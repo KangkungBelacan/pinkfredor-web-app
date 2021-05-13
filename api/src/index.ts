@@ -11,7 +11,9 @@ admin.initializeApp({
 });
 
 // API Routes
-app.get("/api/auth", api.auth);
+app.get("/api/driveapi/authurl", api.driveapi.authurl);
 
-// Start Express Server
+app.get("/api/driveapi/oauth_callback", api.driveapi.oauth_callback);
+
+// Start Express server
 app.listen(port);

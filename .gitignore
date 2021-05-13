@@ -49,3 +49,4 @@ api/yarn-error.log*
 api/src/pinkfredor-web-app-2c7d6-firebase-adminsdk-kf19w-b59326a602.json
 api/package-lock.json
 package-lock.json
+**/*/.vscode

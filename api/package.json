@@ -14,6 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "googleapis": "^73.0.0",
     "typescript": "^4.2.4"
   },
   "devDependencies": {
