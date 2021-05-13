@@ -1,9 +1,10 @@
 import { google } from "googleapis";
+import drive_cred from "./../../drive_credentials.json";
 
 const oauth2Client = new google.auth.OAuth2(
-    "44229445451-f5g42aefkck186jqdb73fojsedh3avsg.apps.googleusercontent.com",
-    "TaeyxYyNY4f6IR7BnOLXgGAJ",
-    "http://localhost:8080/api/driveapi/oauth_callback"
+    (drive_cred as any).client_id,
+    (drive_cred as any).client_secret,
+    (drive_cred as any).redirect_uri
 );
 
 // generate a url that asks permissions for Blogger and Google Calendar scopes
