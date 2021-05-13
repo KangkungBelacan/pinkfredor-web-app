@@ -10,6 +10,7 @@
 
 # production
 /build
+api/dist
 
 # misc
 .DS_Store
@@ -21,3 +22,30 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/api/node_modules
+/api/.pnp
+api/.pnp.js
+
+# testing
+/api/coverage
+
+# production
+/api/build
+
+# misc
+api/.DS_Store
+api/.env.local
+api/.env.development.local
+api/.env.test.local
+api/.env.production.local
+
+api/npm-debug.log*
+api/yarn-debug.log*
+api/yarn-error.log*
+api/src/pinkfredor-web-app-2c7d6-firebase-adminsdk-kf19w-b59326a602.json
+api/package-lock.json
+package-lock.json
