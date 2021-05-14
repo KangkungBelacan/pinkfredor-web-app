@@ -1,2 +1,2 @@
-export {default as auth} from "./auth";
-export {default as driveapi} from "./driveapi";
+export * as auth from "./auth";
+export * as driveapi from "./driveapi";

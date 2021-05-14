@@ -1,19 +1,20 @@
 import express from "express";
 import * as api from "./APIS";
-import * as admin from 'firebase-admin';
-import serviceaccount from "./pinkfredor-web-app-2c7d6-firebase-adminsdk-kf19w-b59326a602.json";
 
 // Initialization
+const bodyParser = require("body-parser");
 const app = express();
 const port = 8080;
-admin.initializeApp({
-    credential: admin.credential.cert(serviceaccount as any)
-});
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // API Routes
 app.get("/api/driveapi/authurl", api.driveapi.authurl);
-
 app.get("/api/driveapi/oauth_callback", api.driveapi.oauth_callback);
 
+app.post("/api/auth/register", api.auth.register);
+
 // Start Express server
-app.listen(port);
+app.listen(port, () => {
+    console.log("Server is listening on 8080");
+});
