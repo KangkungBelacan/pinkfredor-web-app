@@ -1,14 +1,7 @@
-import { useState } from "react";
-import { HomeProps } from "./../interface/HomeProps";
-function Home(props: HomeProps) {
-    const [poop, setPoop] = useState(props.poop);
+function Home() {
     return (
         <div className="">
-            Hello {poop}
-            <br />
-            <button type="button" className="btn btn-primary">
-                Primary
-            </button>
+            Hello World
         </div>
     );
 }
