@@ -42,5 +42,11 @@
 .home-logo {
     display: inline-block;
     border-radius: 50%;
-    box-shadow: 0 0 0 3px #DEB099;
+    box-shadow: 0 0 0 3px #deb099;
+}
+
+@media only screen and (max-width: 600px) {
+    .home-logo img {
+        width: 150px;
+    }
 }
