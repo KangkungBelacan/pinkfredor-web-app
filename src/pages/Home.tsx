@@ -3,9 +3,9 @@ import "./Home.css";
 
 function Home() {
     return (
-        <div className="">
-            Hello World
+        <div className="home-body">
             <HomeComponent.Navbar />
+            <HomeComponent.Content />
         </div>
     );
 }
