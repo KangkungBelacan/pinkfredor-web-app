@@ -1,51 +1,57 @@
-import { generateAccessToken } from "./../../util/auth";
-import { LoginResponse } from "./../interface/auth/LoginResponse";
-import { TokenPayload } from "./../interface/auth/TokenPayload";
-import { db } from "./../../firebase";
+import { generateAccessToken } from "../../util/auth";
+import { LoginResponse } from "../interface/auth/LoginResponse";
+import { AppUser } from "../interface/firebase/AppUser";
+import { db } from "../../firebase";
+import { env } from "../../env";
+import { OAuth2Client } from "google-auth-library";
 const login = async (req: any, res: any) => {
     let response: LoginResponse = {
         status: false,
     };
 
-    if (typeof req.body.username === "undefined") {
-        response.message = "Invalid Parameter";
-        res.json(response);
-        return;
-    }
-    if (typeof req.body.password === "undefined") {
+    if (typeof req.body.id_token === "undefined") {
         response.message = "Invalid Parameter";
         res.json(response);
         return;
     }
 
-    let querySnapshot;
+    // Verify Google ID Token
+    let userid;
     try {
-        querySnapshot = await db
-            .collection("app-users")
-            .where("username", "==", req.body.username)
-            .where("password", "==", req.body.password).get();
+        const client = new OAuth2Client(env.CLIENT_ID);
+        const ticket = await client.verifyIdToken({
+            idToken: req.body.id_token,
+            audience: env.CLIENT_ID,
+        });
+        const payload = ticket.getPayload();
+        userid = payload["sub"];
     } catch (error: any) {
-        response.message = "DB Connection Lost";
+        response.message = "Invalid ID Token";
         res.json(response);
         return;
     }
 
-    if (querySnapshot.size === 0) {
-        response.message = "Wrong username / password";
-        res.json(response);
-        return;
+    // If the token is valid, checks whether if DB have this user_id
+    let doc = db.collection("app-users").doc(userid);
+    let doc_data = await doc.get();
+    let user: AppUser;
+    if (!doc_data.exists) {
+        // User do not exists, create
+        user = {
+            id: userid,
+            username: "User ##",
+        };
+        doc.set(user);
+    } else {
+        let doc_actual_data = doc_data.data();
+        user = {
+            id: doc_actual_data.id,
+            username: doc_actual_data.username,
+        };
     }
 
-    let data_id = querySnapshot.docs[0].id
-    let queryData = querySnapshot.docs[0].data();
-
-    let token:TokenPayload = {
-        user_id: data_id,
-        username: queryData.username
-    };
-    
     response.status = true;
-    response.token = generateAccessToken(token);
+    response.token = generateAccessToken(user);
     res.json(response);
 };
 

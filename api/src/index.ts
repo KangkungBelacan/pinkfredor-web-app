@@ -12,7 +12,6 @@ app.use(bodyParser.json());
 app.get("/api/driveapi/authurl", api.driveapi.authurl);
 app.get("/api/driveapi/oauth_callback", api.driveapi.oauth_callback);
 
-app.post("/api/auth/register", api.auth.register);
 app.post("/api/auth/login", api.auth.login);
 
 // Start Express server

@@ -6,7 +6,8 @@ const clientID =
 
 const Login = (req: any, res: any) => {
     const onSuccess = (res: any) => {
-        console.log(res.profileObj);
+        console.log(res);
+        // console.log(res.profileObj);
     };
     const onFailure = (res: any) => {
         console.log(res);
