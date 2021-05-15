@@ -2,6 +2,7 @@ import "./App.css";
 import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import MainApp from "./pages/MainApp";
+import Help from "./pages/Help"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 // Load FontAwesome Library
@@ -28,6 +29,7 @@ function App() {
                 <Route path="/" exact component={Home} />
                 <Route path="/Auth" component={Auth} />
                 <Route path="/app" component={MainApp} />
+                <Route path="/help" component={Help} />
             </Switch>
         </Router>
     );
