@@ -1,7 +1,10 @@
+import * as MainAppComponent from "./../components/MainApp";
+import "./MainApp.css"
+
 function MainApp() {
     return (
-        <div className="">
-            Main App
+        <div className="home-body">
+            <MainAppComponent.MusicPlayer />
         </div>
     );
 }
