@@ -41,8 +41,7 @@ const login = async (req: any, res: any) => {
 
     let token:TokenPayload = {
         user_id: data_id,
-        username: queryData.username,
-        iat: queryData.created_time
+        username: queryData.username
     };
     
     response.status = true;

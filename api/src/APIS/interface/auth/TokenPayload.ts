@@ -4,9 +4,4 @@
 export interface TokenPayload {
     username: string;
     user_id: string;
-
-    /**
-     * Issued at
-     */
-    iat: number;
 }
