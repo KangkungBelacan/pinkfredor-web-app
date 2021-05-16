@@ -3,6 +3,10 @@
   display: flex;
   right: 30px;
   top: 20px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #07251e;
+  font-size: 15px;
 }
 
 .tr-nav-bar-items-container {
@@ -18,32 +22,51 @@
   padding: 10px;
 }
 
-.center {
-  position: absolute;
-  top: 50%;
-  width: 100%;
+.button {
+  display: inline-block;
+  padding: 15px 25px;
+  font-size: 24px;
+  cursor: pointer;
   text-align: center;
-  font-size: 18px;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #4caf50;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+}
+
+.button:hover {
+  background-color: #3e8e41;
+}
+
+.button:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
 }
 
 .collapsible {
-  background-color: #777;
+  background-color: #198066;
   color: white;
   cursor: pointer;
   padding: 18px;
   width: 100%;
-  border: none;
+  border-radius: 15px;
   text-align: left;
-  outline: none;
+  border-color: #043b26;
   font-size: 15px;
+  display: inline-block;
 }
 
-.active, .collapsible:hover {
+.active,
+.collapsible:hover {
   background-color: #555;
 }
 
 .collapsible:after {
-  content: '\002B';
+  content: "\002B";
   color: white;
   font-weight: bold;
   float: right;
@@ -60,6 +83,18 @@
   overflow: hidden;
   transition: max-height 0.2s ease-out;
   background-color: #f1f1f1;
+}
+
+.TitleText {
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #105241;
+  font-size: 70px;
+}
+.CommonText {
+  font-weight: bold;
+  color: #105241;
+  font-size: 20px;
 }
 
 @media only screen and (max-width: 600px) {

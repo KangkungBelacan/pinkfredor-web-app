@@ -4,11 +4,12 @@ const CollapsibleText = (props: any) => {
     function collapsible(event: any) {
         event.currentTarget.classList.toggle("active");
         var content = event.currentTarget.nextElementSibling;
-        if (content.style.maxHeight) {
+        if (content.style.maxHeight){
             content.style.maxHeight = null;
-        } else {
+        } 
+        else {
             content.style.maxHeight = content.scrollHeight + "px";
-        }
+        } 
     }
 
     return (
