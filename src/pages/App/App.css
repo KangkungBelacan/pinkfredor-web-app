@@ -1,3 +1,24 @@
+.mainapp-body {
+    background-color: #f8f6cc;
+    background-image: url(/src/images/home-bg.png);
+    background-repeat: repeat;
+    height: 100vh;
+}
+
+.mainapp-h1 {
+    font-weight: bold;
+    font-size: 4vw;
+    text-align: center;
+    color: #104043;
+}
+
+.mainapp-h5 {
+    font-size: 13px;
+    text-align: center;
+    color: #104043;
+    padding-top: 0vh;
+}
+
 .button {
   background-color: #4CAF50;
   border: none;
@@ -10,36 +31,27 @@
   font-size: 16px;
 }
 
-.mainapp-body {
-    background-color: #f8f6cc;
-    background-image: url(/src/images/home-bg.png);
-    height: 100vh;
+.player {
+    position: fixed;
+    bottom: 0;
+    height: auto;
+    width: 100%;
+    display: inline-block;
 }
 
-.mainapp-h1 {
-    font-weight: bold;
-    font-size: 50px;
-    text-align: center;
-    color: #104043;
-    padding-top: 10vh;
+.player-song-cover {
+    display: inline-block;
+    border-radius: 6px;
+    max-width: 10%;
+    height: auto;
+    filter: blur(1px);
 }
 
-.mainapp-h2 {
-    font-size: 20px;
-    text-align: center;
-    color: #104043;
-    padding-top: 50vh;
-}
-
-.mainapp-h5 {
+.player-now-playing {
+    display: inline-block;
+    margin-left: 10px;
     font-size: 13px;
     text-align: center;
     color: #104043;
     padding-top: 0vh;
-}
-
-.mainapp-logo {
-    display: inline-block;
-    border-radius: 50%;
-    box-shadow: 0 0 0 3px #DEB099;
 }

@@ -1,9 +1,10 @@
 import { useState } from 'react';
+import example_song_cover from './../../images/example-song-cover.jpeg';
 import Sound, { ReactSoundProps } from 'react-sound';
-import "./../../pages/App/App.css";
+import Playlist from './Playlist'
 
 //Music Player Component.
-function MusicPlayer() {
+function MusicPlayer(): JSX.Element {
     //Control whether the song is playing or not.
     const [status, setStatus] = useState<ReactSoundProps['playStatus']>('STOPPED');
     //User textbox input.
@@ -18,40 +19,22 @@ function MusicPlayer() {
 
     //Stop playing the song.
     function stopPlaying() {
-        setStatus("STOPPED")
+        setStatus('STOPPED')
     }
 
     return (
-        <div style={{
-            position: 'absolute', left: '50%', top: '50%',
-            transform: 'translate(-50%, -50%)'
-        }}>
-            <div>
-                {/*Sound module*/}
-                <Sound
-                    url={playingUrl}
-                    playStatus={status}
-                />
-                <form>
-                    <p>URL To play music from:</p>
-                    <input
-                        type="text"
-                        onChange={event => setInput(event.target.value)}
-                    />
-                    <button style={{
-                        margin: '15px'
-                    }} className="button"
-                        onClick={() => setPlayingUrl(input)}
-                        type="button">
-                        Confirm
-            </button>
-                </form>
-            </div>
-            <div>
-                <button className="button" onClick={togglePlayStatus}>
-                    {(status === 'PLAYING') ? "Pause" : "Play"}
-                </button>
-                <button className="button" onClick={stopPlaying}>Stop</button>
+        <div>
+            <Sound url={playingUrl} playStatus={status}/>
+            <Playlist />
+            <div className="player" style={{backgroundColor:"white"}}>
+                <img className='player-song-cover' src={example_song_cover} alt='Example_Song_Cover'></img>
+                <div className="player-now-playing">
+                    <h5>Now playing: Song Name</h5>
+                    <div style={{display:"inline-block"}}>
+                        <button onClick={togglePlayStatus}>{(status === 'PLAYING') ? 'Pause' : 'Play'}</button>
+                        <button onClick={stopPlaying}>Stop</button>
+                    </div>
+                </div>
             </div>
         </div>
     );
