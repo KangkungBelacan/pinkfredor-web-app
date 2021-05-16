@@ -1,6 +1,6 @@
 import React from "react";
 import { GoogleLogin } from "react-google-login";
-const axios = require("axios").default;
+import { axios } from "./../../global-imports";
 const clientID =
     "44229445451-f5g42aefkck186jqdb73fojsedh3avsg.apps.googleusercontent.com";
 
