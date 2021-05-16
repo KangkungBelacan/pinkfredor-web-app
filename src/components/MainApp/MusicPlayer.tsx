@@ -49,7 +49,7 @@ function MusicPlayer() {
             </div>
             <div>
                 <button className="button" onClick={togglePlayStatus}>
-                    {(status == 'PLAYING') ? "Pause" : "Play"}
+                    {(status === 'PLAYING') ? "Pause" : "Play"}
                 </button>
                 <button className="button" onClick={stopPlaying}>Stop</button>
             </div>
