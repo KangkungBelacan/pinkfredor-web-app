@@ -1,6 +1,6 @@
 import { google } from "googleapis";
 import drive_cred from "./../../drive_credentials.json";
-
+import { verifyIncomingRequest } from "./../../util/auth";
 const oauth2Client = new google.auth.OAuth2(
     (drive_cred as any).client_id,
     (drive_cred as any).client_secret,
@@ -8,9 +8,7 @@ const oauth2Client = new google.auth.OAuth2(
 );
 
 // generate a url that asks permissions for Blogger and Google Calendar scopes
-const scopes = [
-    "https://www.googleapis.com/auth/drive.file"
-];
+const scopes = ["https://www.googleapis.com/auth/drive.file"];
 
 const url = oauth2Client.generateAuthUrl({
     // 'online' (default) or 'offline' (gets refresh_token)
@@ -21,6 +19,11 @@ const url = oauth2Client.generateAuthUrl({
 });
 
 const authurl = (req: any, res: any) => {
+    let status = verifyIncomingRequest(req);
+    if (!status.valid) {
+        res.json({ message: status.message });
+        return;
+    }
     res.json({ url: url });
 };
 
