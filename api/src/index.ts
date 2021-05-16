@@ -16,5 +16,5 @@ app.post("/api/auth/login", api.auth.login);
 
 // Start Express server
 app.listen(port, () => {
-    console.log("Server is listening on 8080");
+    console.log("Server is listening on " + port);
 });

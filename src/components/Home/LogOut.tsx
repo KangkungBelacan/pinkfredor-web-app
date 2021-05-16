@@ -3,6 +3,7 @@ import { GoogleLogout } from "react-google-login";
 const LogOut = () => {
     const onSuccess = () => {
         console.log("Logged out");
+        localStorage.removeItem("token");
     };
     return (
         <div>

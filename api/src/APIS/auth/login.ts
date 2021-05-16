@@ -9,7 +9,9 @@ const login = async (req: any, res: any) => {
         status: false,
     };
 
-    if (typeof req.body.id_token === "undefined") {
+    console.log(req);
+
+    if (typeof req.body.tokenId === "undefined") {
         response.message = "Invalid Parameter";
         res.json(response);
         return;
@@ -20,7 +22,7 @@ const login = async (req: any, res: any) => {
     try {
         const client = new OAuth2Client(env.CLIENT_ID);
         const ticket = await client.verifyIdToken({
-            idToken: req.body.id_token,
+            idToken: req.body.tokenId,
             audience: env.CLIENT_ID,
         });
         const payload = ticket.getPayload();
