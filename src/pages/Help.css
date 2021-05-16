@@ -26,31 +26,40 @@
   font-size: 18px;
 }
 
-.home-body {
-  background-color: #f8f6cc;
-  background-image: url(/src/images/home-bg.png);
-  background-position: center;
-  height: 100vh;
+.collapsible {
+  background-color: #777;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
 }
 
-.home-h1 {
+.active, .collapsible:hover {
+  background-color: #555;
+}
+
+.collapsible:after {
+  content: '\002B';
+  color: white;
   font-weight: bold;
-  font-size: 50px;
-  text-align: center;
-  color: #104043;
-  padding-top: 20vh;
+  float: right;
+  margin-left: 5px;
 }
 
-.home-h2 {
-  font-size: 20px;
-  text-align: center;
-  color: #104043;
+.active:after {
+  content: "\2212";
 }
 
-.home-logo {
-  display: inline-block;
-  border-radius: 50%;
-  box-shadow: 0 0 0 3px #deb099;
+.content {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #f1f1f1;
 }
 
 @media only screen and (max-width: 600px) {
