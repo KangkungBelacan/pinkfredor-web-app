@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Sound, { ReactSoundProps } from 'react-sound';
-import "./../../pages/MainApp.css"
+import "./../../pages/App/App.css";
 
 //Music Player Component.
 function MusicPlayer() {

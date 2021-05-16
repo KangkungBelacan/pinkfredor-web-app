@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import MainApp from "./pages/MainApp";
 import Help from "./pages/Help"
+
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 // Load FontAwesome Library
