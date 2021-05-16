@@ -16,7 +16,7 @@ const LinkGDrive = () => {
 
     return (
         <div>
-            <a href={(data as any).url}>
+            <a href={(data as any).url} target="_blank" rel="noreferrer">
                 <button>Click here to link GDrive</button>
             </a>
         </div>

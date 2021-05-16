@@ -8,15 +8,7 @@ const oauth2Client = new google.auth.OAuth2(
 );
 
 // generate a url that asks permissions for Blogger and Google Calendar scopes
-const scopes = ["https://www.googleapis.com/auth/drive.file"];
-
-const url = oauth2Client.generateAuthUrl({
-    // 'online' (default) or 'offline' (gets refresh_token)
-    access_type: "offline",
-
-    // If you only need one scope you can pass it as a string
-    scope: scopes,
-});
+const scopes = ["https://www.googleapis.com/auth/drive.appdata", "https://www.googleapis.com/auth/drive"];
 
 const authurl = (req: any, res: any) => {
     let status = verifyIncomingRequest(req);
@@ -24,6 +16,16 @@ const authurl = (req: any, res: any) => {
         res.json({ message: status.message });
         return;
     }
+
+    let url = oauth2Client.generateAuthUrl({
+        // 'online' (default) or 'offline' (gets refresh_token)
+        access_type: "offline",
+
+        // If you only need one scope you can pass it as a string
+        scope: scopes,
+
+        state: status.user.id,
+    });
     res.json({ url: url });
 };
 
