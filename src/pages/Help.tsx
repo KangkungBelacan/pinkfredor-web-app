@@ -1,3 +1,4 @@
+import app_img from "./../images/Logo.png";
 import * as HelpComponent from "./../components/Help";
 import "./Help.css";
 
@@ -12,7 +13,10 @@ function Help() {
             </nav>
             <h2 className="GlowBig">Help Centre</h2>
             <p className="GlowSmall">Welcome To Help Centre</p>
-            <p className="CommonText">『Articles Related』</p>
+            <br />
+            <img src={app_img} alt="App_Image" className="CenterImage"></img>
+            <br />
+            <p className="GlowMedium">『Articles Related』</p>
             <p className="CommonText">『Introduction』</p>
             <HelpComponent.CollapsibleText title="What can i do?" content="I used to streams your music collections from Google Drive!"/>
             <p className="CommonText">『User』</p>
