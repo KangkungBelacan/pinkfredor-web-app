@@ -141,8 +141,10 @@
   box-sizing: border-box;
 }
 
-body {
+.help-body {
   font-family: "Balsamiq Sans", cursive;
+  background-color: #f8f6cc;
+  background-image: url(/src/images/home-bg.png);
 }
 
 .neon-button {

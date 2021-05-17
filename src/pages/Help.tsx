@@ -3,7 +3,7 @@ import "./Help.css";
 
 function Help() {
     return (
-        <div className="home-body">
+        <div className="help-body">
             <nav className="tr-nav-bar-container">
                 <div className="tr-nav-bar-items-container">Home</div>
                 <div className="tr-nav-bar-items-container">Main App</div>
