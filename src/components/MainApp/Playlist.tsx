@@ -11,7 +11,7 @@ interface SongsProperties {
 }
 
 function Playlist(props: any, ref: any): JSX.Element {
-    const [inputValue, updateInputValue] = useState('')
+    const [inputValue, setInputValue] = useState('')
     const [songs, setSongs] = useState<SongsProperties[]>([]);
 
     function addSong() {
@@ -22,6 +22,7 @@ function Playlist(props: any, ref: any): JSX.Element {
                 name: inputValue
             }
         ]);
+        setInputValue('')
     }
 
     let listItems = songs.map((song) => <Song key={song.id} index={song.id + 1} song_name={song.name}/>);
@@ -35,7 +36,7 @@ function Playlist(props: any, ref: any): JSX.Element {
                 </div>
             </div>
             <div style={{display:'inline-block'}}>
-                <input value={inputValue} onChange={(event) => updateInputValue(event.currentTarget.value)}/>
+                <input value={inputValue} onChange={(event) => setInputValue(event.currentTarget.value)}/>
                 <button onClick={addSong} className='player-button' style={{marginLeft:'5px'}}>{checkCircle}</button>
             </div>
         </div>
