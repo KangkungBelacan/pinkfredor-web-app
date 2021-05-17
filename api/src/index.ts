@@ -18,6 +18,7 @@ app.post("/api/driveapi/music/update_index", api.driveapi.music.update_index);
 app.post("/api/driveapi/music/remove_index", api.driveapi.music.remove_index);
 
 app.post("/api/auth/login", api.auth.login);
+app.post("/api/auth/devlogin", api.auth.devlogin);
 
 // Start Express server
 app.listen(port, () => {
