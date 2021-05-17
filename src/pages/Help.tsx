@@ -5,14 +5,14 @@ function Help() {
     return (
         <div className="help-body">
             <nav className="tr-nav-bar-container">
-                <div className="tr-nav-bar-items-container">Home</div>
-                <div className="tr-nav-bar-items-container">Main App</div>
-                <div className="tr-nav-bar-items-container">About</div>
+                <a href="http://localhost:3000/" className="tr-nav-bar-items-container">Home</a>
+                <a href="http://localhost:3000/app" className="tr-nav-bar-items-container">Main App</a>
+                <a href="" className="tr-nav-bar-items-container">About</a>
                 <div className="tr-nav-bar-items-container">Log Out</div>
             </nav>
             <h2 className="GlowBig">Help Centre</h2>
             <p className="GlowSmall">Welcome To Help Centre</p>
-            <p className="CommonText">『Article Related』</p>
+            <p className="CommonText">『Articles Related』</p>
             <p className="CommonText">『Introduction』</p>
             <HelpComponent.CollapsibleText title="What can i do?" content="I used to streams your music collections from Google Drive!"/>
             <p className="CommonText">『User』</p>
@@ -31,4 +31,5 @@ function Help() {
         </div>
     );
 }
+
 export default Help;

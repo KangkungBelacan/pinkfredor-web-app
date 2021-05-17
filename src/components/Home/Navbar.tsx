@@ -4,8 +4,8 @@ import LogOut from "./../../components/Home/LogOut";
 const Navbar = () => {
     return (
         <nav className="tr-nav-bar-container">
-            <div className="tr-nav-bar-items-container">About</div>
-            <div className="tr-nav-bar-items-container">Help</div>
+            <a href="" className="tr-nav-bar-items-container">About</a>
+            <a href="http://localhost:3000/help" className="tr-nav-bar-items-container">Help</a>
             {/* <div className="tr-nav-bar-items-container">Login</div> */}
             <Login />
             <LogOut />
