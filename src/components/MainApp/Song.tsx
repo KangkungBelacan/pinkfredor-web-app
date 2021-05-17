@@ -1,6 +1,6 @@
-function Song() {
+function Song(props: any) {
     return (
-        <h6>Song</h6>
+        <p key={props.id}>{props.index + ' | ' + props.song_name}</p>
     );
 }
 

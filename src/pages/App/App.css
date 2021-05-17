@@ -19,16 +19,17 @@
     padding-top: 0vh;
 }
 
-.button {
-  background-color: #4CAF50;
-  border: none;
-  color: white;
-  padding: 12px 15px;
-  margin: 8px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
+.player-button {
+    background-color: rgba(0, 0, 0, 0); /* Blue background */
+    padding: 5px;
+    font-size: 30px;
+    border: none; /* Remove borders */
+    color: black;
+    cursor: pointer; /* Mouse pointer on hover */
+}
+
+.player-button:hover {
+
 }
 
 .player {
@@ -49,9 +50,14 @@
 
 .player-now-playing {
     display: inline-block;
+    vertical-align: middle;
     margin-left: 10px;
     font-size: 13px;
     text-align: center;
     color: #104043;
     padding-top: 0vh;
+}
+
+.playlist {
+
 }
