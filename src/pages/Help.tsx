@@ -5,11 +5,11 @@ import "./Help.css";
 function Help() {
     return (
         <div className="help-body">
-            <nav className="tr-nav-bar-container">
-                <a href="http://localhost:3000/" className="tr-nav-bar-items-container">Home</a>
-                <a href="http://localhost:3000/app" className="tr-nav-bar-items-container">Main App</a>
-                <a href="" className="tr-nav-bar-items-container">About</a>
-                <div className="tr-nav-bar-items-container">Log Out</div>
+            <nav className="help-tr-nav-bar-container">
+                <a href="http://localhost:3000/" className="help-tr-nav-bar-items-container">Home</a>
+                <a href="http://localhost:3000/app" className="help-tr-nav-bar-items-container">Main App</a>
+                <a href="" className="help-tr-nav-bar-items-container">About</a>
+                <div className="help-tr-nav-bar-items-container">Log Out</div>
             </nav>
             <h2 className="GlowBig">Help Centre</h2>
             <p className="GlowSmall">Welcome To Help Centre</p>
