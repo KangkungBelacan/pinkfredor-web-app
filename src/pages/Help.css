@@ -1,5 +1,5 @@
 .tr-nav-bar-container {
-  color: #07251e;
+  color: #104043;
   display: flex;
   font-size: 15px;
   font-weight: 900;
@@ -10,12 +10,40 @@
 }
 
 .tr-nav-bar-items-container {
+  color: #104043;
   padding: 2px 10px 2px 10px;
+  text-decoration: none;
 }
 
 .tr-nav-bar-items-container:hover {
   border-bottom: 3px #104043 solid;
+  color: #104043;
   cursor: pointer;
+  text-decoration: none;
+}
+
+.help-tr-nav-bar-container {
+  color: #000000;
+  display: flex;
+  font-size: 15px;
+  font-weight: 900;
+  position: fixed;
+  right: 30px;
+  text-transform: uppercase;
+  top: 20px;
+}
+
+.help-tr-nav-bar-items-container {
+  color: #000000;
+  padding: 2px 10px 2px 10px;
+  text-decoration: none;
+}
+
+.help-tr-nav-bar-items-container:hover {
+  border-bottom: 3px #000000 solid;
+  color: #000000;
+  cursor: pointer;
+  text-decoration: none;
 }
 
 .tr-nav-bar-items {
