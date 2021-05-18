@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import example_song_cover from './../../images/example-song-cover.jpeg';
 import Sound, { ReactSoundProps } from 'react-sound';
-import Song from './Song'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheckCircle, faPlayCircle, faPauseCircle, faStopCircle } from '@fortawesome/free-solid-svg-icons'
 
@@ -14,19 +13,23 @@ interface SongsProperties {
     url: string;
 }
 
+interface Element {
+
+}
+
+let songs = new Array<SongsProperties>();
+
 //Music Player Component.
 function MusicPlayer(props: any): JSX.Element {
     const checkCircle = <FontAwesomeIcon icon={faCheckCircle} />
     //Control whether the song is playing or not.
     const [status, setStatus] = useState<ReactSoundProps['playStatus']>('STOPPED');
-    //User textbox input.
-    const [input, setInput] = useState('null')
     //URL of the song currently playing.
     const [playingUrl, setPlayingUrl] = useState('null')
 
-    const [songs, setSongs] = useState<SongsProperties[]>([]);
-
     const [inputValue, setInputValue] = useState('')
+
+    const [playlist, setPlaylist] = useState<Element>([])
 
     //Toggle song playing status.
     function togglePlayStatus() {
@@ -38,56 +41,97 @@ function MusicPlayer(props: any): JSX.Element {
         setStatus('STOPPED')
     }
 
-    function addSong() {
-        if (songs.length === 0) {
-            let newSongs = [
-                {
-                    id: songs.length,
-                    url: inputValue
-                },
-            ]
-            setSongs(newSongs);
-        }
-
-        else {
-            let newSongs = [
-                ...songs,
-                {
-                    id: songs.length,
-                    url: inputValue
-                }
-
-            ]
-            setSongs(newSongs);
-
-        }
-
-        setInputValue('')
-
-        console.log(songs[0])
+    function updateSongsList() {
+        let songsList = songs.map((song) => <p key={song.id}> {(song.id + 1) + ' | ' + song.url} </p>);
+        setPlaylist(songsList)
     }
 
-    let songsList = songs.map((song) => <Song key={song.id} index={song.id + 1} song_name={song.url} />);
+    function setDemoPlaylist() {
+        songs = [
+            {
+                id: 0,
+                url: 'https://www.kozco.com/tech/piano2.wav'
+            },
+            {
+                id: 1,
+                url: 'https://www.kozco.com/tech/WAV-MP3.wav'
+            },
+            {
+                id: 2,
+                url: 'https://www.kozco.com/tech/organfinale.mp3'
+            },
+            {
+                id: 3,
+                url: 'https://www.kozco.com/tech/32.mp3'
+            },
+            {
+                id: 4,
+                url: 'https://www.kozco.com/tech/c304-2.wav'
+            }
+        ]
+
+        updateSongsList()
+        setPlayingUrl(songs[0].url)
+    }
+
+    function addSong() {
+        let newSongs = [
+            ...songs,
+            {
+                id: songs.length,
+                url: inputValue
+            }
+
+        ]
+        songs = newSongs;
+
+        setInputValue('')
+        updateSongsList()
+
+        if (songs.length === 1 && status != 'PLAYING') {
+            setPlayingUrl(songs[0].url)
+            // togglePlayStatus()
+        }
+    }
+
+    function playNextSong() {
+        if (songs.length === 1) {
+            songs.shift()
+            setStatus('STOPPED')
+            updateSongsList()
+            return
+        }
+        else if (songs.length === 0) {
+            return
+        }
+        else {
+            songs.shift()
+            setPlayingUrl(songs[0].url)
+            updateSongsList()
+        }
+    }
 
     return (
         <div>
-            <Sound url={playingUrl} playStatus={status} autoLoad={true} />
+            {/*https://www.npmjs.com/package/react-sound*/}
+            <Sound url={playingUrl} playStatus={status} autoLoad={true} onFinishedPlaying={playNextSong} onError={playNextSong} />
             <div>
                 <div style={{ display: 'inline-block' }}>
+                    <button style={{ marginLeft: '5px', marginRight: '5px' }} onClick={setDemoPlaylist}>Set Demo Playlist</button>
                     <input value={inputValue} onChange={(event) => setInputValue(event.currentTarget.value)} />
                     <button onClick={addSong} className='player-button' style={{ marginLeft: '5px' }}>{checkCircle}</button>
                 </div>
                 <div>
                     <h1 className="playlist">Playlist:</h1>
                     <div>
-                        {songsList}
+                        {playlist}
                     </div>
                 </div>
             </div>
             <div className="player" style={{ borderRadius: "0px 25px 0px 0px", backgroundColor: "rgba(0, 0, 0, 0.5)" }}>
                 <img className='player-song-cover' src={example_song_cover} alt='Example_Song_Cover'></img>
                 <div className="player-now-playing">
-                    <h5>Now playing: Song Name</h5>
+                    <h5>Now playing: {playingUrl === 'null' ? 'No songs playing.' : playingUrl}</h5>
                     <div style={{ display: "inline-block" }}>
                         <button className="player-button" onClick={togglePlayStatus}>{(status === 'PLAYING') ? pauseButton : playButton}</button>
                         <button className="player-button" onClick={stopPlaying}>{stopButton}</button>
