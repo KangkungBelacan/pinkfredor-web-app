@@ -17,7 +17,7 @@ interface Element {
 
 }
 
-let songs = new Array<SongsProperties>();
+var songs = new Array<SongsProperties>();
 
 //Music Player Component.
 function MusicPlayer(props: any): JSX.Element {
@@ -94,9 +94,17 @@ function MusicPlayer(props: any): JSX.Element {
         }
     }
 
+    function removeFirstSong() {
+        songs.shift()
+        let i;
+        for (i = 0; i < songs.length; i++) {
+            songs[i].id -= 1
+        }
+    }
+
     function playNextSong() {
         if (songs.length === 1) {
-            songs.shift()
+            removeFirstSong()
             setStatus('STOPPED')
             updateSongsList()
             return
@@ -105,7 +113,7 @@ function MusicPlayer(props: any): JSX.Element {
             return
         }
         else {
-            songs.shift()
+            removeFirstSong()
             setPlayingUrl(songs[0].url)
             updateSongsList()
         }
