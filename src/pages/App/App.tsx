@@ -1,7 +1,4 @@
-import { useState } from 'react'
 import * as MainAppComponent from './../../components/MainApp';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import './App.css';
 
 

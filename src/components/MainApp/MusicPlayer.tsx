@@ -20,7 +20,7 @@ interface Element {
 var songs = new Array<SongsProperties>();
 
 //Music Player Component.
-function MusicPlayer(props: any): JSX.Element {
+function MusicPlayer(): JSX.Element {
     const checkCircle = <FontAwesomeIcon icon={faCheckCircle} />
     //Control whether the song is playing or not.
     const [status, setStatus] = useState<ReactSoundProps['playStatus']>('STOPPED');
