@@ -1,6 +1,6 @@
 import * as MainAppComponent from './../../components/MainApp';
 import './App.css';
-
+import example_song_cover from './../../images/example-song-cover.jpeg'
 
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
     return (
         <div className='mainapp-body'>
             <div>
-                <MainAppComponent.MusicPlayer />
+                <MainAppComponent.MusicPlayer song_cover={example_song_cover}/>
             </div>
         </div>
     );

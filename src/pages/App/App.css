@@ -1,62 +1,36 @@
 .mainapp-body {
-    background-color: white;
+    background-color: #121212;
     background-repeat: repeat;
     height: 100vh;
-}
-
-.mainapp-h1 {
-    font-weight: bold;
-    font-size: 4vw;
-    text-align: center;
-    color: #104043;
-}
-
-.mainapp-h5 {
-    font-size: 13px;
-    text-align: center;
-    color: #104043;
-    padding-top: 0vh;
-}
-
-.player-button {
-    background-color: rgba(0, 0, 0, 0); /* Blue background */
-    padding: 5px;
-    font-size: 30px;
-    border: none; /* Remove borders */
-    color: black;
-    cursor: pointer; /* Mouse pointer on hover */
-}
-
-.player-button:hover {
-
 }
 
 .player {
     position: fixed;
     bottom: 0;
     height: auto;
+    box-sizing: content-box;
     width: 100%;
-    display: inline-block;
+    border: 1px;
+    border-color: #282828;
+    background-color: #181818;
 }
 
-.player-song-cover {
+.player-song-info-cover {
     display: inline-block;
     border-radius: 6px;
-    max-width: 10%;
+    max-width: 8%;
+    padding: 15px;
     height: auto;
-    filter: blur(1px);
 }
 
-.player-now-playing {
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 10px;
-    font-size: 13px;
-    text-align: center;
-    color: #104043;
-    padding-top: 0vh;
+.player-song-info-title {
+    margin:auto;
+    font-size: 14px;
+    color: white;
 }
 
-.playlist {
-
+.player-song-info-artist {
+    margin: auto;
+    font-size: 11px;
+    color: #B3B3B3;
 }
