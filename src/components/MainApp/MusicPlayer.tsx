@@ -16,7 +16,7 @@ function MusicPlayer(props:any): JSX.Element {
                 <div className="player-now-playing">
                     <h5>Now playing: Song Name</h5>
                     <div style={{ display: "inline-block" }}>
-                        <button className="player-button">{(status === 'PLAYING') ? pauseButton : playButton}</button>
+                        <button className="player-button">{playButton}</button>
                         <button className="player-button">{stopButton}</button>
                     </div>
                 </div>
