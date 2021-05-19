@@ -1,6 +1,5 @@
 .mainapp-body {
-    background-color: #f8f6cc;
-    background-image: url(/src/images/home-bg.png);
+    background-color: white;
     background-repeat: repeat;
     height: 100vh;
 }
