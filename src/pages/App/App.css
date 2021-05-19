@@ -1,7 +1,6 @@
 .mainapp-body {
     background-color: #121212;
-    background-repeat: repeat;
-    height: 100vh;
+    height: 1000vh;
 }
 
 .player {
@@ -18,9 +17,9 @@
 .player-song-info-cover {
     display: inline-block;
     border-radius: 6px;
-    max-width: 8%;
+    max-width: 20%;
     padding: 15px;
-    height: auto;
+    border-radius: 20%
 }
 
 .player-song-info-title {
@@ -33,4 +32,82 @@
     margin: auto;
     font-size: 11px;
     color: #B3B3B3;
+}
+
+.player-controls {
+    display:inline-block;
+    position:fixed;
+    flex-direction: column;
+    align-items: center;
+}
+
+.player-controls-buttons {
+
+}
+
+.player-controls-button-misc {
+    margin-left: 8px;
+    margin-right: 8px;
+    color: rgb(164,164,164);
+    font-size: 17px;
+    background: none;
+    border: none;
+}
+
+.player-controls-button-play {
+    margin-left: 5px;
+    margin-right: 5px;
+    color: rgb(164,164,164);
+    font-size: 20px;
+    background: none;
+    border: none;
+}
+
+.player-controls-button-misc:hover {
+    color: white;
+}
+
+.player-controls-button-play:hover {
+    color: white;
+}
+
+.player-progress {
+    color: rgb(179,179,179);
+    display: inline-block;
+    margin: 0px;
+    font-size:11px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.slidecontainer {
+  width: 70%; /* Width of the outside container */
+  display: inline-block;
+}
+
+/* The slider itself */
+.slider {
+    margin: auto;
+    outline: none;
+    padding: 0;
+    width: 150px;
+    height: 2px;
+    background-color: #dedede;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ff1100), color-stop(100%, #ff1100));
+    background-size: 50% 100%;
+    background-repeat: no-repeat;
+    border-radius: 10px;
+    cursor: pointer;
+    -webkit-appearance: none;
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 10px; /* Set a specific slider handle width */
+  height: 10px; /* Slider handle height */
+  border-radius: 50%;
+  background: white;
+  cursor: pointer; /* Cursor on hover */
 }
