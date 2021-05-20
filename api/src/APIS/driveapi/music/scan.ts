@@ -44,12 +44,12 @@ const scan = async (req: any, res: any) => {
                 if (err) {
                     console.error(err);
                 } else {
-                    // console.log(res);
+                    //console.log(res);
                     res.data.files.forEach(function (file) {
-                        // console.log("Found file: ", file.name, file.id);
+                        //console.log("Found file: ", file.name, file.id);
                         m_idx.files[file.id] = {
                             id: file.id,
-                            filename: file.name,
+                            filename: file.name,                            
                         };
                     });
                     if (typeof res.data.nextPageToken !== "undefined") {

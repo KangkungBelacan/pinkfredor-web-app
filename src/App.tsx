@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import MainApp from "./pages/MainApp";
 import Help from "./pages/Help"
+import UserAccount from "./pages/UserAccount";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
@@ -31,6 +32,7 @@ function App() {
                 <Route path="/Auth" component={Auth} />
                 <Route path="/app" component={MainApp} />
                 <Route path="/help" component={Help} />
+                <Route path="/UserAccount" component={UserAccount} />
             </Switch>
         </Router>
     );
