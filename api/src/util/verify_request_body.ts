@@ -97,7 +97,7 @@ const verify_request_body = (req: any, res: any, schema: RequestSchema) => {
     }
 
     if (!verify_keys(schema.content, body)) {
-        res.status(401);
+        res.status(400);
         res.json({ message: "Invalid Parameters" });
         return false;
     }
