@@ -16,6 +16,8 @@ app.get("/api/driveapi/oauth_callback", api.driveapi.oauth_callback);
 app.use(verifyRequestAuthorization);
 
 // API Routes (Protected)
+app.post("/api/driveapi/files", api.driveapi.files.create);
+
 app.post("/api/driveapi/files/scan", api.driveapi.files.scan);
 app.post("/api/driveapi/authurl", api.driveapi.authurl);
 
