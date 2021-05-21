@@ -4,7 +4,7 @@ import drive_cred from "./../../../drive_credentials.json";
 import { google } from "googleapis";
 import * as IAPI from "./../../interface";
 const scan = async (req: any, res: any) => {
-    let status = verifyIncomingRequest(req);
+    let status = verifyIncomingRequest(req, res);
     if (!status.valid) {
         res.json({ message: status.message });
         return;

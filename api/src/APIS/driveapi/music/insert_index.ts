@@ -1,5 +1,5 @@
 import { verifyIncomingRequest } from "./../../../util/auth";
-const remove_index = (req: any, res: any) => {
+const insert_index = (req: any, res: any) => {
     let status = verifyIncomingRequest(req, res);
     if (!status.valid) {
         res.json({ message: status.message });
@@ -7,4 +7,4 @@ const remove_index = (req: any, res: any) => {
     }
 };
 
-export default remove_index;
+export default insert_index;

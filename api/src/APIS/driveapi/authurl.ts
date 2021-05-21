@@ -8,10 +8,13 @@ const oauth2Client = new google.auth.OAuth2(
 );
 
 // generate a url that asks permissions for Blogger and Google Calendar scopes
-const scopes = ["https://www.googleapis.com/auth/drive.appdata", "https://www.googleapis.com/auth/drive"];
+const scopes = [
+    "https://www.googleapis.com/auth/drive.appdata",
+    "https://www.googleapis.com/auth/drive",
+];
 
 const authurl = (req: any, res: any) => {
-    let status = verifyIncomingRequest(req);
+    let status = verifyIncomingRequest(req, res);
     if (!status.valid) {
         res.json({ message: status.message });
         return;

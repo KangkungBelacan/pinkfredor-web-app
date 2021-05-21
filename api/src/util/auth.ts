@@ -11,10 +11,11 @@ function generateAccessToken(obj: object) {
  * Generic function to verify each incoming request
  * @param req Request received from express
  */
-function verifyIncomingRequest(req: any): RequestStatus {
+function verifyIncomingRequest(req: any, res: any): RequestStatus {
     let status: RequestStatus = { valid: false, expired: false };
     if (typeof req.body.token === "undefined") {
         status.message = "Unauthorized User";
+        res.status(401);
         return status;
     }
 

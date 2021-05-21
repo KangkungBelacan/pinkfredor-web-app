@@ -11,6 +11,7 @@ const login = async (req: any, res: any) => {
 
     if (typeof req.body.tokenId === "undefined") {
         response.message = "Invalid Parameter";
+        res.status(400);
         res.json(response);
         return;
     }
