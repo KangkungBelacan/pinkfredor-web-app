@@ -9,7 +9,7 @@ const __schema_create: RequestSchema = {
     type: RequestType.POST,
     content: {
         files: [{
-            fileid: RequestBodyDataType.STRING,
+            fileid: RequestBodyDataType.NUMBER,
             filename: RequestBodyDataType.STRING
         }]
     },

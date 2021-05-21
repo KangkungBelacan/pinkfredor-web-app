@@ -23,30 +23,65 @@ const scan = async (req: any, res: any) => {
     // Scan google drive for music files
     let m_idx: IAPI.driveapi.music.MusicFilesIndex = { files: {} };
 
+    // Get all folders
+    // let folders:any = await new Promise((resolve) => {
+    //     let drive = google.drive({ version: "v3", auth: oAuth2Client });
+    //     let pt = null;
+    //     let obj: any = {};
+    //     drive.files.list(
+    //         {
+    //             q: "mimeType = 'application/vnd.google-apps.folder' and trashed = false",
+    //             fields: "nextPageToken, files(id, name, parents)",
+    //             spaces: "drive",
+    //             pageToken: pt,
+    //         },
+    //         function (err, res) {
+    //             if (err) {
+    //                 console.error(err);
+    //                 resolve(false);
+    //             } else {
+    //                 //console.log(res);
+    //                 res.data.files.forEach(function (file) {
+    //                     //console.log("Found file: ", file.name, file.id);
+    //                     obj[file.id] = {
+    //                         id: file.id,
+    //                         filename: file.name,
+    //                         parents: file.parents,
+    //                     };
+    //                 });
+    //                 if (typeof res.data.nextPageToken !== "undefined") {
+    //                     // there is still next page, figure it out looz
+    //                 }
+    //                 resolve(obj);
+    //             }
+    //         }
+    //     );
+    // });
+
     await new Promise((resolve) => {
         let drive = google.drive({ version: "v3", auth: oAuth2Client });
         let pt = null;
         drive.files.list(
             {
-                q: "mimeType='audio/mpeg'",
-                fields: "nextPageToken, files(id, name)",
+                // q: "mimeType = 'audio/mpeg' and trashed = false",
+                q: "trashed = false",
+                fields: "nextPageToken, files(id, name, parents)",
                 spaces: "drive",
                 pageToken: pt,
             },
             function (err, res) {
                 if (err) {
                     console.error(err);
+                    resolve(true);
                 } else {
                     //console.log(res);
-                    res.data.files.forEach(function (file) {
-                        //console.log("Found file: ", file.name, file.id);
+                    for(let k = 0; k < res.data.files.length; k++) {
+                        let file = res.data.files[k];
                         m_idx.files[file.id] = {
                             id: file.id,
-                            filename: file.name,                            
+                            filename: file.name,
+                            parents: file.parents
                         };
-                    });
-                    if (typeof res.data.nextPageToken !== "undefined") {
-                        // there is still next page, figure it out looz
                     }
                     resolve(true);
                 }
