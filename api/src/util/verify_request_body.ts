@@ -6,7 +6,6 @@ import {
 
 /**
  * Verify if the data contains given keys
- * NOTE: this function is unable to check
  * @param keys_obj keys expected from data
  * @param data request data
  * @return {boolean}
