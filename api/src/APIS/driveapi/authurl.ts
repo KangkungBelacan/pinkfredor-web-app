@@ -1,6 +1,3 @@
-// Default Imports
-import { verifyIncomingRequest } from "./../../util/auth";
-
 import { google } from "googleapis";
 import drive_cred from "./../../drive_credentials.json";
 const oauth2Client = new google.auth.OAuth2(
@@ -16,12 +13,6 @@ const scopes = [
 ];
 
 const authurl = (req: any, res: any) => {
-    let status = verifyIncomingRequest(req, res);
-    if (!status.valid) {
-        res.json({ message: status.message });
-        return;
-    }
-
     let url = oauth2Client.generateAuthUrl({
         // 'online' (default) or 'offline' (gets refresh_token)
         access_type: "offline",
@@ -29,7 +20,7 @@ const authurl = (req: any, res: any) => {
         // If you only need one scope you can pass it as a string
         scope: scopes,
 
-        state: status.user.id,
+        state: req.app_user.id
     });
     res.json({ url: url });
 };
