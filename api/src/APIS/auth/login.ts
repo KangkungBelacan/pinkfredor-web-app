@@ -4,15 +4,22 @@ import { AppUser } from "../interface/firebase/AppUser";
 import { db } from "../../firebase";
 import { env } from "../../env";
 import { OAuth2Client } from "google-auth-library";
+import { RequestSchema, RequestType, RequestBodyDataType } from "../../util/interface/RequestSchema";
+import { verify_request_body } from "../../util/verify_request_body";
+
+const __schema_login:RequestSchema = {
+    type: RequestType.POST,
+    strict: false,
+    content: {
+        "tokenId": RequestBodyDataType.STRING
+    }
+}
+
 const login = async (req: any, res: any) => {
     let response: LoginResponse = {
         status: false,
     };
-
-    if (typeof req.body.tokenId === "undefined") {
-        response.message = "Invalid Parameter";
-        res.status(400);
-        res.json(response);
+    if(!verify_request_body(req, res, __schema_login)) {
         return;
     }
 
