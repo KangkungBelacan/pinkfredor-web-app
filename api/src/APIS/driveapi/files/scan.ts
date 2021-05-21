@@ -2,8 +2,27 @@ import { db } from "./../../../firebase";
 import drive_cred from "./../../../drive_credentials.json";
 import { google } from "googleapis";
 import * as IAPI from "./../../interface";
-import { resolve } from "path";
+import {verify_request_body} from "./../../../util/verify_request_body";
+import {
+    RequestBodyDataType,
+    RequestSchema,
+    RequestType,
+} from "../../../util/interface/RequestSchema";
+
+const __schema_scan:RequestSchema = {
+    type: RequestType.POST,
+    content: {
+        folder_only: RequestBodyDataType.BOOLEAN
+    }
+}
+
 const scan = async (req: any, res: any) => {
+    if(!verify_request_body(req, res, __schema_scan)) {
+        return;
+    }
+
+    let folder_only = req.body.folder_only;
+
     // Check if drive is linked
     let doc = db.collection("drive-api-tokens").doc(req.app_user.id);
     let doc_data = await doc.get();
@@ -22,42 +41,7 @@ const scan = async (req: any, res: any) => {
     oAuth2Client.setCredentials(user_drive_cred);
 
     // Scan google drive for music files
-    let m_idx: IAPI.driveapi.music.MusicFilesIndex = { files: {} };
-
-    // Get all folders
-    // let folders:any = await new Promise((resolve) => {
-    //     let drive = google.drive({ version: "v3", auth: oAuth2Client });
-    //     let pt = null;
-    //     let obj: any = {};
-    //     drive.files.list(
-    //         {
-    //             q: "mimeType = 'application/vnd.google-apps.folder' and trashed = false",
-    //             fields: "nextPageToken, files(id, name, parents)",
-    //             spaces: "drive",
-    //             pageToken: pt,
-    //         },
-    //         function (err, res) {
-    //             if (err) {
-    //                 console.error(err);
-    //                 resolve(false);
-    //             } else {
-    //                 //console.log(res);
-    //                 res.data.files.forEach(function (file) {
-    //                     //console.log("Found file: ", file.name, file.id);
-    //                     obj[file.id] = {
-    //                         id: file.id,
-    //                         filename: file.name,
-    //                         parents: file.parents,
-    //                     };
-    //                 });
-    //                 if (typeof res.data.nextPageToken !== "undefined") {
-    //                     // there is still next page, figure it out looz
-    //                 }
-    //                 resolve(obj);
-    //             }
-    //         }
-    //     );
-    // });
+    let m_idx: IAPI.driveapi.music.MusicFilesIndex = { files: [] };
 
     let drive = google.drive({ version: "v3", auth: oAuth2Client });
 
@@ -97,6 +81,11 @@ const scan = async (req: any, res: any) => {
         });
     } while (!!folder_pt);
 
+    if(folder_only) {
+        res.json(folders);
+        return;
+    }
+
     let pt: any = null;
     do {
         /* eslint-disable */
@@ -125,7 +114,12 @@ const scan = async (req: any, res: any) => {
                                     file.parents[file.parents.length - 1]
                                 ] !== undefined &&
                                 folders[file.parents[file.parents.length - 1]]
-                                    .parents !== undefined
+                                    .parents !== undefined &&
+                                folders[
+                                    folders[
+                                        file.parents[file.parents.length - 1]
+                                    ].parents[0]
+                                ] !== undefined
                             ) {
                                 file.parents.push(
                                     folders[
@@ -135,11 +129,11 @@ const scan = async (req: any, res: any) => {
                             }
                         }
 
-                        m_idx.files[file.id] = {
+                        m_idx.files.push({
                             id: file.id,
                             filename: file.name,
                             parents: file.parents,
-                        };
+                        });
                     }
 
                     resolve(res.data.nextPageToken);
