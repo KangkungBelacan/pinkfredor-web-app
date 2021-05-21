@@ -1,17 +1,10 @@
-import { verifyIncomingRequest } from "./../../../util/auth";
 import { db } from "./../../../firebase";
 import drive_cred from "./../../../drive_credentials.json";
 import { google } from "googleapis";
 import * as IAPI from "./../../interface";
 const scan = async (req: any, res: any) => {
-    let status = verifyIncomingRequest(req);
-    if (!status.valid) {
-        res.json({ message: status.message });
-        return;
-    }
-
     // Check if drive is linked
-    let doc = db.collection("drive-api-tokens").doc(status.user.id);
+    let doc = db.collection("drive-api-tokens").doc(req.app_user.id);
     let doc_data = await doc.get();
     if (!doc_data.exists) {
         res.json({ message: "Google drive is not linked" });

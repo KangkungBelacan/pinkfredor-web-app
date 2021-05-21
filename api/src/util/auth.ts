@@ -1,50 +1,40 @@
 import * as jwt from "jsonwebtoken";
 import { AppUser } from "./../APIS/interface/firebase/AppUser";
 import { env } from "./../env";
-import RequestStatus from "./interface/RequestStatus";
 
 function generateAccessToken(obj: object) {
     return jwt.sign(obj, env.API_SECRET, { expiresIn: "30m" });
 }
 
-/**
- * Generic function to verify each incoming request
- * @param req Request received from express
- */
-function verifyIncomingRequest(req: any): RequestStatus {
-    let status: RequestStatus = { valid: false, expired: false };
-    if (typeof req.body.token === "undefined") {
-        status.message = "Unauthorized User";
-        return status;
+function verifyRequestAuthorization(req: any, res: any, next: any) {
+    if (!req.headers.authorization) {
+        return res.status(403).json({ message: "Unauthorized User" });
     }
+
+    const bearer = req.headers.authorization.split(" ");
+    const bearerToken = bearer[1];
 
     let user;
     try {
-        user = jwt.verify(req.body.token, env.API_SECRET);
+        user = jwt.verify(bearerToken, env.API_SECRET);
     } catch (err: any) {
-        status.message = "Unauthorized User";
-        return status;
+        return res.status(403).json({ message: "Unauthorized User" });
     }
 
     let jwt_payload = user as any;
 
-    if(Date.now() > jwt_payload.exp*1000) {
-        status.expired = true;
-        status.message = "Token Expired";
-        return status;
+    if (Date.now() > jwt_payload.exp * 1000) {
+        return res
+            .status(401)
+            .json({ message: "Token Expired", expired: true });
     }
-    if(Date.now() < jwt_payload.iat*1000) {
-        status.message = "Invalid Token";
-        return status;
+    if (Date.now() < jwt_payload.iat * 1000) {
+        return res.status(401).json({ message: "Invalid Token" });
     }
 
-    let app_user: AppUser = {
-        id: (user as any).id,
-    };
+    req.app_user = user;
 
-    status.user = app_user;
-    status.valid = true;
-    return status;
+    next();
 }
 
-export { generateAccessToken, verifyIncomingRequest };
+export { generateAccessToken, verifyRequestAuthorization };
