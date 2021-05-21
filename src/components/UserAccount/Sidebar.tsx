@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 
 const Sidebar = (props: any) => {
-    const [SidebarWidth,setSidebarWidth]= useState("0px")
+    const [SidebarWidth,setSidebarWidth] = useState("0px")
     return (
         <div>
             <div className="sidebar" style={{width:SidebarWidth}} >

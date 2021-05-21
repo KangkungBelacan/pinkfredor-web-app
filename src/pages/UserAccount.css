@@ -44,3 +44,22 @@
 .Deactivate:hover {
   background-color: #444;
 }
+
+.text {
+  font-size: 20px;
+  padding-left: 20px;
+}
+
+input[type="text"],
+select,
+textarea {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+.Label {
+  padding: 12px 12px 12px 0;
+  display: inline-block;
+}
