@@ -3,7 +3,7 @@ import { AppUser } from "./../APIS/interface/firebase/AppUser";
 import { env } from "./../env";
 
 function generateAccessToken(obj: object) {
-    return jwt.sign(obj, env.API_SECRET, { expiresIn: "30m" });
+    return jwt.sign(obj, env.API_SECRET, { expiresIn: "24h" });
 }
 
 function verifyRequestAuthorization(req: any, res: any, next: any) {
