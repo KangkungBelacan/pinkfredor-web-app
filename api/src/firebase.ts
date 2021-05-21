@@ -4,4 +4,8 @@ admin.initializeApp({
     credential: admin.credential.cert(serviceaccount as any)
 });
 const firestore = admin.firestore();
-export const db = firestore;
+
+const db = firestore
+const FieldValue = admin.firestore.FieldValue;
+
+export {db, FieldValue};

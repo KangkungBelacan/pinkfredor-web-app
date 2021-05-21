@@ -8,17 +8,11 @@ import { db } from "./../../../firebase";
 const __schema_create: RequestSchema = {
     type: RequestType.POST,
     content: {
-        files: [
-            {
-                id: RequestBodyDataType.STRING,
-                filename: RequestBodyDataType.STRING,
-                parents: RequestBodyDataType.OPTIONAL,
-            },
-        ],
+        files: RequestBodyDataType.ANY
     },
 };
 
-const create = async (req: any, res: any) => {
+const __create = async (req: any, res: any) => {
     if (!verify_request_body(req, res, __schema_create)) {
         return;
     }
@@ -31,4 +25,4 @@ const create = async (req: any, res: any) => {
     }  
 };
 
-export default create;
+export default __create;

@@ -16,7 +16,10 @@ app.get("/api/driveapi/oauth_callback", api.driveapi.oauth_callback);
 app.use(verifyRequestAuthorization);
 
 // API Routes (Protected)
-app.post("/api/driveapi/files", api.driveapi.files.create);
+app.post("/api/driveapi/files", api.driveapi.files.__create);
+app.get("/api/driveapi/files", api.driveapi.files.__read);
+app.put("/api/driveapi/files/:fileid", api.driveapi.files.__update);
+app.delete("/api/driveapi/files/:fileid", api.driveapi.files.__delete);
 
 app.post("/api/driveapi/files/scan", api.driveapi.files.scan);
 app.post("/api/driveapi/authurl", api.driveapi.authurl);

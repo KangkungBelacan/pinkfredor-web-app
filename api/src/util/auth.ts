@@ -1,5 +1,4 @@
 import * as jwt from "jsonwebtoken";
-import { AppUser } from "./../APIS/interface/firebase/AppUser";
 import { env } from "./../env";
 
 function generateAccessToken(obj: object) {

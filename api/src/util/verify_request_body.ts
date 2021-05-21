@@ -95,14 +95,12 @@ const verify_request_body = (req: any, res: any, schema: RequestSchema) => {
     let body: any = {};
     switch (schema.type) {
         case RequestType.GET:
+        case RequestType.DELETE:
             body = req.query;
             break;
         case RequestType.POST:
-            body = req.body;
-            break;
         case RequestType.PUT:
-            break;
-        case RequestType.DELETE:
+            body = req.body;
             break;
     }
 
