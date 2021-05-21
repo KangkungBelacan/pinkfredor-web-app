@@ -7,9 +7,11 @@ import { verify_request_body } from "../../../util/verify_request_body";
 
 const __schema_create: RequestSchema = {
     type: RequestType.POST,
-    strict: false,
     content: {
-        files: RequestBodyDataType.STRING,
+        files: [{
+            fileid: RequestBodyDataType.STRING,
+            filename: RequestBodyDataType.STRING
+        }]
     },
 };
 
@@ -17,6 +19,7 @@ const create = (req: any, res: any) => {
     if (!verify_request_body(req, res, __schema_create)) {
         return;
     }
+    res.json({status: true});
 };
 
 export default create;

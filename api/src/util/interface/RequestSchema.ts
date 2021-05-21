@@ -6,11 +6,14 @@ export enum RequestType {
 }
 
 export enum RequestBodyDataType {
-    INTEGER,
-    DOUBLE,
-    BOOLEAN,
-    JSON,
-    STRING
+    STRING = "string",
+    NUMBER = "number",
+    BIGINT = "bigint",
+    BOOLEAN = "boolean",
+    SYMBOL = "symbol",
+    UNDEFINED = "undefined",
+    OBJECT = "object",
+    FUNCTION = "function"
 }
 
 /**
@@ -20,12 +23,7 @@ export interface RequestSchema {
     type: RequestType,
 
     /**
-     * Indicate if the request body MUST strictly match (Meaning if request includes additional field, its bad request)
-     */
-    strict: boolean,
-
-    /**
      * Expected Content
      */
-    content: {[key: string]: RequestBodyDataType}
+    content: {[key: string]: any}
 }

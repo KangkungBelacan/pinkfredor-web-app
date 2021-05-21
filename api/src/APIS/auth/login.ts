@@ -9,7 +9,6 @@ import { verify_request_body } from "../../util/verify_request_body";
 
 const __schema_login:RequestSchema = {
     type: RequestType.POST,
-    strict: false,
     content: {
         "tokenId": RequestBodyDataType.STRING
     }
