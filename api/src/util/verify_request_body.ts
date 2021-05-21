@@ -15,9 +15,19 @@ function verify_keys(keys_obj: { [key: string]: any }, data: any): boolean {
     for (let i = 0; i < keys.length; i++) {
         let type_string = typeof data[keys[i]];
 
+        // If this variable expects optionally 
+        if(keys_obj[keys[i]] === RequestBodyDataType.OPTIONAL) {
+            continue;
+        }
+
         // If this key doesnt exists
         if (type_string === "undefined") {
             return false;
+        }
+
+        // If this variable expects anything
+        if(keys_obj[keys[i]] === RequestBodyDataType.ANY) {
+            continue;
         }
 
         // If object is expected

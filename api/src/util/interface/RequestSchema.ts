@@ -13,7 +13,9 @@ export enum RequestBodyDataType {
     SYMBOL = "symbol",
     UNDEFINED = "undefined",
     OBJECT = "object",
-    FUNCTION = "function"
+    FUNCTION = "function",
+    ANY = "any",
+    OPTIONAL = "optional"
 }
 
 /**
