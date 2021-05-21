@@ -59,13 +59,14 @@ const scan = async (req: any, res: any) => {
     //     );
     // });
 
+    let drive = google.drive({ version: "v3", auth: oAuth2Client });
+
     // Get all folder
     let folders: any = {};
     let folder_pt: any = null;
     do {
         /* eslint-disable */
         folder_pt = await new Promise((resolve) => {
-            let drive = google.drive({ version: "v3", auth: oAuth2Client });
             drive.files.list(
                 {
                     // q: "mimeType = 'audio/mpeg' and trashed = false",
@@ -86,7 +87,7 @@ const scan = async (req: any, res: any) => {
                         folders[file.id] = {
                             id: file.id,
                             folder_name: file.name,
-                            parents: file.parents
+                            parents: file.parents,
                         };
                     }
 
@@ -96,9 +97,6 @@ const scan = async (req: any, res: any) => {
         });
     } while (!!folder_pt);
 
-    console.log(folders["0ACa7KghsbpvmUk9PVA"]);
-
-    let drive = google.drive({ version: "v3", auth: oAuth2Client });
     let pt: any = null;
     do {
         /* eslint-disable */
@@ -123,7 +121,9 @@ const scan = async (req: any, res: any) => {
                         let file = res.data.files[k];
                         if (file.parents !== undefined) {
                             while (
-                                folders[file.parents[file.parents.length - 1]] !== undefined &&
+                                folders[
+                                    file.parents[file.parents.length - 1]
+                                ] !== undefined &&
                                 folders[file.parents[file.parents.length - 1]]
                                     .parents !== undefined
                             ) {
