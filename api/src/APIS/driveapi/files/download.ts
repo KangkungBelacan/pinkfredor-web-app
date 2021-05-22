@@ -51,18 +51,14 @@ const download = async (req: any, res: any) => {
         return;
     }
 
-    const f_name = `${req.app_user.id}-${Date.now()}.mp3`;
-    let f = fs.createWriteStream(f_name);
+    // const f_name = `${req.app_user.id}-${Date.now()}.mp3`;
+    // let f = fs.createWriteStream(f_name);
 
-    test.data
-        .on("end", () => {
-            let f2 = fs.readFileSync(f_name, {encoding: 'base64'});
-            res.json({
-                b64: f2
-            });
-            fs.unlink(f_name,(err:any)=>{console.error(err)});
-        })
-        .pipe(f);
+    res.writeHead(200, {
+        'Content-Type': "application/octet-stream"
+    });
+
+    test.data.pipe(res);
     // res.send(test);
 };
 

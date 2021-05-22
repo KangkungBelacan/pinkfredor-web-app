@@ -4,13 +4,13 @@ import { readBuilderProgram } from "typescript";
 import { axios, useAxiosPOST } from "./../../global-imports";
 
 function getAudioURL(data: any) {
-    let bc = atob(data);
-    let bn = new Array(bc.length);
-    for (let i = 0; i < bc.length; i++) {
-        bn[i] = bc.charCodeAt(i);
-    }
-    let bytes = new Uint8Array(bn);
-    let blob = new Blob([bytes], { type: "audio/mpeg" });
+    // let bc = atob(data);
+    // let bn = new Array(bc.length);
+    // for (let i = 0; i < bc.length; i++) {
+    //     bn[i] = bc.charCodeAt(i);
+    // }
+    // let bytes = new Uint8Array(bn);
+    let blob = new Blob([data], { type: "audio/mpeg" });
     let url = window.URL.createObjectURL(blob);
     return url;
 }
@@ -20,7 +20,8 @@ const TestPage = () => {
     const {data, loading} = useAxiosPOST(
         "/api/driveapi/files/download",
         { fileid: "1fFEGOusvSIFTA141ytEkwzrY_B1MkYAu" },
-        localStorage.token
+        localStorage.token,
+        "blob"
     );
     // useEffect(() => {
     //     const run = async () => {
@@ -53,7 +54,7 @@ const TestPage = () => {
             <div>
                 <div>Ready to play?</div>
                 <Sound
-                    url={getAudioURL((data as any).b64)}
+                    url={getAudioURL(data)}
                     playStatus={removePls}
                     autoLoad={true}
                     onFinishedPlaying={() => {}}
