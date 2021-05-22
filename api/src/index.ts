@@ -22,6 +22,8 @@ app.put("/api/driveapi/files/:fileid", api.driveapi.files.__update);
 app.delete("/api/driveapi/files/:fileid", api.driveapi.files.__delete);
 
 app.post("/api/driveapi/files/scan", api.driveapi.files.scan);
+app.post("/api/driveapi/files/download", api.driveapi.files.download);
+
 app.post("/api/driveapi/authurl", api.driveapi.authurl);
 
 // Start Express server
