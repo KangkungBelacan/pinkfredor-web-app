@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-import { Collapse } from "react-bootstrap";
 import "./SideNavBar.css";
 function SideNavBar(props: any): JSX.Element {
     return (

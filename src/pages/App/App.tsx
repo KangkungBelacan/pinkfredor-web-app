@@ -1,16 +1,15 @@
-import * as MainAppComponent from './../../components/MainApp';
-import './App.css';
-import example_song_cover from './../../images/example-song-cover.jpeg'
+import * as MainAppComponent from "./../../components/MainApp";
+import "./App.css";
+import example_song_cover from "./../../images/example-song-cover.jpeg";
 
 function App() {
-
     return (
-        <div className='mainapp-body'>
-            <div>
+        <div className="mainapp-body">
+            <div style={{ display: "flex", height: "85vh" }}>
                 <MainAppComponent.SideNavBar />
                 <MainAppComponent.Content />
-                <MainAppComponent.MusicPlayer song_cover={example_song_cover}/>
             </div>
+            <MainAppComponent.MusicPlayer song_cover={example_song_cover} />
         </div>
     );
 }
