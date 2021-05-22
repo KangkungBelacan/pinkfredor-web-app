@@ -1,7 +1,10 @@
 import "./SideNavBar.css";
 function SideNavBar(props: any): JSX.Element {
     return (
-        <div className="sidebar-container">
+        <div
+            className="sidebar-container"
+            style={props.navBar ? { marginLeft: "250px" } : {}}
+        >
             <nav id="mainapp-sidebar" className="">
                 <div className="sidebar-header">
                     <h3>Pinkfredor</h3>
@@ -11,7 +14,9 @@ function SideNavBar(props: any): JSX.Element {
                     <li>
                         <div className="item-container">
                             <i>♥</i>
-                            <span className="item-container-text fs-lg">Browse</span>
+                            <span className="item-container-text fs-lg">
+                                Browse
+                            </span>
                         </div>
                     </li>
                     <li>
@@ -26,7 +31,7 @@ function SideNavBar(props: any): JSX.Element {
                         <div className="seperator"></div>
                     </li>
                     <li>
-                        <p className="sidebar-subheader" >Playlist</p>
+                        <p className="sidebar-subheader">Playlist</p>
                     </li>
                     <li>
                         <div className="item-container">

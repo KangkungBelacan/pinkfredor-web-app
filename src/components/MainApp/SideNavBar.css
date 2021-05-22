@@ -1,6 +1,7 @@
 .sidebar-container {
     display: flex;
     align-items: stretch;
+    transition: margin-left .3s;
 }
 
 .fs-sm {
