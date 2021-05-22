@@ -16,16 +16,11 @@ function Content(props: any): JSX.Element {
                         <FontAwesomeIcon icon="align-justify" />
                     </div>
                 </div>
-                <div className="col-sm-8 col-md-10 col-10">
+                <div className="col-sm-8 col-md-10 col-12">
                     <div className={topBarSelection === 1 ? "content-top-bar-items-container selected" : "content-top-bar-items-container"} onClick={()=> {setTopBar(1);}}>All Songs</div>
                     <div className={topBarSelection === 2 ? "content-top-bar-items-container selected" : "content-top-bar-items-container"} onClick={()=> {setTopBar(2);}}>Artist</div>
                     <div className={topBarSelection === 3 ? "content-top-bar-items-container selected" : "content-top-bar-items-container"} onClick={()=> {setTopBar(3);}}>Albums</div>
                     <div className={topBarSelection === 4 ? "content-top-bar-items-container selected" : "content-top-bar-items-container"} onClick={()=> {setTopBar(4);}}>Genres</div>
-                </div>
-                <div className="col-sm-2 col-2">
-                    <div className="row justify-content-end">
-                        <div style={{width: "auto"}}>User Account</div>
-                    </div>
                 </div>
             </div>
             Content Page goes here
