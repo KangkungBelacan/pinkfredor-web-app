@@ -1,10 +1,10 @@
 import { Redirect } from "react-router-dom";
-import { useAxiosPOST } from "./../../global-imports";
+import { axios, useAxiosPOST } from "./../../global-imports";
 
 const LinkGDrive = () => {
     const { data, loading } = useAxiosPOST("/api/driveapi/authurl", {
-        token: localStorage.token,
-    });
+        
+    }, localStorage.token);
 
     if (loading) {
         return <div>Loading...</div>;
