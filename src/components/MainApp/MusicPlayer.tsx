@@ -63,7 +63,7 @@ function MusicPlayer(props: any): JSX.Element {
                             <p className="player-progress">1:30</p>
                         </div>
                     </div>
-                    <div className="player-misc-controls" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', alignContent:'center' ,flexGrow: 1, flexBasis: 0, flexDirection: 'row'}}>
+                    <div className="player-misc-controls" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', alignContent:'center' ,flexGrow: 1, flexBasis: 0, flexDirection: 'row'}}>
                         <button className="player-controls-button-misc">{bars}</button>
                         <div className="player-misc-controls-volume-slider-container">
                             <input type="range" min='0' max='100' value={volume} className="player-misc-controls-volume-slider" style={{ backgroundSize: (volume - 0) * 100 / (100 - 0) + '% 100%' }} onInput={(event: any) => setVolume(event.currentTarget.value)} />
