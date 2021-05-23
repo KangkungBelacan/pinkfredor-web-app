@@ -28,7 +28,7 @@ const __create = async (req: any, res: any) => {
             return;
         }
 
-        let doc_data:IAPI.indexes.files.MusicFilesIndex = (doc_get.data() as IAPI.indexes.files.MusicFilesIndex);
+        let doc_data:IAPI.indexes.files.FileIndex = (doc_get.data() as IAPI.indexes.files.FileIndex);
 
         let keys = Object.keys(req.body.files);
         for(let i = 0; i < keys.length; i++) {

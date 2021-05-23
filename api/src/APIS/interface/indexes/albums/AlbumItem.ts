@@ -1,6 +1,7 @@
+import { Item } from "../Item";
 import { AlbumTrackEntry } from "./AlbumTrackEntry";
 
-export interface AlbumItem {
+export interface AlbumItem extends Item {
     albumid: string;
     album_name: string;
 

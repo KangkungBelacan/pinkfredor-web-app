@@ -41,7 +41,7 @@ const scan = async (req: any, res: any) => {
     oAuth2Client.setCredentials(user_drive_cred);
 
     // Scan google drive for music files
-    let m_idx: IAPI.indexes.music.MusicFilesIndex = { files: {} };
+    let m_idx: IAPI.indexes.files.FileIndex = { files: {} };
 
     let drive = google.drive({ version: "v3", auth: oAuth2Client });
 
@@ -71,7 +71,7 @@ const scan = async (req: any, res: any) => {
                         folders[file.id] = {
                             id: file.id,
                             folder_name: file.name,
-                            parents: file.parents,
+                            parents: file.parents
                         };
                     }
 
@@ -133,7 +133,9 @@ const scan = async (req: any, res: any) => {
                             id: file.id,
                             filename: file.name,
                             parents: file.parents,
-                            size: file.size
+                            size: file.size,
+                            date_added: Date.now(),
+                            date_modified: Date.now()
                         };
                     }
 

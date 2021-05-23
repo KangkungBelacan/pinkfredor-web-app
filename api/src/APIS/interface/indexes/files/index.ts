@@ -1,2 +1,2 @@
-export {MusicFilesIndex} from "./MusicFilesIndex";
-export {MusicFile} from "./MusicFile";
+export {FileIndex} from "./FileIndex";
+export {FileItem} from "./FileItem";
