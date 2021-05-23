@@ -41,7 +41,7 @@ const scan = async (req: any, res: any) => {
     oAuth2Client.setCredentials(user_drive_cred);
 
     // Scan google drive for music files
-    let m_idx: IAPI.driveapi.music.MusicFilesIndex = { files: {} };
+    let m_idx: IAPI.indexes.music.MusicFilesIndex = { files: {} };
 
     let drive = google.drive({ version: "v3", auth: oAuth2Client });
 
