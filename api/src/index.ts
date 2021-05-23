@@ -14,6 +14,8 @@ app.post("/api/auth/devlogin", api.auth.devlogin);
 app.get("/api/driveapi/oauth_callback", api.driveapi.oauth_callback);
 app.get("/api/driveapi/files/download", api.driveapi.files.download);
 
+// Make sure the response recieved from the endpoints after this line is properly authorized.
+// See Express > Middleware
 app.use(verifyRequestAuthorization);
 
 // API Routes (Protected)

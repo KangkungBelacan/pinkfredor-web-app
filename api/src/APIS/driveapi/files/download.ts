@@ -54,6 +54,7 @@ const download = async (req: any, res: any) => {
         return;
     }
 
+    // Get google drive credentials from firebase
     let file_id = req.query.fileid;
     let oAuth2Client = new google.auth.OAuth2(
         (env.DRIVE_CREDENTIAL as any).client_id,
@@ -64,7 +65,7 @@ const download = async (req: any, res: any) => {
     let drive = google.drive({ version: "v3", auth: oAuth2Client });
     let test: any;
 
-    // Read file metadata scanned
+    // Read file metadata previously scanned
     doc = db.collection("index-files").doc(req.app_user.id);
     let doc_get = await doc.get();
     if (!doc_get.exists) {
@@ -87,14 +88,19 @@ const download = async (req: any, res: any) => {
         return;
     }
 
-
+    // Read "range" from request header and response with correct bytes with status code (206)
     let filesize = file_metadata.size;
     try {
+        // If "range" is provided in header
         if (req.headers.range) {
+
+            // Get the range numbers
             let range = req.headers.range;
             const parts = range.replace(/bytes=/, "").split("-");
             const start = parseInt(parts[0], 10);
             const end = parts[1] ? parseInt(parts[1], 10) : filesize - 1;
+
+            // Get the file within the provided byte range through google drive api
             test = await drive.files.get(
                 {
                     fileId: file_id,
@@ -107,14 +113,20 @@ const download = async (req: any, res: any) => {
                     },
                 }
             );
+
+            // Write response head
             res.writeHead(206, {
                 "Content-Type": "audio/mpeg",
                 "Content-Range": `bytes ${start}-${end}/${filesize}`,
                 "Accept-Ranges": "bytes",
                 "Content-Length": `${end - start + 1}`,
             });
+
+            // Write drive filestream to user
             test.data.pipe(res);
         } else {
+
+            // Serve the filestream normally
             test = await drive.files.get(
                 {
                     fileId: file_id,
@@ -130,15 +142,12 @@ const download = async (req: any, res: any) => {
             test.data.pipe(res);
         }
     } catch (err: any) {
+
+        // Happens when user gives file_id that is not found
         res.status(404);
         res.json({ message: "File not found." });
         return;
     }
-
-    // res.writeHead(200, {
-    //     "Content-Type": "application/octet-stream",
-    // });
-    // test.data.pipe(res);
 };
 
 export default download;
