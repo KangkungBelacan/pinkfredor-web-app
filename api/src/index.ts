@@ -1,10 +1,19 @@
 import express from "express";
 import * as api from "./APIS";
 import {verifyRequestAuthorization} from "./util/auth";
+
+// ======================================
 // Initialization
+// ======================================
+
 const bodyParser = require("body-parser");
 const app = express();
 const port = 8080;
+
+// ======================================
+// ======================================
+
+// Use bodyParser middleware to get form data in json
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -17,12 +26,12 @@ app.post("/api/auth/devlogin", api.auth.devlogin);
 app.get("/api/driveapi/oauth_callback", api.driveapi.oauth_callback);
 app.get("/api/driveapi/files/download", api.driveapi.files.download);
 
+// ======================================
+// ======================================
+
 // Make sure the response recieved from the endpoints after this line is properly authorized.
 // See Express > Middleware
 app.use(verifyRequestAuthorization);
-
-// ======================================
-// ======================================
 
 // ======================================
 // API Routes (Protected)
