@@ -12,6 +12,7 @@ app.use(bodyParser.json());
 app.post("/api/auth/login", api.auth.login);
 app.post("/api/auth/devlogin", api.auth.devlogin);
 app.get("/api/driveapi/oauth_callback", api.driveapi.oauth_callback);
+app.get("/api/driveapi/files/download_v2", api.driveapi.files.download_v2);
 
 app.use(verifyRequestAuthorization);
 

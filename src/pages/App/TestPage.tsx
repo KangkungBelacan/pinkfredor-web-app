@@ -16,12 +16,12 @@ function getAudioURL(data: any) {
 
 const TestPage = () => {
     const [removePls, rp] = useState<ReactSoundProps["playStatus"]>("PAUSED");
-    const {data, loading} = useAxiosPOST(
-        "/api/driveapi/files/download",
-        { fileid: "1fFEGOusvSIFTA141ytEkwzrY_B1MkYAu" },
-        localStorage.token,
-        "blob"
-    );
+    // const {data, loading} = useAxiosPOST(
+    //     "/api/driveapi/files/download",
+    //     { fileid: "1fFEGOusvSIFTA141ytEkwzrY_B1MkYAu" },
+    //     localStorage.token,
+    //     "blob"
+    // );
     // useEffect(() => {
     //     const run = async () => {
     //         let res = await axios.post(
@@ -48,28 +48,28 @@ const TestPage = () => {
     //     run();
     // });
 
-    if (!loading) {
-        return (
-            <div>
-                <div>Ready to play?</div>
-                <Sound
-                    url={getAudioURL(data)}
-                    playStatus={removePls}
-                    autoLoad={true}
-                    onFinishedPlaying={() => {}}
-                    onError={() => {}}
-                />
-                <button
-                    onClick={() => {
-                        rp("PLAYING");
-                    }}
-                >
-                    Play
-                </button>
-            </div>
-        );
-    } else {
-        return <div>Downloading...</div>;
-    }
+    // if (!loading) {
+    return (
+        <div>
+            <div>Ready to play?</div>
+            <Sound
+                url="http://localhost:8080/api/driveapi/files/download_v2?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEwMzA2OTA4NDU1NjE3MDgxOTc5NiIsImlhdCI6MTYyMTcwMDYzMiwiZXhwIjoxNjIxNzg3MDMyfQ.7AfPA0kQ_u_bWVTI4ZmdxVtWOgcAu128BRbba2NSH2U&fileid=1fFEGOusvSIFTA141ytEkwzrY_B1MkYAu"
+                playStatus={removePls}
+                autoLoad={true}
+                onFinishedPlaying={() => {}}
+                onError={() => {}}
+            />
+            <button
+                onClick={() => {
+                    rp("PLAYING");
+                }}
+            >
+                Play
+            </button>
+        </div>
+    );
+    // } else {
+    //     return <div>Downloading...</div>;
+    // }
 };
 export default TestPage;

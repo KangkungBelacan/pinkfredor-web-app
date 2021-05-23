@@ -1,5 +1,6 @@
 export interface MusicFile {
     id: string,
     filename: string,
-    parents: any[]
+    parents: any[],
+    size: number
 }

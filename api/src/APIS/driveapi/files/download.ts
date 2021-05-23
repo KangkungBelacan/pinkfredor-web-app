@@ -43,7 +43,12 @@ const download = async (req: any, res: any) => {
                 fileId: file_id,
                 alt: "media",
             },
-            { responseType: "stream" }
+            {
+                responseType: "stream",
+                headers: {
+                    Range: "bytes=500-999",
+                },
+            }
         );
     } catch (err: any) {
         res.status(404);
@@ -51,15 +56,10 @@ const download = async (req: any, res: any) => {
         return;
     }
 
-    // const f_name = `${req.app_user.id}-${Date.now()}.mp3`;
-    // let f = fs.createWriteStream(f_name);
-
     res.writeHead(200, {
         'Content-Type': "application/octet-stream"
     });
-
     test.data.pipe(res);
-    // res.send(test);
 };
 
 export default download;

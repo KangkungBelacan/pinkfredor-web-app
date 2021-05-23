@@ -95,7 +95,7 @@ const scan = async (req: any, res: any) => {
                     q: "mimeType = 'audio/mpeg' and trashed = false",
                     // q: "trashed = false",
                     // q: "name = 'Week 1.5 VC.mkv'",
-                    fields: "nextPageToken, files(id, name, parents)",
+                    fields: "nextPageToken, files(id, name, parents, size)",
                     spaces: "drive",
                     pageToken: pt,
                 },
@@ -133,6 +133,7 @@ const scan = async (req: any, res: any) => {
                             id: file.id,
                             filename: file.name,
                             parents: file.parents,
+                            size: file.size
                         };
                     }
 
