@@ -1,1 +1,1 @@
-export * as music from "./music";
+export * as files from "./files";

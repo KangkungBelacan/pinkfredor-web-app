@@ -5,6 +5,8 @@ import {
 } from "../../../util/interface/RequestSchema";
 import { verify_request_body } from "../../../util/verify_request_body";
 import { db } from "./../../../firebase";
+import * as IAPI from "./../../interface";
+
 const __schema_create: RequestSchema = {
     type: RequestType.POST,
     content: {
@@ -18,8 +20,27 @@ const __create = async (req: any, res: any) => {
     }
 
     try {
-        await db.collection("index-files").doc(req.app_user.id).set(req.body);
-        res.json({ status: true });
+        let doc = db.collection("index-files").doc(req.app_user.id);
+        let doc_get = await doc.get();
+        if(!doc_get.exists) {
+            await db.collection("index-files").doc(req.app_user.id).set(req.body);
+            res.json({ status: true }); 
+            return;
+        }
+
+        let doc_data:IAPI.indexes.files.MusicFilesIndex = (doc_get.data() as IAPI.indexes.files.MusicFilesIndex);
+
+        let keys = Object.keys(req.body.files);
+        for(let i = 0; i < keys.length; i++) {
+            if(doc_data.files[keys[i]] === undefined) {
+                res.status(400);
+                res.json({message: "Contains duplicate data, consider using PUT?"});
+                return;
+            }
+            doc_data.files[keys[i]] = req.body.files[keys[i]];
+        }
+
+        await doc.set(doc_data);
     } catch (err: any) {
         res.json({ status: false });
     }  
