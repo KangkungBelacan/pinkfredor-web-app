@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 app.post("/api/auth/login", api.auth.login);
 app.post("/api/auth/devlogin", api.auth.devlogin);
 app.get("/api/driveapi/oauth_callback", api.driveapi.oauth_callback);
-app.get("/api/driveapi/files/download_v2", api.driveapi.files.download_v2);
+app.get("/api/driveapi/files/download", api.driveapi.files.download);
 
 app.use(verifyRequestAuthorization);
 
@@ -23,7 +23,6 @@ app.put("/api/driveapi/files/:fileid", api.driveapi.files.__update);
 app.delete("/api/driveapi/files/:fileid", api.driveapi.files.__delete);
 
 app.post("/api/driveapi/files/scan", api.driveapi.files.scan);
-app.post("/api/driveapi/files/download", api.driveapi.files.download);
 
 app.post("/api/driveapi/authurl", api.driveapi.authurl);
 
