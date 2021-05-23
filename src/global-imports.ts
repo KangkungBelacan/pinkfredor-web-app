@@ -23,8 +23,8 @@ const useAxiosPOST = (
             }
 
             let res = await axios.post(url, params, config);
-            setLoading(false);
             setData(res.data);
+            setLoading(false);
         };
         if (loading) {
             run();
