@@ -1,4 +1,4 @@
-import { db, FieldValue } from "./../../../firebase";
+import { db } from "./../../../firebase";
 
 const __delete = async (req: any, res: any) => {
     let file_id = req.params.fileid;

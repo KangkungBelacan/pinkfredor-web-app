@@ -24,6 +24,19 @@ const __read = async (req:any, res:any) => {
         res.json({message: "Not Found"});
         return;
     }
+
+    let doc_data = doc.data();
+
+    if(req.params.fileid !== undefined) {
+        if(doc_data.files[req.params.fileid] === undefined) {
+            res.status(404);
+            res.json({message: "File ID not found"});
+            return;
+        }
+
+        res.json(doc_data.files[req.params.fileid]);
+        return;
+    }
     
     res.json(doc.data());
 }
