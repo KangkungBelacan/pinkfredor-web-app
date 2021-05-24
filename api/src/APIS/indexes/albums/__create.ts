@@ -1,16 +1,59 @@
-import { RequestSchema, RequestType } from "../../../util/interface/RequestSchema";
+import * as IAPI from "../../../APIS/interface";
+import {
+    RequestBodyDataType,
+    RequestSchema,
+    RequestType,
+} from "../../../util/interface/RequestSchema";
 import { verify_request_body } from "../../../util/verify_request_body";
+import { db } from "./../../../firebase";
 
-const __schema_create:RequestSchema = {
+const __schema_create: RequestSchema = {
     type: RequestType.POST,
-    content: {}
-}
+    content: {
+        albums: [
+            {
+                album_name: RequestBodyDataType.STRING,
+                album_art: RequestBodyDataType.OPTIONAL,
+                tracks: RequestBodyDataType.OPTIONAL,
+                total_tracks: RequestBodyDataType.OPTIONAL,
+                year_released: RequestBodyDataType.OPTIONAL,
+                artistid: RequestBodyDataType.OPTIONAL,
+            },
+        ],
+    },
+};
 
-const __create = (req:any, res:any) => {
-    if(!verify_request_body(req, res, __schema_create)) {
+const __create = async (req: any, res: any) => {
+    if (!verify_request_body(req, res, __schema_create)) {
         return;
     }
-    res.json({status: false});
-}
+
+    let al = req.body.albums;
+
+    let al_idx: IAPI.indexes.albums.AlbumIndex = { albums: {} };
+
+    for (let i = 0; i < al.length; i++) {
+        let unique_id = `album-${Date.now()}-${req.app_user.id}-${i}`;
+        al_idx.albums[unique_id] = al[i];
+        al_idx.albums[unique_id].albumid = unique_id;
+    }
+
+    let doc = db.collection("index-album").doc(req.app_user.id);
+    let doc_get = await doc.get();
+    if (!doc_get.exists) {
+        await doc.set(al_idx);
+        res.json(al_idx);
+        return;
+    }
+
+    let doc_data = doc_get.data();
+    let keys = Object.keys(al_idx.albums);
+    for (let i = 0; i < keys.length; i++) {
+        doc_data.albums[keys[i]] = al_idx.albums[keys[i]];
+    }
+
+    await doc.set(doc_data);
+    res.json(al_idx);
+};
 
 export default __create;

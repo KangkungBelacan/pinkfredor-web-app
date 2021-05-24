@@ -57,7 +57,7 @@ app.delete("/api/indexes/genres/:genreid", api.indexes.genres.__delete);
 
 // Refer to index-albums in firestore
 app.post("/api/indexes/albums", api.indexes.albums.__create);
-app.get("/api/indexes/albums", api.indexes.albums.__read);
+app.get("/api/indexes/albums/:albumid?", api.indexes.albums.__read);
 app.put("/api/indexes/albums/:albumid", api.indexes.albums.__update);
 app.delete("/api/indexes/albums/:albumid", api.indexes.albums.__delete);
 
