@@ -1,5 +1,4 @@
 import { Item } from "../Item";
-import { AlbumTrackEntry } from "./AlbumTrackEntry";
 
 export interface AlbumItem extends Item {
     albumid: string;
@@ -9,10 +8,6 @@ export interface AlbumItem extends Item {
      * Base64 encoded album art
      */
     album_art?: string;
-
-    tracks?: Array<AlbumTrackEntry>,
-
-    total_tracks?: number
 
     year_released?: number
 
