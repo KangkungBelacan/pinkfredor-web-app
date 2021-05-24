@@ -9,7 +9,7 @@ import { db } from "./../../../firebase";
 const __schema_update: RequestSchema = {
     type: RequestType.PUT,
     content: {
-        genre_name: RequestBodyDataType.OPTIONAL
+        genre_name: RequestBodyDataType.OPTIONAL,
     },
 };
 
@@ -43,9 +43,12 @@ const __update = async (req: any, res: any) => {
     }
 
     // If provided, update
-    if (req.body.genre_name !== undefined)
+    if (req.body.genre_name !== undefined) {
         update_data[`genres.${req.params.genreid}`].genre_name =
             req.body.genre_name;
+    }
+    
+    update_data[`genres.${req.params.genreid}`].date_modified = Date.now();
 
     try {
         await doc.update(update_data);

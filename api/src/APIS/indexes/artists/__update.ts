@@ -51,6 +51,8 @@ const __update = async (req: any, res: any) => {
         update_data[`artists.${req.params.artistid}`].artist_art =
             req.body.artist_art;
 
+    update_data[`artists.${req.params.artistid}`].date_modified = Date.now();
+
     try {
         await doc.update(update_data);
     } catch (err: any) {

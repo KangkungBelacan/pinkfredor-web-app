@@ -66,6 +66,8 @@ const __update = async (req: any, res: any) => {
         update_data[`albums.${req.params.albumid}`].artistid =
             req.body.artistid;
 
+    update_data[`albums.${req.params.albumid}`].date_modified = Date.now();
+
     try {
         await doc.update(update_data);
     } catch (err: any) {

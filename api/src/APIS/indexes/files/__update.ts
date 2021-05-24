@@ -57,6 +57,8 @@ const __update = async (req: any, res: any) => {
         update_data[`files.${req.params.fileid}`].parents = req.body.parents;
     } 
 
+    update_data[`files.${req.params.fileid}`].date_modified = Date.now();
+
     try {
         await doc.update(update_data);
     } catch (err: any) {
