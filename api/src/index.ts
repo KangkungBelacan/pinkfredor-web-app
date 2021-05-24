@@ -51,7 +51,7 @@ app.delete("/api/indexes/playlists/:playlistid", api.indexes.playlists.__delete)
 
 // Refer to index-genres in firestore
 app.post("/api/indexes/genres", api.indexes.genres.__create);
-app.get("/api/indexes/genres", api.indexes.genres.__read);
+app.get("/api/indexes/genres/:genreid?", api.indexes.genres.__read);
 app.put("/api/indexes/genres/:genreid", api.indexes.genres.__update);
 app.delete("/api/indexes/genres/:genreid", api.indexes.genres.__delete);
 

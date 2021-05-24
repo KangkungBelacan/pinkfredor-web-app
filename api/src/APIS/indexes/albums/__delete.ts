@@ -2,13 +2,13 @@ import { RequestSchema, RequestType } from "../../../util/interface/RequestSchem
 import { verify_request_body } from "../../../util/verify_request_body";
 import { db } from "./../../../firebase";
 
-const __schema_create:RequestSchema = {
+const __schema_delete:RequestSchema = {
     type: RequestType.DELETE,
     content: {}
 }
 
 const __delete = async (req:any, res:any) => {
-    if(!verify_request_body(req, res, __schema_create)) {
+    if(!verify_request_body(req, res, __schema_delete)) {
         return;
     }
     let albumid = req.params.albumid;

@@ -2,13 +2,13 @@ import { RequestSchema, RequestType } from "../../../util/interface/RequestSchem
 import { verify_request_body } from "../../../util/verify_request_body";
 import { db } from "./../../../firebase";
 
-const __schema_create:RequestSchema = {
+const __schema_read:RequestSchema = {
     type: RequestType.GET,
     content: {}
 }
 
 const __read = async (req:any, res:any) => {
-    if(!verify_request_body(req, res, __schema_create)) {
+    if(!verify_request_body(req, res, __schema_read)) {
         return;
     }
 
