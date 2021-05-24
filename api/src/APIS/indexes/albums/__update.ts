@@ -11,8 +11,6 @@ const __schema_update: RequestSchema = {
     content: {
         album_name: RequestBodyDataType.OPTIONAL,
         album_art: RequestBodyDataType.OPTIONAL,
-        tracks: RequestBodyDataType.OPTIONAL,
-        total_tracks: RequestBodyDataType.OPTIONAL,
         year_released: RequestBodyDataType.OPTIONAL,
         artistid: RequestBodyDataType.OPTIONAL,
     },
@@ -54,11 +52,6 @@ const __update = async (req: any, res: any) => {
     if (req.body.album_art !== undefined)
         update_data[`albums.${req.params.albumid}`].album_art =
             req.body.album_art;
-    if (req.body.tracks !== undefined)
-        update_data[`albums.${req.params.albumid}`].tracks = req.body.tracks;
-    if (req.body.total_tracks !== undefined)
-        update_data[`albums.${req.params.albumid}`].total_tracks =
-            req.body.total_tracks;
     if (req.body.year_released !== undefined)
         update_data[`albums.${req.params.albumid}`].year_released =
             req.body.year_released;
