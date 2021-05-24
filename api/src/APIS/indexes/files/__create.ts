@@ -32,7 +32,7 @@ const __create = async (req: any, res: any) => {
                 .collection("index-files")
                 .doc(req.app_user.id)
                 .set(req.body);
-            res.json({ status: true });
+            res.json(req.body);
             return;
         }
 
