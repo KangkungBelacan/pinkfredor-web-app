@@ -11,6 +11,7 @@ const __schema_update: RequestSchema = {
     content: {
         filename: RequestBodyDataType.OPTIONAL,
         parents: RequestBodyDataType.OPTIONAL,
+        file_metadata: RequestBodyDataType.OPTIONAL,
     },
 };
 
@@ -49,13 +50,48 @@ const __update = async (req: any, res: any) => {
     }
 
     let update_data: any = {};
-    update_data[`files.${req.params.fileid}`] = doc_data.files[req.params.fileid]
-    if(req.body.filename !== undefined) {
+    update_data[`files.${req.params.fileid}`] =
+        doc_data.files[req.params.fileid];
+    if (req.body.filename !== undefined) {
         update_data[`files.${req.params.fileid}`].filename = req.body.filename;
-    } 
-    if(req.body.parents !== undefined) {
+    }
+    if (req.body.parents !== undefined) {
         update_data[`files.${req.params.fileid}`].parents = req.body.parents;
-    } 
+    }
+
+    if (req.body.file_metadata !== undefined) {
+        if (req.body.file_metadata.album_track_no !== undefined) {
+            update_data[
+                `files.${req.params.fileid}`
+            ].file_metadata.album_track_no =
+                req.body.file_metadata.album_track_no;
+        }
+        if (req.body.file_metadata.song_title !== undefined) {
+            update_data[`files.${req.params.fileid}`].file_metadata.song_title =
+                req.body.file_metadata.song_title;
+        }
+        if (req.body.file_metadata.song_artistid !== undefined) {
+            update_data[
+                `files.${req.params.fileid}`
+            ].file_metadata.song_artistid =
+                req.body.file_metadata.song_artistid;
+        }
+        if (req.body.file_metadata.song_albumid !== undefined) {
+            update_data[
+                `files.${req.params.fileid}`
+            ].file_metadata.song_albumid = req.body.file_metadata.song_albumid;
+        }
+        if (req.body.file_metadata.song_genreid !== undefined) {
+            update_data[
+                `files.${req.params.fileid}`
+            ].file_metadata.song_genreid = req.body.file_metadata.song_genreid;
+        }
+        if (req.body.file_metadata.song_comment !== undefined) {
+            update_data[
+                `files.${req.params.fileid}`
+            ].file_metadata.song_comment = req.body.file_metadata.song_comment;
+        }
+    }
 
     update_data[`files.${req.params.fileid}`].date_modified = Date.now();
 
@@ -67,7 +103,8 @@ const __update = async (req: any, res: any) => {
     }
 
     res.json(
-        (await db.collection("index-files").doc(req.app_user.id).get()).data().files[req.params.fileid]
+        (await db.collection("index-files").doc(req.app_user.id).get()).data()
+            .files[req.params.fileid]
     );
 };
 

@@ -39,7 +39,7 @@ app.use(verifyRequestAuthorization);
 
 // Refer to index-files in firestore
 app.post("/api/indexes/files", api.indexes.files.__create);
-app.get("/api/indexes/files", api.indexes.files.__read);
+app.get("/api/indexes/files/:fileid?", api.indexes.files.__read);
 app.put("/api/indexes/files/:fileid", api.indexes.files.__update);
 app.delete("/api/indexes/files/:fileid", api.indexes.files.__delete);
 
