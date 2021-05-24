@@ -10,14 +10,14 @@ export interface AlbumItem extends Item {
      */
     album_art?: string;
 
-    tracks: Array<AlbumTrackEntry>,
+    tracks?: Array<AlbumTrackEntry>,
 
-    total_tracks: number
+    total_tracks?: number
 
     year_released?: number
 
     /**
      * Hmm
      */
-    artistid: string
+    artistid?: string
 }
