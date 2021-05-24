@@ -13,7 +13,7 @@ const __schema_create: RequestSchema = {
         artists: [
             {
                 artist_name: RequestBodyDataType.STRING,
-                artist_art: RequestBodyDataType.OPTIONAL
+                artist_art: RequestBodyDataType.OPTIONAL,
             },
         ],
     },
@@ -37,6 +37,11 @@ const __create = async (req: any, res: any) => {
     let doc = db.collection("index-artist").doc(req.app_user.id);
     let doc_get = await doc.get();
     if (!doc_get.exists) {
+        let keys = Object.keys(artist_idx.artists);
+        for (let i = 0; i < keys.length; i++) {
+            artist_idx.artists[keys[i]].date_added = Date.now();
+            artist_idx.artists[keys[i]].date_modified = Date.now();
+        }
         await doc.set(artist_idx);
         res.json(artist_idx);
         return;
@@ -46,6 +51,8 @@ const __create = async (req: any, res: any) => {
     let keys = Object.keys(artist_idx.artists);
     for (let i = 0; i < keys.length; i++) {
         doc_data.artists[keys[i]] = artist_idx.artists[keys[i]];
+        doc_data.artists[keys[i]].date_added = Date.now();
+        doc_data.artists[keys[i]].date_modified = Date.now();
     }
 
     await doc.set(doc_data);

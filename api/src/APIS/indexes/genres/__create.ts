@@ -12,7 +12,7 @@ const __schema_create: RequestSchema = {
     content: {
         genres: [
             {
-                genre_name: RequestBodyDataType.STRING
+                genre_name: RequestBodyDataType.STRING,
             },
         ],
     },
@@ -36,6 +36,11 @@ const __create = async (req: any, res: any) => {
     let doc = db.collection("index-genres").doc(req.app_user.id);
     let doc_get = await doc.get();
     if (!doc_get.exists) {
+        let keys = Object.keys(genre_idx.genres);
+        for (let i = 0; i < keys.length; i++) {
+            genre_idx.genres[keys[i]].date_added = Date.now();
+            genre_idx.genres[keys[i]].date_modified = Date.now();
+        }
         await doc.set(genre_idx);
         res.json(genre_idx);
         return;
@@ -45,6 +50,8 @@ const __create = async (req: any, res: any) => {
     let keys = Object.keys(genre_idx.genres);
     for (let i = 0; i < keys.length; i++) {
         doc_data.genres[keys[i]] = genre_idx.genres[keys[i]];
+        doc_data.genres[keys[i]].date_added = Date.now();
+        doc_data.genres[keys[i]].date_modified = Date.now();
     }
 
     await doc.set(doc_data);

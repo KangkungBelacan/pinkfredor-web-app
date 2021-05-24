@@ -10,7 +10,7 @@ import * as IAPI from "./../../interface";
 const __schema_create: RequestSchema = {
     type: RequestType.POST,
     content: {
-        files: RequestBodyDataType.ANY
+        files: RequestBodyDataType.ANY,
     },
 };
 
@@ -22,28 +22,41 @@ const __create = async (req: any, res: any) => {
     try {
         let doc = db.collection("index-files").doc(req.app_user.id);
         let doc_get = await doc.get();
-        if(!doc_get.exists) {
-            await db.collection("index-files").doc(req.app_user.id).set(req.body);
-            res.json({ status: true }); 
+        if (!doc_get.exists) {
+            let keys = Object.keys(req.body.files);
+            for (let i = 0; i < keys.length; i++) {
+                req.body.files[keys[i]].date_added = Date.now();
+                req.body.files[keys[i]].date_modified = Date.now();
+            }
+            await db
+                .collection("index-files")
+                .doc(req.app_user.id)
+                .set(req.body);
+            res.json({ status: true });
             return;
         }
 
-        let doc_data:IAPI.indexes.files.FileIndex = (doc_get.data() as IAPI.indexes.files.FileIndex);
+        let doc_data: IAPI.indexes.files.FileIndex =
+            doc_get.data() as IAPI.indexes.files.FileIndex;
 
         let keys = Object.keys(req.body.files);
-        for(let i = 0; i < keys.length; i++) {
-            if(doc_data.files[keys[i]] === undefined) {
+        for (let i = 0; i < keys.length; i++) {
+            if (doc_data.files[keys[i]] === undefined) {
                 res.status(400);
-                res.json({message: "Contains duplicate data, consider using PUT?"});
+                res.json({
+                    message: "Contains duplicate data, consider using PUT?",
+                });
                 return;
             }
             doc_data.files[keys[i]] = req.body.files[keys[i]];
+            doc_data.files[keys[i]].date_added = Date.now();
+            doc_data.files[keys[i]].date_modified = Date.now();
         }
 
         await doc.set(doc_data);
     } catch (err: any) {
         res.json({ status: false });
-    }  
+    }
 };
 
 export default __create;

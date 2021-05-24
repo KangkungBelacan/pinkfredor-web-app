@@ -129,14 +129,12 @@ const scan = async (req: any, res: any) => {
                             }
                         }
 
-                        m_idx.files[file.id] = {
+                        m_idx.files[file.id] = ({
                             id: file.id,
                             filename: file.name,
                             parents: file.parents,
-                            size: file.size,
-                            date_added: Date.now(),
-                            date_modified: Date.now()
-                        };
+                            size: file.size
+                        } as IAPI.indexes.files.FileItem);
                     }
 
                     resolve(res.data.nextPageToken);

@@ -14,8 +14,6 @@ const __schema_create: RequestSchema = {
             {
                 album_name: RequestBodyDataType.STRING,
                 album_art: RequestBodyDataType.OPTIONAL,
-                tracks: RequestBodyDataType.OPTIONAL,
-                total_tracks: RequestBodyDataType.OPTIONAL,
                 year_released: RequestBodyDataType.OPTIONAL,
                 artistid: RequestBodyDataType.OPTIONAL,
             },
@@ -41,6 +39,12 @@ const __create = async (req: any, res: any) => {
     let doc = db.collection("index-album").doc(req.app_user.id);
     let doc_get = await doc.get();
     if (!doc_get.exists) {
+        let keys = Object.keys(al_idx.albums);
+        for (let i = 0; i < keys.length; i++) {
+            al_idx.albums[keys[i]].date_added = Date.now();
+            al_idx.albums[keys[i]].date_modified = Date.now();
+        }
+
         await doc.set(al_idx);
         res.json(al_idx);
         return;
@@ -50,6 +54,8 @@ const __create = async (req: any, res: any) => {
     let keys = Object.keys(al_idx.albums);
     for (let i = 0; i < keys.length; i++) {
         doc_data.albums[keys[i]] = al_idx.albums[keys[i]];
+        doc_data.albums[keys[i]].date_added = Date.now();
+        doc_data.albums[keys[i]].date_modified = Date.now();
     }
 
     await doc.set(doc_data);
