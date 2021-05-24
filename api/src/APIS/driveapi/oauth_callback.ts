@@ -12,7 +12,19 @@ const oauth_callback = async (req: any, res: any) => {
     let userid: string = req.query.state;
     try {
         const { tokens } = await oauth2Client.getToken(auth_code);
-        db.collection("drive-api-tokens").doc(userid).set(tokens);
+        let doc = db.collection("drive-api-tokens").doc(userid);
+        let doc_get = await doc.get();
+
+        // If user already had refresh token and refresh token is not provided
+        if(doc_get.exists && tokens.refresh_token === undefined) {
+            let doc_data = doc_get.data();
+            let rt = doc_data.refresh_token;
+            let new_token = tokens;
+            new_token.refresh_token = rt;
+            await doc.set(new_token);
+        } else {
+            await doc.set(tokens);
+        }
         res.redirect("http://localhost:3000");
     } catch (err: any) {
         res.json({message: "Wtf are you doing"});
