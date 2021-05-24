@@ -45,7 +45,7 @@ app.delete("/api/indexes/files/:fileid", api.indexes.files.__delete);
 
 // Refer to index-playlists in firestore
 app.post("/api/indexes/playlists", api.indexes.playlists.__create);
-app.get("/api/indexes/playlists", api.indexes.playlists.__read);
+app.get("/api/indexes/playlists/:playlistid?", api.indexes.playlists.__read);
 app.put("/api/indexes/playlists/:playlistid", api.indexes.playlists.__update);
 app.delete("/api/indexes/playlists/:playlistid", api.indexes.playlists.__delete);
 
