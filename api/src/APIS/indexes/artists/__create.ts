@@ -1,16 +1,55 @@
-import { RequestSchema, RequestType } from "../../../util/interface/RequestSchema";
+import * as IAPI from "../../../APIS/interface";
+import {
+    RequestBodyDataType,
+    RequestSchema,
+    RequestType,
+} from "../../../util/interface/RequestSchema";
 import { verify_request_body } from "../../../util/verify_request_body";
+import { db } from "./../../../firebase";
 
-const __schema_create:RequestSchema = {
+const __schema_create: RequestSchema = {
     type: RequestType.POST,
-    content: {}
-}
+    content: {
+        artists: [
+            {
+                artist_name: RequestBodyDataType.STRING,
+                artist_art: RequestBodyDataType.OPTIONAL
+            },
+        ],
+    },
+};
 
-const __create = (req:any, res:any) => {
-    if(!verify_request_body(req, res, __schema_create)) {
+const __create = async (req: any, res: any) => {
+    if (!verify_request_body(req, res, __schema_create)) {
         return;
     }
-    res.json({status: false});
-}
+
+    let artist = req.body.artists;
+
+    let artist_idx: IAPI.indexes.artists.ArtistIndex = { artists: {} };
+
+    for (let i = 0; i < artist.length; i++) {
+        let unique_id = `artist-${Date.now()}-${req.app_user.id}-${i}`;
+        artist_idx.artists[unique_id] = artist[i];
+        artist_idx.artists[unique_id].artistid = unique_id;
+    }
+
+    let doc = db.collection("index-artist").doc(req.app_user.id);
+    let doc_get = await doc.get();
+    if (!doc_get.exists) {
+        await doc.set(artist_idx);
+        res.json(artist_idx);
+        return;
+    }
+
+    let doc_data = doc_get.data();
+    let keys = Object.keys(artist_idx.artists);
+    for (let i = 0; i < keys.length; i++) {
+        doc_data.artists[keys[i]] = artist_idx.artists[keys[i]];
+    }
+
+    await doc.set(doc_data);
+    res.json(artist_idx);
+};
 
 export default __create;

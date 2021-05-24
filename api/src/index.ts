@@ -63,7 +63,7 @@ app.delete("/api/indexes/albums/:albumid", api.indexes.albums.__delete);
 
 // Refer to index-artists in firestore
 app.post("/api/indexes/artists", api.indexes.artists.__create);
-app.get("/api/indexes/artists", api.indexes.artists.__read);
+app.get("/api/indexes/artists/:artistid?", api.indexes.artists.__read);
 app.put("/api/indexes/artists/:artistid", api.indexes.artists.__update);
 app.delete("/api/indexes/artists/:artistid", api.indexes.artists.__delete);
 

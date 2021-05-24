@@ -6,7 +6,7 @@ import {
 import { verify_request_body } from "../../../util/verify_request_body";
 import { db } from "./../../../firebase";
 
-const __schema_create: RequestSchema = {
+const __schema_update: RequestSchema = {
     type: RequestType.PUT,
     content: {
         album_name: RequestBodyDataType.OPTIONAL,
@@ -19,7 +19,7 @@ const __schema_create: RequestSchema = {
 };
 
 const __update = async (req: any, res: any) => {
-    if (!verify_request_body(req, res, __schema_create)) {
+    if (!verify_request_body(req, res, __schema_update)) {
         return;
     }
 
