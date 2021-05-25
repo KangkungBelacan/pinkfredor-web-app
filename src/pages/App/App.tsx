@@ -8,14 +8,16 @@ function App() {
 
     return (
         <div className="mainapp-body">
-            <div style={{ display: "flex"}}>
+            <div style={{ display: "flex" , height:"100vh"}}>
                 <MainAppComponent.SideNavBar navBar={showNavBar} />
                 <MainAppComponent.Content
                     navBarState={showNavBar}
                     setNavBar={setNavBarDisplay}
                 />
             </div>
-            <MainAppComponent.MusicPlayer song_cover={example_song_cover} />
+            <div className="music-player">
+                <MainAppComponent.MusicPlayer song_cover={example_song_cover} />
+            </div>
         </div>
     );
 }

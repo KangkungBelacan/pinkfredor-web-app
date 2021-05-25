@@ -1,14 +1,6 @@
 .mainapp-body {
     background-color: #121212;
     background-repeat: repeat;
-    /* height: 1000vh; */
-}
-
-.player-root {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
 }
 
 .player {
