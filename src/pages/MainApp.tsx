@@ -2,7 +2,6 @@
 import PrivateRoute from "../components/generic/PrivateRoute";
 import * as App from "./App";
 import { AuthService } from "../services/Auth";
-import { Redirect } from "react-router";
 function MainApp() {
     const { authed, loading } = AuthService();
     return loading ? (

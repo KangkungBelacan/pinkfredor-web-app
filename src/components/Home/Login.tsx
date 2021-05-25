@@ -1,12 +1,9 @@
-import React, { useState } from "react";
 import { GoogleLogin } from "react-google-login";
-import { Redirect } from "react-router";
 import { axios } from "./../../global-imports";
 const clientID =
     "44229445451-f5g42aefkck186jqdb73fojsedh3avsg.apps.googleusercontent.com";
 
-const Login = (props:any) => {
-
+const Login = (props: any) => {
     const onSuccess = (res: any) => {
         // console.log(res);
         axios
@@ -17,7 +14,9 @@ const Login = (props:any) => {
                 console.log(res);
                 if (typeof res.data.token !== "undefined") {
                     localStorage.setItem("token", res.data.token);
-                    props.setlogon(true);
+                    if (props.setlogon !== undefined) {
+                        props.setlogon(true);
+                    }
                     return;
                 }
                 alert("Login unsuccessful");
@@ -28,7 +27,7 @@ const Login = (props:any) => {
     };
 
     return (
-        <div style={{display: props.show ? "block" : "none"}}> 
+        <div style={{ display: props.show ? "block" : "none" }}>
             <GoogleLogin
                 clientId={clientID}
                 render={(props) => (
