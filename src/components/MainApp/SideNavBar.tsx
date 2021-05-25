@@ -1,23 +1,60 @@
+import { Link, useLocation } from "react-router-dom";
 import "./SideNavBar.css";
 function SideNavBar(props: any): JSX.Element {
+    const current_path = useLocation().pathname;
     return (
         <div
             className="sidebar-container"
-            style={{marginLeft: props.navBar ? "250px" : ""}}
+            style={{ marginLeft: props.navBar ? "250px" : "" }}
         >
-            <nav id="mainapp-sidebar" className="" style={{overflowY: "auto"}}>
+            <nav
+                id="mainapp-sidebar"
+                className=""
+                style={{ overflowY: "auto" }}
+            >
                 <div className="sidebar-header">
                     <h3>Pinkfredor</h3>
                 </div>
 
                 <ul className="list-unstyled components">
                     <li>
-                        <div className="item-container">
-                            <i>♥</i>
-                            <span className="item-container-text fs-lg">
-                                Browse
-                            </span>
-                        </div>
+                        <Link
+                            to="/app/test"
+                            style={{ textDecoration: "none", color: "inherit" }}
+                        >
+                            <div className={current_path === "/app/test" ? "item-container selected" : "item-container"}>
+                                <i>♥</i>
+                                <span className="item-container-text fs-lg">
+                                    Test Page
+                                </span>
+                            </div>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to="/app/linkdrive"
+                            style={{ textDecoration: "none", color: "inherit" }}
+                        >
+                            <div className={current_path === "/app/linkdrive" ? "item-container selected" : "item-container"}>
+                                <i>♥</i>
+                                <span className="item-container-text fs-lg">
+                                    Link Google Drive
+                                </span>
+                            </div>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to="/app"
+                            style={{ textDecoration: "none", color: "inherit" }}
+                        >
+                            <div className={current_path === "/app" ? "item-container selected" : "item-container"}>
+                                <i>♥</i>
+                                <span className="item-container-text fs-lg">
+                                    Browse
+                                </span>
+                            </div>
+                        </Link>
                     </li>
                     <li>
                         <div className="item-container">
