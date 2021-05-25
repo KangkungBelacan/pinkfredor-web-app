@@ -10,7 +10,7 @@ function App() {
 
     return (
         <div className="mainapp-body">
-            <div style={{ display: "flex" , height:"100vh"}}>
+            <div style={{ display: "flex" , height:"85vh"}}>
                 <MainAppComponent.SideNavBar navBar={showNavBar} />
                 {/* <MainAppComponent.Content
                     navBarState={showNavBar}

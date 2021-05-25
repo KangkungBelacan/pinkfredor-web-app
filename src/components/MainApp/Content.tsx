@@ -153,8 +153,8 @@ function Content(props: any): JSX.Element {
     }
 
     return (
-        <div className="container-fluid" style={{ color: "#ffffff" }}>
-            <div className="row content-top-bar">
+        <div className="container-fluid mainapp-content-container" style={{ color: "#ffffff" }}>
+            <div className="row content-top-bar col-12">
                 {/* Only show when screen size is small */}
                 <div className="d-sm-block d-md-none col-sm-2 col-12">
                     <div style={{ padding: "10px", cursor: "pointer" }} onClick={() => props.setNavBar(!props.navBarState)}>
@@ -167,34 +167,35 @@ function Content(props: any): JSX.Element {
                     <div className={topBarSelection === 3 ? "content-top-bar-items-container selected" : "content-top-bar-items-container"} onClick={() => { setTopBar(3); }}>Albums</div>
                     <div className={topBarSelection === 4 ? "content-top-bar-items-container selected" : "content-top-bar-items-container"} onClick={() => { setTopBar(4); }}>Genres</div>
                 </div>
-            </div>
-            <div className="songs-section" style={{ display: 'flex', flexDirection: 'column', marginBottom: "150px" }}>
-                <input className="songs-search-bar" style={(songsQuery === "" && !inputFocus) ? { width: '10px' } : { width: '100%' }} value={songsQuery} onFocus={() => setInputFocus(true)} onBlur={() => setInputFocus(false)} onChange={(event) => searchBarUpdate(event)} />
-                <div className="songs-table">
-                    <MaterialTable
-                    icons={tableIcons}
-                        columns={[
-                            { title: "Adı", field: "name" },
-                            { title: "Soyadı", field: "surname" },
-                            { title: "Doğum Yılı", field: "birthYear", type: "numeric" },
-                            {
-                                title: "Doğum Yeri",
-                                field: "birthCity",
-                                lookup: { 34: "İstanbul", 63: "Şanlıurfa" },
-                            },
-                        ]}
-                        data={[
-                            {
-                                name: "Mehmet",
-                                surname: "Baran",
-                                birthYear: 1987,
-                                birthCity: 63,
-                            },
-                        ]}
-                        title="Demo Title"
-                    />
+                <div className="songs-section" style={{ display: 'flex', flexDirection: 'column', marginBottom: "150px" }}>
+                    <input className="songs-search-bar" style={(songsQuery === "" && !inputFocus) ? { width: '10px' } : { width: '100%' }} value={songsQuery} onFocus={() => setInputFocus(true)} onBlur={() => setInputFocus(false)} onChange={(event) => searchBarUpdate(event)} />
+                    <div className="songs-table">
+                        <MaterialTable
+                        icons={tableIcons}
+                            columns={[
+                                { title: "Adı", field: "name" },
+                                { title: "Soyadı", field: "surname" },
+                                { title: "Doğum Yılı", field: "birthYear", type: "numeric" },
+                                {
+                                    title: "Doğum Yeri",
+                                    field: "birthCity",
+                                    lookup: { 34: "İstanbul", 63: "Şanlıurfa" },
+                                },
+                            ]}
+                            data={[
+                                {
+                                    name: "Mehmet",
+                                    surname: "Baran",
+                                    birthYear: 1987,
+                                    birthCity: 63,
+                                },
+                            ]}
+                            title="Demo Title"
+                        />
+                    </div>
                 </div>
             </div>
+
         </div>
     );
 }
