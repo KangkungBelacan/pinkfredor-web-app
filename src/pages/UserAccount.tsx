@@ -24,7 +24,7 @@ function UserAccount() {
                     <br/>
                     <input id="Email" type="text" placeholder="Your Email"></input>
                     <p><br/><button className="Button">UPDATE</button></p>
-                    <p><h2 className="HeaderLine"></h2></p>
+                    <p><h2 className="HeaderLine">H2 Header here</h2></p>
                 </p>
                 <p>
                     <UserAccountComponent.Password/>
@@ -40,7 +40,7 @@ function UserAccount() {
                     <br/>
                     <input id="ClubNum" type="text" placeholder="Club Card Number"></input>
                 </p>
-                <p className="ParagraphPosition2">Need help?Please visit our <a href="#">Contact Us</a> page!
+                <p className="ParagraphPosition2">Need help?Please visit our <a href="#0">Contact Us</a> page!
                 <p><br/><button className="Button">UPDATE</button></p></p>
             </div>
         </div>

@@ -97,7 +97,7 @@ function Content(props: any): JSX.Element {
         setSongsQuery(query)
         let i;
         let newSongsResults = [];
-        if (query != "") {
+        if (query !== "") {
             for (i = 0; i < example_songs.length; i++) {
                 if (example_songs[i].title.toLowerCase().includes(query.toLowerCase())) {
                     newSongsResults.push(example_songs[i])
@@ -131,7 +131,7 @@ function Content(props: any): JSX.Element {
                 </div>
             </div>
             <div className="songs-section" style={{ display: 'flex', flexDirection: 'column', marginBottom: "150px" }}>
-                <input className="songs-search-bar" style={(songsQuery == "" && !inputFocus) ? { width: '10px' } : { width: '100%' }} value={songsQuery} onFocus={() => setInputFocus(true)} onBlur={() => setInputFocus(false)} onChange={(event) => searchBarUpdate(event)} />
+                <input className="songs-search-bar" style={(songsQuery === "" && !inputFocus) ? { width: '10px' } : { width: '100%' }} value={songsQuery} onFocus={() => setInputFocus(true)} onBlur={() => setInputFocus(false)} onChange={(event) => searchBarUpdate(event)} />
                 <div className="songs-results-table">
                     <ul style={{ display: "flex", flexDirection: "column" }}>
                         {songResults}

@@ -1,4 +1,4 @@
-import app_img from "./../images/Logo.png";
+// import app_img from "./../images/Logo.png";
 import * as HelpComponent from "./../components/Help";
 import "./Help.css";
 
@@ -8,7 +8,7 @@ function Help() {
             <nav className="tr-nav-bar-container">
                 <a href="http://localhost:3000/" className="tr-nav-bar-items-container">Home</a>
                 <a href="http://localhost:3000/app" className="tr-nav-bar-items-container">Main App</a>
-                <a href="" className="tr-nav-bar-items-container">About</a>
+                <a href="#0" className="tr-nav-bar-items-container">About</a>
                 <div className="tr-nav-bar-items-container">Log Out</div>
             </nav>
             <h1>Help</h1>

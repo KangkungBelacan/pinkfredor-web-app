@@ -1,18 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Sound, { ReactSoundProps } from "react-sound";
-import { axios, useAxiosPOST } from "./../../global-imports";
-
-function getAudioURL(data: any) {
-    // let bc = atob(data);
-    // let bn = new Array(bc.length);
-    // for (let i = 0; i < bc.length; i++) {
-    //     bn[i] = bc.charCodeAt(i);
-    // }
-    // let bytes = new Uint8Array(bn);
-    let blob = new Blob([data], { type: "audio/mpeg" });
-    let url = window.URL.createObjectURL(blob);
-    return url;
-}
 
 const TestPage = () => {
     const [removePls, rp] = useState<ReactSoundProps["playStatus"]>("PAUSED");

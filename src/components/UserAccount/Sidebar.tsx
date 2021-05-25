@@ -10,8 +10,8 @@ const Sidebar = (props: any) => {
     return (
         <div>
             <div className="sidebar" style={{width:SidebarWidth}}>
-            <a href="javascript:void(0)" className="Deactivate" onClick={() => setSidebarWidth("0px")}>×</a>
-            <a>My Account</a>
+            <a href="#0" className="Deactivate" onClick={() => setSidebarWidth("0px")}>×</a>
+            <a href="#0">My Account</a>
             <img className="RoundedImage" src={HomeImage} alt="HomeAvatar"></img>
             <a href={props.link1}>{props.line1}</a>
             <img className="ResizeImage1" src={AppImage} alt="AppAvatar"></img>
