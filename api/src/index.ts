@@ -22,9 +22,12 @@ app.use(bodyParser.json());
 // ======================================
 
 app.post("/api/auth/login", api.auth.login);
-app.post("/api/auth/devlogin", api.auth.devlogin);
+app.post("/api/auth/check", api.auth.check);
 app.get("/api/driveapi/oauth_callback", api.driveapi.oauth_callback);
 app.get("/api/driveapi/files/download", api.driveapi.files.download);
+
+// Developer use only (PLEASE REMOVE IN PRODUCTION)
+app.post("/api/auth/devlogin", api.auth.devlogin);
 
 // ======================================
 // ======================================
