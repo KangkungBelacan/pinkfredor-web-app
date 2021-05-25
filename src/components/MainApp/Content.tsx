@@ -140,7 +140,6 @@ function Content(props: any): JSX.Element {
     };
 
     return (
-
         <div className="container-fluid mainapp-content-container" style={{ color: "#ffffff" }}>
             <div className="row content-top-bar col-12">
                 {/* Only show when screen size is small */}
