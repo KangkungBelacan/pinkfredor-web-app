@@ -9,6 +9,7 @@ const useAxiosPOST = (
     responseType: string = ""
 ) => {
     const [data, setData] = useState(null);
+    const [error, setErr] = useState(null);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
         const run = async () => {
@@ -21,16 +22,19 @@ const useAxiosPOST = (
             if (responseType !== "") {
                 config.responseType = responseType;
             }
-
-            let res = await axios.post(url, params, config);
-            setData(res.data);
+            try {
+                let res = await axios.post(url, params, config);
+                setData(res.data);
+            } catch (err: any) {
+                setErr(err);
+            }
             setLoading(false);
         };
         if (loading) {
             run();
         }
     });
-    return { data, loading };
+    return { data, loading, error };
 };
 
 export { axios, useAxiosPOST };

@@ -22,7 +22,6 @@ app.use(bodyParser.json());
 // ======================================
 
 app.post("/api/auth/login", api.auth.login);
-app.post("/api/auth/check", api.auth.check);
 app.get("/api/driveapi/oauth_callback", api.driveapi.oauth_callback);
 app.get("/api/driveapi/files/download", api.driveapi.files.download);
 
@@ -39,6 +38,9 @@ app.use(verifyRequestAuthorization);
 // ======================================
 // API Routes (Protected)
 // ======================================
+
+// Allow login checks
+app.post("/api/auth/check", api.auth.check);
 
 // Refer to index-files in firestore
 app.post("/api/indexes/files", api.indexes.files.__create);
