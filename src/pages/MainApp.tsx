@@ -14,10 +14,7 @@ function MainApp() {
         <div>Loading...</div>
     ) : (
         <div>
-            <PrivateRoute authed={authed} path="/app" exact component={App.App} />
-            <PrivateRoute authed={authed} path="/app/user" component={App.UserAccount} />
-            <PrivateRoute authed={authed} path="/app/test" component={App.TestPage} />
-            <PrivateRoute authed={authed} path="/app/linkdrive" component={App.LinkGDrive} />
+            <PrivateRoute authed={authed} path="/app" component={App.App} />
         </div>
     )
 }

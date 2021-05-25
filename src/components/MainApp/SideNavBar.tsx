@@ -3,9 +3,9 @@ function SideNavBar(props: any): JSX.Element {
     return (
         <div
             className="sidebar-container"
-            style={props.navBar ? { marginLeft: "250px" } : {}}
+            style={{marginLeft: props.navBar ? "250px" : ""}}
         >
-            <nav id="mainapp-sidebar" className="">
+            <nav id="mainapp-sidebar" className="" style={{overflowY: "auto"}}>
                 <div className="sidebar-header">
                     <h3>Pinkfredor</h3>
                 </div>
