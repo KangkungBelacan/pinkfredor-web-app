@@ -49,7 +49,7 @@ interface Element {
 function Content(props: any): JSX.Element {
     const song_columns = [
         { title: "Title", field: "title" },
-        { title: "Length", field: "length" },
+        { title: "Length", field: "length", editable: "never" as const },
         { title: "Artist", field: "artist" },
         { title: "Album", field: "album" }
     ]
@@ -111,7 +111,7 @@ function Content(props: any): JSX.Element {
     const [songsQuery, setSongsQuery] = useState("")
     const [inputFocus, setInputFocus] = useState(false)
     const [songResults, setSongsResults] = useState<Element>([])
-    const [tableData, setTableData] = useState(example_songs);
+    const [songsTableData, setSongsTableData] = useState(example_songs);
 
     const DragState = {
         row: -1,
@@ -134,9 +134,9 @@ function Content(props: any): JSX.Element {
         return arr;
     };
     const reOrderRow = (from: any, to: any) => {
-        let newtableData = offsetIndex(from, to, tableData);
+        let newtableData = offsetIndex(from, to, songsTableData);
         //Update react state
-        setTableData(newtableData);
+        setSongsTableData(newtableData);
     };
 
     return (
@@ -158,25 +158,25 @@ function Content(props: any): JSX.Element {
                     <MaterialTable
                         icons={tableIcons}
                         columns={song_columns}
-                        data={tableData}
+                        data={songsTableData}
                         title="Songs"
                         components={{
                             Row: (props) => (
                                 <MTableBodyRow
                                     {...props}
                                     draggable="true"
-                                    onDragStart={(e:any) => {
+                                    onDragStart={(e: any) => {
                                         console.log("onDragStart");
                                         DragState.row = props.data.tableData.id;
                                     }}
-                                    onDragEnter={(e:any) => {
+                                    onDragEnter={(e: any) => {
                                         e.preventDefault();
                                         if (props.data.tableData.id !== DragState.row) {
                                             DragState.dropIndex = props.data.tableData.id;
                                         }
                                     }}
-                                    onDragEnd={(e:any) => {
-                                        console.log(`onDragEnd`);
+                                    onDragEnd={(e: any) => {
+                                        console.log(DragState);
                                         if (DragState.dropIndex !== -1) {
                                             reOrderRow(DragState.row, DragState.dropIndex);
                                         }
@@ -185,7 +185,44 @@ function Content(props: any): JSX.Element {
                                     }}
                                 />
                             ),
-                        }} // components
+                        }}
+
+                        editable={{
+                            onRowAdd: newData =>
+                                new Promise<void>((resolve, reject) => {
+                                    setTimeout(() => {
+                                        setSongsTableData([...songsTableData, newData]);
+
+                                        resolve();
+                                    }, 1000)
+                                }),
+                            onRowUpdate: (newData, oldData) =>
+                                new Promise<void>((resolve, reject) => {
+                                    setTimeout(() => {
+                                        const dataUpdate = [...songsTableData];
+                                        const index = oldData!.id;
+                                        dataUpdate[index] = newData;
+                                        setSongsTableData([...dataUpdate]);
+
+                                        resolve();
+                                    }, 1000)
+                                }),
+                            onRowDelete: oldData =>
+                                new Promise<void>((resolve, reject) => {
+                                    setTimeout(() => {
+                                        const dataDelete = [...songsTableData];
+                                        const index = oldData!.id;
+                                        dataDelete.splice(index, 1);
+                                        setSongsTableData([...dataDelete]);
+
+                                        resolve()
+                                    }, 1000)
+                                }),
+                        }}
+
+                        options={{
+                            actionsColumnIndex: -1
+                        }}
                     />
                 </div>
             </div>
