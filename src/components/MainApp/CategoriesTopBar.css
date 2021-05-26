@@ -27,7 +27,7 @@
     color: white !important;
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 768px) {
     .top-bar-item-container {
         width: 50px;
     }

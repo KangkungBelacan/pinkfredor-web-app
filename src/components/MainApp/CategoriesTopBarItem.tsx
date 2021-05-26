@@ -39,7 +39,7 @@ const CategoriesTopBarItem = (props: CategoriesTopBarItemProps) => {
             )}
             {custom_icon}
 
-            <div className="d-sm-block d-none">{props.display_text}</div>
+            <div className="d-md-block d-none">{props.display_text}</div>
         </Link>
     );
 };
