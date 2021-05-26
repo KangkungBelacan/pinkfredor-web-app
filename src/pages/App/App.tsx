@@ -20,6 +20,7 @@ function App() {
                 <Route path="/app/user" component={AppSubPage.UserAccount} />
                 <Route path="/app/linkdrive" component={AppSubPage.LinkGDrive} />
                 <Route path="/app/test" component={AppSubPage.TestPage} />
+                <Route path="/app/organize" component={() => <AppSubPage.Organizer className="mainapp-content-container" /> } />
             </div>
             <div className="music-player">
                 <MainAppComponent.MusicPlayer song_cover={example_song_cover} />

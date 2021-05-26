@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import "./SideNavBar.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function SideNavBar(props: any): JSX.Element {
     const current_path = useLocation().pathname;
     return (
@@ -22,7 +23,13 @@ function SideNavBar(props: any): JSX.Element {
                             to="/app/test"
                             style={{ textDecoration: "none", color: "inherit" }}
                         >
-                            <div className={current_path === "/app/test" ? "item-container selected" : "item-container"}>
+                            <div
+                                className={
+                                    current_path === "/app/test"
+                                        ? "item-container selected"
+                                        : "item-container"
+                                }
+                            >
                                 <i>♥</i>
                                 <span className="item-container-text fs-lg">
                                     Test Page
@@ -35,7 +42,13 @@ function SideNavBar(props: any): JSX.Element {
                             to="/app/linkdrive"
                             style={{ textDecoration: "none", color: "inherit" }}
                         >
-                            <div className={current_path === "/app/linkdrive" ? "item-container selected" : "item-container"}>
+                            <div
+                                className={
+                                    current_path === "/app/linkdrive"
+                                        ? "item-container selected"
+                                        : "item-container"
+                                }
+                            >
                                 <i>♥</i>
                                 <span className="item-container-text fs-lg">
                                     Link Google Drive
@@ -48,10 +61,35 @@ function SideNavBar(props: any): JSX.Element {
                             to="/app"
                             style={{ textDecoration: "none", color: "inherit" }}
                         >
-                            <div className={current_path === "/app" ? "item-container selected" : "item-container"}>
+                            <div
+                                className={
+                                    current_path === "/app"
+                                        ? "item-container selected"
+                                        : "item-container"
+                                }
+                            >
                                 <i>♥</i>
                                 <span className="item-container-text fs-lg">
                                     Browse
+                                </span>
+                            </div>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to="/app/organize"
+                            style={{ textDecoration: "none", color: "inherit" }}
+                        >
+                            <div
+                                className={
+                                    current_path === "/app/organize"
+                                        ? "item-container selected"
+                                        : "item-container"
+                                }
+                            >
+                                <FontAwesomeIcon icon="columns" />
+                                <span className="item-container-text fs-lg">
+                                    Organize
                                 </span>
                             </div>
                         </Link>
