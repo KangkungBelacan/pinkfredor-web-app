@@ -3,6 +3,7 @@ import CategoriesTopBarItem from "./CategoriesTopBarItem";
 import "./CategoriesTopBar.css";
 const CategoriesTopBar = (props: CategoriesTopBarProps) => {
     const CONT_CLASS = " row justify-content-center border-bottom";
+    const CONT_STYLE = {};
     let content_components = [];
     if (props.items !== undefined) {
         for (let i = 0; i < props.items.length; i++) {
@@ -16,7 +17,7 @@ const CategoriesTopBar = (props: CategoriesTopBarProps) => {
             className={
                 props.className ? props.className + CONT_CLASS : CONT_CLASS
             }
-            style={props.style ? props.style : {}}
+            style={props.style ? {...CONT_STYLE, ...props.style} : CONT_STYLE}
         >{content_components}</div>
     );
 };

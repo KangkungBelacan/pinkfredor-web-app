@@ -26,3 +26,14 @@
     background-color: rgba(122, 122, 122, 0.5);
     color: white !important;
 }
+
+@media only screen and (max-width: 500px) {
+    .top-bar-item-container {
+        width: 50px;
+    }
+
+    .top-bar-item-container.selected::after {
+        width: 50px;
+        margin-left: -20px;
+    }
+}
