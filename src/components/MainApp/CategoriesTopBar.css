@@ -1,0 +1,19 @@
+.top-bar-item-container {
+    width: auto;
+    text-align: center;
+    cursor:pointer;
+    padding: 5px 20px 5px 20px;
+    margin: 0 5px 0 5px;
+    border-radius: 10px;
+    text-decoration: none;
+    color:white;
+}
+
+.top-bar-item-container.selected {
+    background-color: red;
+}
+
+.top-bar-item-container:hover {
+    background-color: rgba(122,122,122,1);
+    color: white !important;
+}
