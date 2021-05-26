@@ -2,8 +2,9 @@
 import { forwardRef } from 'react';
 import "./Content.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MaterialTable, { MTableBodyRow } from "material-table";
+// import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
@@ -47,6 +48,7 @@ interface Element {
 }
 
 function Content(props: any): JSX.Element {
+
     const song_columns = [
         { title: "Title", field: "title" },
         { title: "Length", field: "length", editable: "never" as const },
@@ -56,88 +58,94 @@ function Content(props: any): JSX.Element {
 
     var example_songs = [
         {
-            id: 1,
+            id: 0,
             title: "Apple",
             length: "3:23",
             artist: "Test artist 1",
             album: "Test album 1",
             album_tr_no: 0,
             date_added: "13-5-2021",
-            genre: "Pop"
+            genre: "Pop",
+            uid: "uid_one"
         },
         {
-            id: 2,
+            id: 1,
             title: "Banana",
             length: "9:30",
             artist: "Test artist 1",
             album: "Test album 1",
             album_tr_no: 1,
             date_added: "14-5-2021",
-            genre: "Rock"
+            genre: "Rock",
+            uid: "uid_two"
         },
         {
-            id: 3,
+            id: 2,
             title: "Cat",
             length: "5:20",
             artist: "Test artist 1",
             album: "Test album 1",
             album_tr_no: 2,
             date_added: "15-5-2021",
-            genre: "Jazz"
+            genre: "Jazz",
+            uid: "uid_three"
         },
         {
-            id: 4,
+            id: 3,
             title: "Donkey",
             length: "1:47",
             artist: "Test artist 2",
             album: "Test album 2",
             album_tr_no: 0,
             date_added: "16-5-2021",
-            genre: "Pop"
+            genre: "Pop",
+            uid: "uid_four"
         },
         {
-            id: 5,
+            id: 4,
             title: "Fish",
             length: "2:43",
             artist: "Test artist 2",
             album: "Test album 2",
             album_tr_no: 1,
             date_added: "16-5-2021",
-            genre: "Jazz"
+            genre: "Jazz",
+            uid: "uid_five"
         },
     ]
 
     const [topBarSelection, setTopBar] = useState(0)
-    const [songsQuery, setSongsQuery] = useState("")
-    const [inputFocus, setInputFocus] = useState(false)
-    const [songResults, setSongsResults] = useState<Element>([])
     const [songsTableData, setSongsTableData] = useState(example_songs);
 
-    const DragState = {
-        row: -1,
-        dropIndex: -1, // drag target
-    };
-
-    const offsetIndex = (from: any, to: any, arr: any = []) => {
-        if (from < to) {
-            let start = arr.slice(0, from),
-                between = arr.slice(from + 1, to + 1),
-                end = arr.slice(to + 1);
-            return [...start, ...between, arr[from], ...end];
-        }
-        if (from > to) {
-            let start = arr.slice(0, to),
-                between = arr.slice(to, from),
-                end = arr.slice(from + 1);
-            return [...start, arr[from], ...between, ...end];
-        }
-        return arr;
-    };
-    const reOrderRow = (from: any, to: any) => {
-        let newtableData = offsetIndex(from, to, songsTableData);
-        //Update react state
-        setSongsTableData(newtableData);
-    };
+    // This shit causing me a headache, how about we dont use right click, and just use a button
+    // const [contextMenus, setContextMenus] = useState<Element>([])
+    //
+    // function handleContextMenus(e:any, data:any) {
+    //     console.log(e)
+    //     console.log(data)
+    // }
+    //
+    // function updateContextMenus() {
+    //     let newContextMenus = (example_songs.map((song) =>
+    //         <ContextMenu id={song.uid}>
+    //             <MenuItem data={{ menuName: 'playNext' }} onClick={handleContextMenus}>
+    //                 Play next
+    //         </MenuItem>
+    //             <MenuItem data={{ menuName: 'addToQ' }} onClick={handleContextMenus}>
+    //                 Add to queue
+    //         </MenuItem>
+    //             <MenuItem divider />
+    //             <MenuItem data={{ menuName: 'addToPlaylist' }} onClick={handleContextMenus}>
+    //                 Add to playlist
+    //         </MenuItem>
+    //         </ContextMenu>
+    //     ))
+    //     setContextMenus(newContextMenus)
+    // }
+    //
+    // useEffect(()=> {
+    //     updateContextMenus();
+    // }, [])
 
     return (
         <div className="container-fluid mainapp-content-container" style={{ color: "#ffffff" }}>
@@ -160,70 +168,16 @@ function Content(props: any): JSX.Element {
                         columns={song_columns}
                         data={songsTableData}
                         title="Songs"
-                        components={{
-                            Row: (props) => (
-                                <MTableBodyRow
-                                    {...props}
-                                    draggable="true"
-                                    onDragStart={(e: any) => {
-                                        console.log("onDragStart");
-                                        DragState.row = props.data.tableData.id;
-                                    }}
-                                    onDragEnter={(e: any) => {
-                                        e.preventDefault();
-                                        if (props.data.tableData.id !== DragState.row) {
-                                            DragState.dropIndex = props.data.tableData.id;
-                                        }
-                                    }}
-                                    onDragEnd={(e: any) => {
-                                        console.log(DragState);
-                                        if (DragState.dropIndex !== -1) {
-                                            reOrderRow(DragState.row, DragState.dropIndex);
-                                        }
-                                        DragState.row = -1;
-                                        DragState.dropIndex = -1;
-                                    }}
-                                />
-                            ),
-                        }}
 
-                        editable={{
-                            onRowAdd: newData =>
-                                new Promise<void>((resolve, reject) => {
-                                    setTimeout(() => {
-                                        setSongsTableData([...songsTableData, newData]);
-
-                                        resolve();
-                                    }, 1000)
-                                }),
-                            onRowUpdate: (newData, oldData) =>
-                                new Promise<void>((resolve, reject) => {
-                                    setTimeout(() => {
-                                        const dataUpdate = [...songsTableData];
-                                        const index = oldData!.id;
-                                        dataUpdate[index] = newData;
-                                        setSongsTableData([...dataUpdate]);
-
-                                        resolve();
-                                    }, 1000)
-                                }),
-                            onRowDelete: oldData =>
-                                new Promise<void>((resolve, reject) => {
-                                    setTimeout(() => {
-                                        const dataDelete = [...songsTableData];
-                                        const index = oldData!.id;
-                                        dataDelete.splice(index, 1);
-                                        setSongsTableData([...dataDelete]);
-
-                                        resolve()
-                                    }, 1000)
-                                }),
-                        }}
-
-                        options={{
-                            actionsColumnIndex: -1
-                        }}
+                        // components={{
+                        //     Row: props => (
+                        //         <ContextMenuTrigger id={props.data.tableData.uid}>
+                        //             <MTableBodyRow {...props} />
+                        //         </ContextMenuTrigger>
+                        //     )
+                        // }}
                     />
+                    {/* contextMenus */}
                 </div>
             </div>
         </div>
