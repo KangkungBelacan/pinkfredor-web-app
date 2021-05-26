@@ -12,20 +12,23 @@ const Password = (props: any) => {
       }
     }
     return (
-        <div className="ParagraphPosition">
-            <h2>Change your password</h2>
-          <p>
-            <label className="Label" htmlFor="CurrentPass">Current Password</label>
-            <br/>
-            <button className="PassButton" onClick={visibility}>Show</button>
-            <input id="CurrentPass" type="text" placeholder="Current Password"></input>
-          </p>
-          <p className="ObjectPosition">
-            <label className="Label" htmlFor="NewPass">New Password</label>
-            <br/>
-            <button className="PassButton" onClick={visibility}>Show</button>
-            <input id="NewPass" type="text" placeholder="New Password"></input>      
-          </p>
+        <div>
+          <br/><h2>Change your password</h2>
+          <div className="flex">
+            <div>
+              <label className="Label" htmlFor="CurrentPass">Current Password</label><br/>
+              <button className="PassButton" onClick={visibility}>Show</button>
+              <input id="CurrentPass" type="text" placeholder="Current Password"></input>
+            </div>
+            <div>
+              <label className="Label" htmlFor="NewPass">New Password</label><br/>
+              <button className="PassButton" onClick={visibility}>Show</button>
+              <input id="NewPass" type="text" placeholder="New Password"></input>
+            </div>
+          </div>
+          <div className="flex">
+            <div><button className="Button">UPDATE</button></div>
+          </div>           
         </div>
     );
 };
