@@ -6,7 +6,7 @@ function SideNavBar(props: any): JSX.Element {
     return (
         <div
             className="sidebar-container"
-            style={{ marginLeft: props.navBar ? "250px" : "" }}
+            style={{ marginLeft: props.navBar && props.isMobile ? "250px" : "" }}
         >
             <nav
                 id="mainapp-sidebar"
