@@ -2,6 +2,8 @@ import { GenericProps } from "../../interface/GenericProps";
 import "./Organizer.css";
 import CategoriesTopBar from "../../components/MainApp/CategoriesTopBar";
 import { CategoriesTopBarItemProps } from "../../interface/components/MainApp/CategoriesTopBarItemProps";
+import { Route } from "react-router";
+import * as OrganizerSubPage from "./OrganizerSubPage";
 const Organizer = (props: GenericProps) => {
     let items: Array<CategoriesTopBarItemProps> = [
         {
@@ -31,16 +33,13 @@ const Organizer = (props: GenericProps) => {
             style={props.style ? props.style : {}}
         >
             <div className="container-fluid organizer-body">
+                <CategoriesTopBar items={items} />
                 <div className="row">
-                    <div className="container-fluid">
-                        <CategoriesTopBar items={items} />
-                    </div>
-                </div>
-
-                <div className="container">
-                    <div className="row">
-                        <div className="col-12">Content goes here</div>
-                    </div>
+                    <Route path="/app/organize" exact component={ () => <div>Select one of the category</div> }  />
+                    <Route path="/app/organize/Tracks" component={OrganizerSubPage.tracks} />
+                    <Route path="/app/organize/Artists" component={OrganizerSubPage.artists} />
+                    <Route path="/app/organize/Genres" component={OrganizerSubPage.genres} />
+                    <Route path="/app/organize/Albums" component={OrganizerSubPage.albums} />
                 </div>
             </div>
         </div>

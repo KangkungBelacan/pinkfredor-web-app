@@ -1,3 +1,7 @@
 .organizer-body {
     color:white;
 }
+
+.organizer-subpage-content-container {
+    overflow-y: auto;
+}
