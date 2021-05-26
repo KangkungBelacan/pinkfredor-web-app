@@ -4,7 +4,7 @@
 }
 
 .mainapp-content-container {
-    display: flex;
+    /* display: flex; */
     overflow-y: auto;
     align-items: stretch;
     flex-direction: row;

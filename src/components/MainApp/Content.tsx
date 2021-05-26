@@ -154,7 +154,7 @@ function Content(props: any): JSX.Element {
                     <div className={topBarSelection === 3 ? "content-top-bar-items-container selected" : "content-top-bar-items-container"} onClick={() => { setTopBar(3); }}>Albums</div>
                     <div className={topBarSelection === 4 ? "content-top-bar-items-container selected" : "content-top-bar-items-container"} onClick={() => { setTopBar(4); }}>Genres</div>
                 </div>
-                <div className="songs-section" style={{ display: 'flex', flexDirection: 'column', marginBottom: "150px" }}>
+                <div className="songs-section" style={{ display: 'flex', flexDirection: 'column', }}>
                     <MaterialTable
                         icons={tableIcons}
                         columns={song_columns}
