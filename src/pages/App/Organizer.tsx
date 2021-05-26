@@ -7,12 +7,12 @@ const Organizer = (props: GenericProps) => {
         {
             display_text: "Album",
             faIconClass: "broadcast-tower",
-            link: "/app/organize/Album"
+            link: "/app/organize/Album",
         },
         {
             display_text: "GDrive",
             faIconClass: ["fab", "google-drive"],
-            link: "/app/organize/gdrive"
+            link: "/app/organize/gdrive",
         },
     ];
     return (
@@ -20,9 +20,18 @@ const Organizer = (props: GenericProps) => {
             className={props.className ? props.className : ""}
             style={props.style ? props.style : {}}
         >
-            <div className="container organizer-body">
-                <CategoriesTopBar items={items} />
-                <div className="row">Hi</div>
+            <div className="container-fluid organizer-body">
+                <div className="row">
+                    <div className="container-fluid">
+                        <CategoriesTopBar items={items} />
+                    </div>
+                </div>
+
+                <div className="container">
+                    <div className="row">
+                        <div className="col-12">Content goes here</div>
+                    </div>
+                </div>
             </div>
         </div>
     );

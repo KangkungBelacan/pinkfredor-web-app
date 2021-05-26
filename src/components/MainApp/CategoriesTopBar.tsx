@@ -2,7 +2,7 @@ import { CategoriesTopBarProps } from "../../interface/components/MainApp/Catego
 import CategoriesTopBarItem from "./CategoriesTopBarItem";
 import "./CategoriesTopBar.css";
 const CategoriesTopBar = (props: CategoriesTopBarProps) => {
-    const CONT_CLASS = " row justify-content-center p-3 border-bottom";
+    const CONT_CLASS = " row justify-content-center border-bottom";
     let content_components = [];
     if (props.items !== undefined) {
         for (let i = 0; i < props.items.length; i++) {
