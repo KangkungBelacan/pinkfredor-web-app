@@ -25,7 +25,7 @@ function SideNavBar(props: any): JSX.Element {
                         >
                             <div
                                 className={
-                                    current_path === "/app/test"
+                                    current_path.startsWith("/app/test")
                                         ? "item-container selected"
                                         : "item-container"
                                 }
@@ -44,7 +44,7 @@ function SideNavBar(props: any): JSX.Element {
                         >
                             <div
                                 className={
-                                    current_path === "/app/linkdrive"
+                                    current_path.startsWith("/app/linkdrive")
                                         ? "item-container selected"
                                         : "item-container"
                                 }
@@ -84,7 +84,7 @@ function SideNavBar(props: any): JSX.Element {
                         >
                             <div
                                 className={
-                                    current_path === "/app/organize"
+                                    current_path.startsWith("/app/organize")
                                         ? "item-container selected"
                                         : "item-container"
                                 }
