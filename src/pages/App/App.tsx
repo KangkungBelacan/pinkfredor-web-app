@@ -14,7 +14,7 @@ function App() {
     return (
         <div className="mainapp-body">
             <div style={{ display: "flex" , height:"85vh"}}>
-                <MainAppComponent.SideNavBar isMobile={isMobile} navBar={showNavBar} />
+                <MainAppComponent.SideNavBar setNavBarDisplay={setNavBarDisplay} isMobile={isMobile} navBar={showNavBar} />
                 {/* <MainAppComponent.Content
                     navBarState={showNavBar}
                     setNavBar={setNavBarDisplay}

@@ -14,7 +14,14 @@ function SideNavBar(props: any): JSX.Element {
                 style={{ overflowY: "auto" }}
             >
                 <div className="sidebar-header">
-                    <h3>Pinkfredor</h3>
+                    <div className="row">
+                        <div className="col-md-12 col-8">
+                            <h3>Pinkfredor</h3>
+                        </div>
+                        <div className="col-4 d-md-none d-block" style={{textAlign: "right", cursor: "pointer"}} onClick={() => { props.setNavBarDisplay(false); }}>
+                            <FontAwesomeIcon icon="times"/>
+                        </div>
+                    </div>
                 </div>
 
                 <ul className="list-unstyled components">
