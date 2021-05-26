@@ -30,7 +30,7 @@ function SideNavBar(props: any): JSX.Element {
                                         : "item-container"
                                 }
                             >
-                                <i>♥</i>
+                                <FontAwesomeIcon icon="vial" />
                                 <span className="item-container-text fs-lg">
                                     Test Page
                                 </span>
@@ -49,7 +49,9 @@ function SideNavBar(props: any): JSX.Element {
                                         : "item-container"
                                 }
                             >
-                                <i>♥</i>
+                                <FontAwesomeIcon
+                                    icon={["fab", "google-drive"]}
+                                />
                                 <span className="item-container-text fs-lg">
                                     Link Google Drive
                                 </span>
@@ -68,7 +70,7 @@ function SideNavBar(props: any): JSX.Element {
                                         : "item-container"
                                 }
                             >
-                                <i>♥</i>
+                                <FontAwesomeIcon icon="list" />
                                 <span className="item-container-text fs-lg">
                                     Browse
                                 </span>
@@ -96,7 +98,7 @@ function SideNavBar(props: any): JSX.Element {
                     </li>
                     <li>
                         <div className="item-container">
-                            <i>♥</i>
+                            <FontAwesomeIcon icon="broadcast-tower" />
                             <span className="item-container-text fs-lg">
                                 Recently Played
                             </span>
