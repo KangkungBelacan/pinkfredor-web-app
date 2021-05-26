@@ -5,14 +5,24 @@ import { CategoriesTopBarItemProps } from "../../interface/components/MainApp/Ca
 const Organizer = (props: GenericProps) => {
     let items: Array<CategoriesTopBarItemProps> = [
         {
-            display_text: "Album",
-            faIconClass: "broadcast-tower",
-            link: "/app/organize/Album",
+            display_text: "Tracks",
+            faIconClass: "music",
+            link: "/app/organize/Tracks",
         },
         {
-            display_text: "GDrive",
-            faIconClass: ["fab", "google-drive"],
-            link: "/app/organize/gdrive",
+            display_text: "Artists",
+            faIconClass: "users",
+            link: "/app/organize/Artists",
+        },
+        {
+            display_text: "Genres",
+            faIconClass: "guitar",
+            link: "/app/organize/Genres",
+        },
+        {
+            display_text: "Albums",
+            faIconClass: "compact-disc",
+            link: "/app/organize/Albums",
         },
     ];
     return (

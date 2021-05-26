@@ -33,7 +33,7 @@ const CategoriesTopBarItem = (props: CategoriesTopBarItemProps) => {
             style={props.style ? { ...props.style, ...CONT_STYLE } : CONT_STYLE}
         >
             {props.faIconClass !== undefined ? (
-                <FontAwesomeIcon size="2x" icon={props.faIconClass} />
+                <FontAwesomeIcon size="lg" icon={props.faIconClass} />
             ) : (
                 []
             )}
