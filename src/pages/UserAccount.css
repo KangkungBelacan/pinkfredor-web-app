@@ -1,3 +1,7 @@
+.core {
+  background-color: rgb(255, 255, 255);
+}
+
 .sidebar {
   height: 100%;
   width: 0;
@@ -110,52 +114,10 @@ input[type="text"],
   transform: translate(246%, 5%);
 }
 
-.CorePosition {
-  transform: translate(6%, -4%);
-  transition: margin-left 0.5s;
-  padding: 16px;
+.flex {
+  display: flex;
 }
 
-.ParagraphPosition {
-  transform: translate(0%, -40%);
-}
-
-.ParagraphPosition1 {
-  transform: translate(0%, -65%);
-}
-
-.ParagraphPosition2 {
-  transform: translate(0%, -230%);
-}
-
-.ObjectPosition {
-  transform: translate(25%, -118%);
-}
-
-.HeaderLine {
-  color: rgb(85, 85, 85);
-  display: grid;
-  width: 100%;
-  align-items: center;
-  text-align: center;
-  grid-template-columns: minmax(20px, 1fr) auto minmax(20px, 1fr);
-  grid-gap: 20px;
-}
-
-.RoundedImage {
-  max-width: 22%;
-  border-radius: 50%;
-}
-
-.ResizeImage1 {
-  max-width: 23%;
-}
-
-.ResizeImage2 {
-  max-width: 25%;
-  border-radius: 50%;
-}
-
-.ResizeImage3 {
-  max-width: 22%;
+.flex > div {
+  margin: 15px;
 }
