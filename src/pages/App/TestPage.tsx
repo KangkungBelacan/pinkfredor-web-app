@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sound, { ReactSoundProps } from "react-sound";
 
 const TestPage = () => {
@@ -35,12 +35,14 @@ const TestPage = () => {
     //     run();
     // });
 
+    const url = `/api/driveapi/files/download?token=${localStorage.token}&fileid=1fFEGOusvSIFTA141ytEkwzrY_B1MkYAu`;
+
     // if (!loading) {
     return (
         <div>
             <div>Ready to play?</div>
             <Sound
-                url="http://localhost:8080/api/driveapi/files/download_v2?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEwMzA2OTA4NDU1NjE3MDgxOTc5NiIsImlhdCI6MTYyMTcwMDYzMiwiZXhwIjoxNjIxNzg3MDMyfQ.7AfPA0kQ_u_bWVTI4ZmdxVtWOgcAu128BRbba2NSH2U&fileid=1fFEGOusvSIFTA141ytEkwzrY_B1MkYAu"
+                url={url}
                 playStatus={removePls}
                 autoLoad={true}
                 onFinishedPlaying={() => {}}
