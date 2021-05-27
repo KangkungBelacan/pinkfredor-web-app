@@ -29,11 +29,11 @@
 
 @media only screen and (max-width: 768px) {
     .top-bar-item-container {
-        width: 50px;
+        width: 75px;
     }
 
     .top-bar-item-container.selected::after {
-        width: 50px;
-        margin-left: -20px;
+        width: 75px;
+        margin-top: 25px;
     }
 }
