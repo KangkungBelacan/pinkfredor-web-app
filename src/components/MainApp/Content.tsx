@@ -4,6 +4,7 @@ import "./Content.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect } from "react";
 import MaterialTable, { MTableBodyRow } from "material-table";
+import ContextMenu from "./ContextMenu"
 // import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 
 import AddBox from '@material-ui/icons/AddBox';
@@ -21,6 +22,7 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import MoreVert from '@material-ui/icons/MoreVert';
 import { Icons } from 'material-table';
 
 const tableIcons: Icons = {
@@ -40,7 +42,7 @@ const tableIcons: Icons = {
     Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
     SortArrow: forwardRef((props, ref) => <ArrowUpward {...props} ref={ref} />),
     ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
+    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
 interface Element {
@@ -114,38 +116,32 @@ function Content(props: any): JSX.Element {
         },
     ]
 
-    const [topBarSelection, setTopBar] = useState(0)
-    const [songsTableData, setSongsTableData] = useState(example_songs);
+    var contextMenuItems = [
+        {
+            icon: "",
+            label: "Play",
+            callback: ""
+        }
+    ]
 
-    // This shit causing me a headache, how about we dont use right click, and just use a button
-    // const [contextMenus, setContextMenus] = useState<Element>([])
-    //
-    // function handleContextMenus(e:any, data:any) {
-    //     console.log(e)
-    //     console.log(data)
-    // }
-    //
-    // function updateContextMenus() {
-    //     let newContextMenus = (example_songs.map((song) =>
-    //         <ContextMenu id={song.uid}>
-    //             <MenuItem data={{ menuName: 'playNext' }} onClick={handleContextMenus}>
-    //                 Play next
-    //         </MenuItem>
-    //             <MenuItem data={{ menuName: 'addToQ' }} onClick={handleContextMenus}>
-    //                 Add to queue
-    //         </MenuItem>
-    //             <MenuItem divider />
-    //             <MenuItem data={{ menuName: 'addToPlaylist' }} onClick={handleContextMenus}>
-    //                 Add to playlist
-    //         </MenuItem>
-    //         </ContextMenu>
-    //     ))
-    //     setContextMenus(newContextMenus)
-    // }
-    //
-    // useEffect(()=> {
-    //     updateContextMenus();
-    // }, [])
+    const [topBarSelection, setTopBar] = useState(0);
+    const [songsTableData, setSongsTableData] = useState(example_songs);
+    const [contextMenuVisible, setContextMenuVisible] = useState(false);
+    const [contextMenuX, setContextMenuX] = useState("0");
+    const [contextMenuY, setContextMenuY] = useState("0");
+    const [contextMenuActive, setContextMenuActive] = useState(null);
+
+    function handleDocumentClick(e:any) {
+    // return element object or null
+    const isOutside = e.target.className != "context-menu"
+    if (contextMenuVisible && isOutside) {
+        setContextMenuVisible(false);
+    }
+  };
+
+    useEffect(()=>{
+        document.addEventListener("click", handleDocumentClick)
+    }, [])
 
     return (
         <div className="container-fluid mainapp-content-container" style={{ color: "#ffffff" }}>
@@ -163,21 +159,36 @@ function Content(props: any): JSX.Element {
                     <div className={topBarSelection === 4 ? "content-top-bar-items-container selected" : "content-top-bar-items-container"} onClick={() => { setTopBar(4); }}>Genres</div>
                 </div>
                 <div className="songs-section" style={{ display: 'flex', flexDirection: 'column', }}>
+                    <ContextMenu x={contextMenuX} y={contextMenuY} visible={contextMenuVisible} />
                     <MaterialTable
                         icons={tableIcons}
                         columns={song_columns}
                         data={songsTableData}
                         title="Songs"
+                        actions={[
+                            {
+                                icon: MoreVert,
+                                tooltip: 'More Options',
+                                onClick: (event, rowData) => {
 
-                        // components={{
-                        //     Row: props => (
-                        //         <ContextMenuTrigger id={props.data.tableData.uid}>
-                        //             <MTableBodyRow {...props} />
-                        //         </ContextMenuTrigger>
-                        //     )
-                        // }}
+                                    if (contextMenuActive != (rowData as any).uid) {
+                                        //TODO: get location of button and use it for xy
+                                        setContextMenuVisible(true)
+                                        setContextMenuX(event.pageX)
+                                        setContextMenuY(event.pageY)
+                                        setContextMenuActive((rowData as any).uid)
+                                    }
+
+                                    else if (contextMenuActive === (rowData as any).uid) {
+                                        setContextMenuVisible(!contextMenuVisible)
+                                    }
+                                }
+                            }
+                        ]}
+                        options={{
+                            actionsColumnIndex: -1
+                        }}
                     />
-                    {/* contextMenus */}
                 </div>
             </div>
         </div>
