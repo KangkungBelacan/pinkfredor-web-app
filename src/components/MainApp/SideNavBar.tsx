@@ -6,7 +6,12 @@ function SideNavBar(props: any): JSX.Element {
     return (
         <div
             className="sidebar-container"
-            style={{ marginLeft: props.navBar && props.isMobile ? "250px" : "" }}
+            style={{ 
+                marginLeft: props.navBar && props.isMobile ? "250px" : "", 
+                position: props.isMobile ? "fixed" : "static", 
+                height: "85vh",
+                zIndex: props.isMobile ? 1000 : 1
+            }}
         >
             <nav
                 id="mainapp-sidebar"
@@ -128,6 +133,76 @@ function SideNavBar(props: any): JSX.Element {
                         <div className="item-container">
                             <span className="item-container-text">
                                 Playlist B
+                            </span>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="item-container">
+                            <span className="item-container-text">
+                                Playlist C
+                            </span>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="item-container">
+                            <span className="item-container-text">
+                                Playlist C
+                            </span>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="item-container">
+                            <span className="item-container-text">
+                                Playlist C
+                            </span>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="item-container">
+                            <span className="item-container-text">
+                                Playlist C
+                            </span>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="item-container">
+                            <span className="item-container-text">
+                                Playlist C
+                            </span>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="item-container">
+                            <span className="item-container-text">
+                                Playlist C
+                            </span>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="item-container">
+                            <span className="item-container-text">
+                                Playlist C
+                            </span>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="item-container">
+                            <span className="item-container-text">
+                                Playlist C
+                            </span>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="item-container">
+                            <span className="item-container-text">
+                                Playlist C
+                            </span>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="item-container">
+                            <span className="item-container-text">
+                                Playlist C
                             </span>
                         </div>
                     </li>
