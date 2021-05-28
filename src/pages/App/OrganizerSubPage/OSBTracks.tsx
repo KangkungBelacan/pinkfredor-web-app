@@ -46,7 +46,7 @@ const tableIcons: Icons = {
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-const OSB_Tracks = () => {
+const OSBTracks = () => {
     const [t_data, set_tdata] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -145,4 +145,4 @@ const OSB_Tracks = () => {
     );
 };
 
-export default OSB_Tracks;
+export default OSBTracks;
