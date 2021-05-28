@@ -4,6 +4,7 @@ import Auth from "./pages/Auth";
 import MainApp from "./pages/MainApp";
 import Help from "./pages/Help"
 import UserAccount from "./pages/UserAccount";
+import Playground from "./pages/Playground";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 // import $ from 'jquery';
@@ -38,6 +39,7 @@ function App() {
                 <Route path="/app" component={MainApp} />
                 <Route path="/help" component={Help} />
                 <Route path="/UserAccount" component={UserAccount} />
+                <Route path="/Playground" component={Playground} />
             </Switch>
         </Router>
     );
