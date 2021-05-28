@@ -1,16 +1,18 @@
 import { Link, useLocation } from "react-router-dom";
 import "./SideNavBar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useMediaQuery } from 'react-responsive';
 function SideNavBar(props: any): JSX.Element {
     const current_path = useLocation().pathname;
+    const isMobile = useMediaQuery({query: '(max-width: 768px'});
     return (
         <div
             className="sidebar-container"
             style={{ 
-                marginLeft: props.navBar && props.isMobile ? "250px" : "", 
-                position: props.isMobile ? "fixed" : "static", 
+                marginLeft: props.navBar && isMobile ? "250px" : "", 
+                position: isMobile ? "fixed" : "static", 
                 height: "85vh",
-                zIndex: props.isMobile ? 1000 : 1
+                zIndex: isMobile ? 1000 : 1
             }}
         >
             <nav

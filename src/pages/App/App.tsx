@@ -5,16 +5,12 @@ import { useState } from "react";
 import * as AppSubPage from "./index";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {Route} from "react-router";
-import { useMediaQuery } from 'react-responsive';
-
 function App() {
     const [showNavBar, setNavBarDisplay] = useState(false);
-    const isMobile = useMediaQuery({query: '(max-width: 768px'});
-
     return (
         <div className="mainapp-body">
             <div style={{ display: "flex" , height:"85vh"}}>
-                <MainAppComponent.SideNavBar setNavBarDisplay={setNavBarDisplay} isMobile={isMobile} navBar={showNavBar} />
+                <MainAppComponent.SideNavBar setNavBarDisplay={setNavBarDisplay} navBar={showNavBar} />
                 {/* <MainAppComponent.Content
                     navBarState={showNavBar}
                     setNavBar={setNavBarDisplay}
