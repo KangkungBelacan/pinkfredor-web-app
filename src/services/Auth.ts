@@ -13,8 +13,9 @@ const AuthService = () => {
             };
 
             try {
-                await axios.post("/api/auth/check",{}, config);
+                let response = await axios.post("/api/auth/check",{}, config);
                 setAuthed(true);
+                localStorage.token = response.data.new_token;
             } catch (err: any) {
                 console.log(err);
             }
