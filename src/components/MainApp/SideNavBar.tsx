@@ -150,69 +150,6 @@ function SideNavBar(props: any): JSX.Element {
                             </span>
                         </div>
                     </li>
-                    <li>
-                        <div className="item-container">
-                            <span className="item-container-text">
-                                Playlist C
-                            </span>
-                        </div>
-                    </li>
-                    <li>
-                        <div className="item-container">
-                            <span className="item-container-text">
-                                Playlist C
-                            </span>
-                        </div>
-                    </li>
-                    <li>
-                        <div className="item-container">
-                            <span className="item-container-text">
-                                Playlist C
-                            </span>
-                        </div>
-                    </li>
-                    <li>
-                        <div className="item-container">
-                            <span className="item-container-text">
-                                Playlist C
-                            </span>
-                        </div>
-                    </li>
-                    <li>
-                        <div className="item-container">
-                            <span className="item-container-text">
-                                Playlist C
-                            </span>
-                        </div>
-                    </li>
-                    <li>
-                        <div className="item-container">
-                            <span className="item-container-text">
-                                Playlist C
-                            </span>
-                        </div>
-                    </li>
-                    <li>
-                        <div className="item-container">
-                            <span className="item-container-text">
-                                Playlist C
-                            </span>
-                        </div>
-                    </li>
-                    <li>
-                        <div className="item-container">
-                            <span className="item-container-text">
-                                Playlist C
-                            </span>
-                        </div>
-                    </li>
-                    <li>
-                        <div className="item-container">
-                            <span className="item-container-text">
-                                Playlist C
-                            </span>
-                        </div>
-                    </li>
                 </ul>
             </nav>
         </div>

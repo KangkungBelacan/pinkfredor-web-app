@@ -34,9 +34,9 @@ const Organizer = (props: GenericProps) => {
         >
             <div className="container-fluid organizer-body">
                 <CategoriesTopBar items={items} />
-                <div className="row" style={{overflowY:"auto", height: "calc(100% - 64px)"}}>
+                <div className="row" style={{overflowY:"auto", height: "calc(100% - 64px)", paddingTop: "12px"}}>
                     <Route path="/app/organize" exact component={ () => <div>Select one of the category</div> }  />
-                    <Route path="/app/organize/Tracks" component={OrganizerSubPage.tracks} />
+                    <Route path="/app/organize/Tracks" component={OrganizerSubPage.OSB_Tracks} />
                     <Route path="/app/organize/Artists" component={OrganizerSubPage.artists} />
                     <Route path="/app/organize/Genres" component={OrganizerSubPage.genres} />
                     <Route path="/app/organize/Albums" component={OrganizerSubPage.albums} />
