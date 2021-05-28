@@ -26,7 +26,7 @@ function App() {
                         <Route path="/app/user" component={AppSubPage.UserAccount} />
                         <Route path="/app/linkdrive" component={AppSubPage.LinkGDrive} />
                         <Route path="/app/test" component={AppSubPage.TestPage} />
-                        <Route path="/app/organize" component={() => <AppSubPage.Organizer className="mainapp-content-container" /> } />
+                        <Route path="/app/organize" render={() => <AppSubPage.Organizer className="mainapp-content-container" /> } />
                     </div>
                 </div>
             </div>

@@ -3,6 +3,7 @@ import "./Organizer.css";
 import CategoriesTopBar from "../../components/MainApp/CategoriesTopBar";
 import { CategoriesTopBarItemProps } from "../../interface/components/MainApp/CategoriesTopBarItemProps";
 import { Route } from "react-router";
+import React from "react";
 import * as OrganizerSubPage from "./OrganizerSubPage";
 const Organizer = (props: GenericProps) => {
     let items: Array<CategoriesTopBarItemProps> = [
@@ -46,4 +47,4 @@ const Organizer = (props: GenericProps) => {
     );
 };
 
-export default Organizer;
+export default React.memo(Organizer);
