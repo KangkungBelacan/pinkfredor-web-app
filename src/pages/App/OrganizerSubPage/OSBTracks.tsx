@@ -58,15 +58,23 @@ const OSBTracks = () => {
                 },
             };
             let files_response = await axios.get("/api/indexes/files", config);
-            let scan_folder_response = await axios.post("/api/driveapi/files/scan", {folder_only: true}, config);
+            let scan_folder_response = await axios.post(
+                "/api/driveapi/files/scan",
+                { folder_only: true },
+                config
+            );
             // set_tdata(files_response.data);
             let keys = Object.keys(files_response.data.files);
             let t_data: any = [];
             for (let i = 0; i < keys.length; i++) {
                 let file_item = files_response.data.files[keys[i]];
                 let parent_path = "/";
-                if(file_item.parents !== undefined) {
-                    parent_path += scan_folder_response.data[file_item.parents.pop()].folder_name + "/";
+                if (file_item.parents !== undefined) {
+                    while (file_item.parents.length != 0) {
+                        parent_path +=
+                            scan_folder_response.data[file_item.parents.pop()]
+                                .folder_name + "/";
+                    }
                 }
                 t_data.push({
                     rowNum: i + 1,
