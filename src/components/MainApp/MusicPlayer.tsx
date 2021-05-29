@@ -18,6 +18,7 @@ const volumeUp = <FontAwesomeIcon icon={faVolumeUp} />
 function MusicPlayer(props: any): JSX.Element {
     const [width] = useWindowSize();
     const [playing, setPlaying] = useState(false);
+    const [currentPos, setCurrentPos] = useState("0:00");
     const [maxDuration, setMaxDuration] = useState("0:00");
     const {
         status, setStatus, 
@@ -65,6 +66,7 @@ function MusicPlayer(props: any): JSX.Element {
                 }}
                 onPlaying={(args?:any) => {
                     // console.log(args);
+                    setCurrentPos(format(args.position / 1000));
                     setProgress(Math.round(args.position / args.duration * 100))
                 }}
                 onFinishedPlaying={() => {setStatus("PAUSED")}}
@@ -91,7 +93,7 @@ function MusicPlayer(props: any): JSX.Element {
                             <button className="player-controls-button-misc d-md-none d-inline-block">{bars}</button>
                         </div>
                         <div className="player-controls-progress-bar d-md-flex d-none">
-                            <p className="player-progress">{format(progress)}</p>
+                            <p className="player-progress">{currentPos}</p>
                             <div className="player-progress-slider-container">
                                 <input type="range" min={min} max={max} value={progress} className="player-progress-slider" style={{ backgroundSize: (progress - min) * 100 / (max - min) + '% 100%' }} onInput={(event: any) => setProgress(event.currentTarget.value)} />
                             </div>
