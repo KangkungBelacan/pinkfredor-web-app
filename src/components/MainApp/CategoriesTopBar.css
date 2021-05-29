@@ -1,19 +1,39 @@
 .top-bar-item-container {
-    width: auto;
+    width: 100px;
     text-align: center;
-    cursor:pointer;
-    padding: 5px 20px 5px 20px;
-    margin: 0 5px 0 5px;
-    border-radius: 10px;
+    cursor: pointer;
+    padding: 10px 20px 5px 20px;
+    /* border-radius: 10px; */
     text-decoration: none;
-    color:white;
+    color: rgb(200, 200, 200);
 }
 
 .top-bar-item-container.selected {
-    background-color: red;
+    color: white;
+}
+
+.top-bar-item-container.selected::after {
+    /* background-color: red; */
+    content: "";
+    border-top: red 5px solid;
+    position: absolute;
+    width: 100px;
+    margin-left: -50px;
+    border-radius: 10px;
 }
 
 .top-bar-item-container:hover {
-    background-color: rgba(122,122,122,1);
+    background-color: rgba(122, 122, 122, 0.5);
     color: white !important;
+}
+
+@media only screen and (max-width: 768px) {
+    .top-bar-item-container {
+        width: 75px;
+    }
+
+    .top-bar-item-container.selected::after {
+        width: 75px;
+        margin-top: 25px;
+    }
 }

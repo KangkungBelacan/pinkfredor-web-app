@@ -6,7 +6,12 @@ function SideNavBar(props: any): JSX.Element {
     return (
         <div
             className="sidebar-container"
-            style={{ marginLeft: props.navBar ? "250px" : "" }}
+            style={{ 
+                marginLeft: props.navBar && props.isMobile ? "250px" : "", 
+                position: props.isMobile ? "fixed" : "static", 
+                height: "85vh",
+                zIndex: props.isMobile ? 1000 : 1
+            }}
         >
             <nav
                 id="mainapp-sidebar"
@@ -14,7 +19,14 @@ function SideNavBar(props: any): JSX.Element {
                 style={{ overflowY: "auto" }}
             >
                 <div className="sidebar-header">
-                    <h3>Pinkfredor</h3>
+                    <div className="row">
+                        <div className="col-md-12 col-8">
+                            <h3>Pinkfredor</h3>
+                        </div>
+                        <div className="col-4 d-md-none d-block" style={{textAlign: "right", cursor: "pointer"}} onClick={() => { props.setNavBarDisplay(false); }}>
+                            <FontAwesomeIcon icon="times"/>
+                        </div>
+                    </div>
                 </div>
 
                 <ul className="list-unstyled components">
@@ -121,6 +133,13 @@ function SideNavBar(props: any): JSX.Element {
                         <div className="item-container">
                             <span className="item-container-text">
                                 Playlist B
+                            </span>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="item-container">
+                            <span className="item-container-text">
+                                Playlist C
                             </span>
                         </div>
                     </li>

@@ -1,3 +1,8 @@
 .organizer-body {
     color:white;
+    height: 85vh;
+}
+
+.organizer-subpage-content-container {
+    overflow-y: auto;
 }

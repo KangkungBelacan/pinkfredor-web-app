@@ -2,8 +2,10 @@
 import { forwardRef } from 'react';
 import "./Content.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MaterialTable, { MTableBodyRow } from "material-table";
+import ContextMenu from "./ContextMenu"
+// import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
@@ -20,6 +22,11 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import MoreVert from '@material-ui/icons/MoreVert';
+
+import PlayArrow from '@material-ui/icons/PlayArrow'
+import Queue from '@material-ui/icons/Queue';
+
 import { Icons } from 'material-table';
 
 const tableIcons: Icons = {
@@ -39,7 +46,7 @@ const tableIcons: Icons = {
     Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
     SortArrow: forwardRef((props, ref) => <ArrowUpward {...props} ref={ref} />),
     ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
+    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
 interface Element {
@@ -47,6 +54,7 @@ interface Element {
 }
 
 function Content(props: any): JSX.Element {
+
     const song_columns = [
         { title: "Title", field: "title" },
         { title: "Length", field: "length", editable: "never" as const },
@@ -56,88 +64,88 @@ function Content(props: any): JSX.Element {
 
     var example_songs = [
         {
-            id: 1,
+            id: 0,
             title: "Apple",
             length: "3:23",
             artist: "Test artist 1",
             album: "Test album 1",
             album_tr_no: 0,
             date_added: "13-5-2021",
-            genre: "Pop"
+            genre: "Pop",
+            uid: "uid_one"
         },
         {
-            id: 2,
+            id: 1,
             title: "Banana",
             length: "9:30",
             artist: "Test artist 1",
             album: "Test album 1",
             album_tr_no: 1,
             date_added: "14-5-2021",
-            genre: "Rock"
+            genre: "Rock",
+            uid: "uid_two"
         },
         {
-            id: 3,
+            id: 2,
             title: "Cat",
             length: "5:20",
             artist: "Test artist 1",
             album: "Test album 1",
             album_tr_no: 2,
             date_added: "15-5-2021",
-            genre: "Jazz"
+            genre: "Jazz",
+            uid: "uid_three"
         },
         {
-            id: 4,
+            id: 3,
             title: "Donkey",
             length: "1:47",
             artist: "Test artist 2",
             album: "Test album 2",
             album_tr_no: 0,
             date_added: "16-5-2021",
-            genre: "Pop"
+            genre: "Pop",
+            uid: "uid_four"
         },
         {
-            id: 5,
+            id: 4,
             title: "Fish",
             length: "2:43",
             artist: "Test artist 2",
             album: "Test album 2",
             album_tr_no: 1,
             date_added: "16-5-2021",
-            genre: "Jazz"
+            genre: "Jazz",
+            uid: "uid_five"
         },
     ]
 
-    const [topBarSelection, setTopBar] = useState(0)
-    const [songsQuery, setSongsQuery] = useState("")
-    const [inputFocus, setInputFocus] = useState(false)
-    const [songResults, setSongsResults] = useState<Element>([])
+    function test_callback(uid:any) {
+        console.log(contextMenuActive)
+        console.log(uid)
+    }
+
+    var contextMenuItems = [
+        {
+            icon: <PlayArrow style={{color:"black"}}/>,
+            label: "Play",
+            uid: "play",
+            callback: test_callback
+        },
+        {
+            icon: <Queue style={{color:"black"}} />,
+            label: "Add to queue",
+            uid: "addtoq",
+            callback: test_callback
+        },
+    ]
+
+    const [topBarSelection, setTopBar] = useState(0);
     const [songsTableData, setSongsTableData] = useState(example_songs);
-
-    const DragState = {
-        row: -1,
-        dropIndex: -1, // drag target
-    };
-
-    const offsetIndex = (from: any, to: any, arr: any = []) => {
-        if (from < to) {
-            let start = arr.slice(0, from),
-                between = arr.slice(from + 1, to + 1),
-                end = arr.slice(to + 1);
-            return [...start, ...between, arr[from], ...end];
-        }
-        if (from > to) {
-            let start = arr.slice(0, to),
-                between = arr.slice(to, from),
-                end = arr.slice(from + 1);
-            return [...start, arr[from], ...between, ...end];
-        }
-        return arr;
-    };
-    const reOrderRow = (from: any, to: any) => {
-        let newtableData = offsetIndex(from, to, songsTableData);
-        //Update react state
-        setSongsTableData(newtableData);
-    };
+    const [contextMenuVisible, setContextMenuVisible] = useState(false);
+    const [contextMenuX, setContextMenuX] = useState("0");
+    const [contextMenuY, setContextMenuY] = useState("0");
+    const [contextMenuActive, setContextMenuActive] = useState(null);
 
     return (
         <div className="container-fluid mainapp-content-container" style={{ color: "#ffffff" }}>
@@ -154,72 +162,33 @@ function Content(props: any): JSX.Element {
                     <div className={topBarSelection === 3 ? "content-top-bar-items-container selected" : "content-top-bar-items-container"} onClick={() => { setTopBar(3); }}>Albums</div>
                     <div className={topBarSelection === 4 ? "content-top-bar-items-container selected" : "content-top-bar-items-container"} onClick={() => { setTopBar(4); }}>Genres</div>
                 </div>
-                <div className="songs-section" style={{ display: 'flex', flexDirection: 'column', }}>
+                <ContextMenu x={contextMenuX} y={contextMenuY} visible={contextMenuVisible} items={contextMenuItems}/>
+                <div className="songs-section" style={{ display: 'flex', flexDirection: 'column', }} onClick={() => setContextMenuVisible(false)}>
                     <MaterialTable
                         icons={tableIcons}
                         columns={song_columns}
                         data={songsTableData}
                         title="Songs"
-                        components={{
-                            Row: (props) => (
-                                <MTableBodyRow
-                                    {...props}
-                                    draggable="true"
-                                    onDragStart={(e: any) => {
-                                        console.log("onDragStart");
-                                        DragState.row = props.data.tableData.id;
-                                    }}
-                                    onDragEnter={(e: any) => {
-                                        e.preventDefault();
-                                        if (props.data.tableData.id !== DragState.row) {
-                                            DragState.dropIndex = props.data.tableData.id;
-                                        }
-                                    }}
-                                    onDragEnd={(e: any) => {
-                                        console.log(DragState);
-                                        if (DragState.dropIndex !== -1) {
-                                            reOrderRow(DragState.row, DragState.dropIndex);
-                                        }
-                                        DragState.row = -1;
-                                        DragState.dropIndex = -1;
-                                    }}
-                                />
-                            ),
-                        }}
+                        actions={[
+                            {
+                                icon: MoreVert,
+                                tooltip: 'More Options',
+                                onClick: (event, rowData) => {
 
-                        editable={{
-                            onRowAdd: newData =>
-                                new Promise<void>((resolve, reject) => {
-                                    setTimeout(() => {
-                                        setSongsTableData([...songsTableData, newData]);
+                                    if (contextMenuActive != (rowData as any).uid) {
+                                        //TODO: get location of button and use it for xy
+                                        setContextMenuVisible(true)
+                                        setContextMenuX(event.pageX)
+                                        setContextMenuY(event.pageY)
+                                        setContextMenuActive((rowData as any).uid)
+                                    }
 
-                                        resolve();
-                                    }, 1000)
-                                }),
-                            onRowUpdate: (newData, oldData) =>
-                                new Promise<void>((resolve, reject) => {
-                                    setTimeout(() => {
-                                        const dataUpdate = [...songsTableData];
-                                        const index = oldData!.id;
-                                        dataUpdate[index] = newData;
-                                        setSongsTableData([...dataUpdate]);
-
-                                        resolve();
-                                    }, 1000)
-                                }),
-                            onRowDelete: oldData =>
-                                new Promise<void>((resolve, reject) => {
-                                    setTimeout(() => {
-                                        const dataDelete = [...songsTableData];
-                                        const index = oldData!.id;
-                                        dataDelete.splice(index, 1);
-                                        setSongsTableData([...dataDelete]);
-
-                                        resolve()
-                                    }, 1000)
-                                }),
-                        }}
-
+                                    else if (contextMenuActive === (rowData as any).uid) {
+                                        setContextMenuVisible(!contextMenuVisible)
+                                    }
+                                }
+                            }
+                        ]}
                         options={{
                             actionsColumnIndex: -1
                         }}

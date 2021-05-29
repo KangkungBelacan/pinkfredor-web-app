@@ -2,17 +2,30 @@ import { GenericProps } from "../../interface/GenericProps";
 import "./Organizer.css";
 import CategoriesTopBar from "../../components/MainApp/CategoriesTopBar";
 import { CategoriesTopBarItemProps } from "../../interface/components/MainApp/CategoriesTopBarItemProps";
+import { Route } from "react-router";
+import React from "react";
+import * as OrganizerSubPage from "./OrganizerSubPage";
 const Organizer = (props: GenericProps) => {
     let items: Array<CategoriesTopBarItemProps> = [
         {
-            display_text: "Album",
-            faIconClass: "broadcast-tower",
-            link: "/app/organize/Album"
+            display_text: "Tracks",
+            faIconClass: "music",
+            link: "/app/organize/Tracks",
         },
         {
-            display_text: "GDrive",
-            faIconClass: ["fab", "google-drive"],
-            link: "/app/organize/gdrive"
+            display_text: "Artists",
+            faIconClass: "users",
+            link: "/app/organize/Artists",
+        },
+        {
+            display_text: "Genres",
+            faIconClass: "guitar",
+            link: "/app/organize/Genres",
+        },
+        {
+            display_text: "Albums",
+            faIconClass: "compact-disc",
+            link: "/app/organize/Albums",
         },
     ];
     return (
@@ -20,12 +33,18 @@ const Organizer = (props: GenericProps) => {
             className={props.className ? props.className : ""}
             style={props.style ? props.style : {}}
         >
-            <div className="container organizer-body">
+            <div className="organizer-body">
                 <CategoriesTopBar items={items} />
-                <div className="row">Hi</div>
+                <div className="row" style={{overflowY:"auto", height: "calc(100% - 64px)", paddingTop: "12px"}}>
+                    <Route path="/app/organize" exact component={ () => <div>Select one of the category</div> }  />
+                    <Route path="/app/organize/Tracks" component={OrganizerSubPage.OSBTracks} />
+                    <Route path="/app/organize/Artists" component={OrganizerSubPage.artists} />
+                    <Route path="/app/organize/Genres" component={OrganizerSubPage.genres} />
+                    <Route path="/app/organize/Albums" component={OrganizerSubPage.albums} />
+                </div>
             </div>
         </div>
     );
 };
 
-export default Organizer;
+export default React.memo(Organizer);

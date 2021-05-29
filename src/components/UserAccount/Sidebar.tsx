@@ -9,7 +9,7 @@ const Sidebar = (props: any) => {
     return (
         <div>
             <div className="sidebar" style={{width:SidebarWidth}}>
-                <a href="javascript:void(0)" className="Deactivate" onClick={() => setSidebarWidth("0px")}>×</a>
+                <a href="#0" className="Deactivate" onClick={() => setSidebarWidth("0px")}>×</a>
                 <a href={props.link1}><FontAwesomeIcon icon={faHome}/> {props.line1}</a>
                 <a href={props.link2}><FontAwesomeIcon icon={faMobileAlt}/> {props.line2}</a>
                 <a href={props.link3}><FontAwesomeIcon icon={faHandsHelping}/> {props.line3}</a>
