@@ -33,7 +33,7 @@ const Organizer = (props: GenericProps) => {
             className={props.className ? props.className : ""}
             style={props.style ? props.style : {}}
         >
-            <div className="container-fluid organizer-body">
+            <div className="organizer-body">
                 <CategoriesTopBar items={items} />
                 <div className="row" style={{overflowY:"auto", height: "calc(100% - 64px)", paddingTop: "12px"}}>
                     <Route path="/app/organize" exact component={ () => <div>Select one of the category</div> }  />
