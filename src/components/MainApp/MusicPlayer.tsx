@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlayCircle, faPauseCircle, faStepBackward, faStepForward, faForward, faBackward, faBars, faVolumeUp } from '@fortawesome/free-solid-svg-icons'
+import { useWindowSize } from "../../global-imports";
 
 const stepBackward = <FontAwesomeIcon icon={faStepBackward} />
 const stepForward = <FontAwesomeIcon icon={faStepForward} />
@@ -13,8 +14,9 @@ const volumeUp = <FontAwesomeIcon icon={faVolumeUp} />
 
 //Music Player Component.
 function MusicPlayer(props: any): JSX.Element {
+    const [width] = useWindowSize();
     const [playing, setPlaying] = useState(false)
-    const [progress, setProgress] = useState(0)
+    const [progress, setProgress] = useState(50)
     const [volume, setVolume] = useState(100)
 
     let min = 0
@@ -39,7 +41,7 @@ function MusicPlayer(props: any): JSX.Element {
     return (
         <div>
             <div className="player-root">
-                <div className="player">
+                <div className="player" style={{boxShadow: width >= 768 ? "" : `${-width + (width*progress/100)}px -2px red`}}>
                     {/* <div className='player-song-info' style={{ display: 'flex', alignItems: 'center', flexGrow: 1, flexBasis: 0 }}> */}
                     <div className='player-song-info col-md-3 col-7'>
                         <img className='player-song-info-cover' src={props.song_cover} alt='Example_Song_Cover'></img>
@@ -56,7 +58,6 @@ function MusicPlayer(props: any): JSX.Element {
                             <button className="player-controls-button-misc d-md-inline-block d-none">{forward}</button>
                             <button className="player-controls-button-misc">{stepForward}</button>
                             <button className="player-controls-button-misc d-md-none d-inline-block">{bars}</button>
-                            <button className="player-controls-button-misc d-md-none d-inline-block">{volumeUp}</button>
                         </div>
                         <div className="player-controls-progress-bar d-md-flex d-none">
                             <p className="player-progress">{format(progress)}</p>

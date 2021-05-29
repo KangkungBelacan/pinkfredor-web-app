@@ -36,7 +36,7 @@
 .player-song-info-cover {
     display: inline-block;
     border-radius: 6px;
-    max-width: 20%;
+    max-width: 15%;
     /* padding: 15px; */
     border-radius: 20%;
 }
