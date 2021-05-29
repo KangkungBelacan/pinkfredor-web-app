@@ -40,22 +40,25 @@ function MusicPlayer(props: any): JSX.Element {
         <div>
             <div className="player-root">
                 <div className="player">
-                    <div className='player-song-info' style={{ display: 'flex', alignItems: 'center', flexGrow: 1, flexBasis: 0 }}>
+                    {/* <div className='player-song-info' style={{ display: 'flex', alignItems: 'center', flexGrow: 1, flexBasis: 0 }}> */}
+                    <div className='player-song-info col-md-3 col-7'>
                         <img className='player-song-info-cover' src={props.song_cover} alt='Example_Song_Cover'></img>
-                        <div>
+                        <div style={{display: "inline-block", paddingLeft: "10px"}}>
                             <p className="player-song-info-title">Song Title</p>
                             <p className="player-song-info-artist">Song Artist</p>
                         </div>
                     </div>
-                    <div className="player-controls">
+                    <div className="player-controls col-md-6 col-3">
                         <div className="player-controls-buttons">
-                            <button className="player-controls-button-misc">{stepBackward}</button>
-                            <button className="player-controls-button-misc">{backward}</button>
+                            <button className="player-controls-button-misc d-md-inline-block d-none">{stepBackward}</button>
+                            <button className="player-controls-button-misc d-md-inline-block d-none">{backward}</button>
                             <button className="player-controls-button-play" onClick={() => setPlaying(!playing)}>{playing === true ? pauseCircle : playCircle}</button>
-                            <button className="player-controls-button-misc">{forward}</button>
+                            <button className="player-controls-button-misc d-md-inline-block d-none">{forward}</button>
                             <button className="player-controls-button-misc">{stepForward}</button>
+                            <button className="player-controls-button-misc d-md-none d-inline-block">{bars}</button>
+                            <button className="player-controls-button-misc d-md-none d-inline-block">{volumeUp}</button>
                         </div>
-                        <div className="player-controls-progress-bar">
+                        <div className="player-controls-progress-bar d-md-flex d-none">
                             <p className="player-progress">{format(progress)}</p>
                             <div className="player-progress-slider-container">
                                 <input type="range" min={min} max={max} value={progress} className="player-progress-slider" style={{ backgroundSize: (progress - min) * 100 / (max - min) + '% 100%' }} onInput={(event: any) => setProgress(event.currentTarget.value)} />
@@ -63,7 +66,7 @@ function MusicPlayer(props: any): JSX.Element {
                             <p className="player-progress">1:30</p>
                         </div>
                     </div>
-                    <div className="player-misc-controls" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', alignContent:'center' ,flexGrow: 1, flexBasis: 0, flexDirection: 'row'}}>
+                    <div className="player-misc-controls col-md-3 d-md-flex d-none" style={{ display: 'flex', justifyContent: 'flex-end'}}>
                         <button className="player-controls-button-misc">{bars}</button>
                         <div className="player-misc-controls-volume-slider-container">
                             <input type="range" min='0' max='100' value={volume} className="player-misc-controls-volume-slider" style={{ backgroundSize: (volume - 0) * 100 / (100 - 0) + '% 100%' }} onInput={(event: any) => setVolume(event.currentTarget.value)} />

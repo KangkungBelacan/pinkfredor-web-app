@@ -27,11 +27,17 @@
     padding: 0 15px;
 }
 
+.player-song-info {
+    display: flex;
+    align-items: center;
+    overflow-x: hidden;
+}
+
 .player-song-info-cover {
     display: inline-block;
     border-radius: 6px;
     max-width: 20%;
-    padding: 15px;
+    /* padding: 15px; */
     border-radius: 20%;
 }
 
@@ -53,7 +59,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-    width: 500px;
+    /* width: 500px; */
 }
 
 .player-controls-buttons {
