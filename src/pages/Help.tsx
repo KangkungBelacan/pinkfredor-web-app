@@ -11,23 +11,18 @@ function Help() {
                 <a href="#0" className="tr-nav-bar-items-container">About</a>
                 <div className="tr-nav-bar-items-container">Log Out</div>
             </nav>
-            <h1>Help</h1>
-            <h2>Welcome To Help Centre!</h2>
-            <p>Introduction</p>
+            <div><h2 style={{marginLeft: "485px",fontSize: "30px"}}>Welcome To Help Centre!</h2><br/></div>
             <HelpComponent.CollapsibleText title="What can i do?" content="I used to streams your music collections from Google Drive!"/>
-            <p>User</p>
             <HelpComponent.CollapsibleText title="How to sign up" content="There will be an answer when the whole website has done!"/>
             <HelpComponent.CollapsibleText title="How to log out" content="There will be an answer when the whole website has done!"/>
-            <p>Music</p>
             <HelpComponent.CollapsibleText title="How to play a music" content="There will be an answer when the whole website has done!"/>
             <HelpComponent.CollapsibleText title="How to pause a music" content="There will be an answer when the whole website has done!"/>
             <HelpComponent.CollapsibleText title="How to stop a music" content="There will be an answer when the whole website has done!"/>
             <HelpComponent.CollapsibleText title="How to skip a music" content="There will be an answer when the whole website has done!"/>
             <HelpComponent.CollapsibleText title="How to loop a music" content="There will be an answer when the whole website has done!"/>
-            <p>Coming Soon</p>
-            <HelpComponent.CollapsibleText title="Comming Soon" content="There will be an answer when the whole website has done!"/>
-            <p>Bugs Report!</p>
-            <p><HelpComponent.TestComponent/></p>
+            <HelpComponent.CollapsibleText title="Comming Soon" content="There will be an answer when the whole website has done!"/><br/>
+            <h2 style={{marginLeft: "570px",fontSize: "30px"}}>Bugs Report</h2><br/>
+            <div style={{marginLeft: "570px"}}><HelpComponent.TestComponent/></div>
         </div>
     );
 }

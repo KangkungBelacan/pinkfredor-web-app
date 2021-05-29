@@ -14,9 +14,9 @@ const CollapsibleText = (props: any) => {
 
     return (
         <div>
-            <button onClick={collapsible} className="collapsible">{props.title}</button>
+            <button onClick={collapsible} className="collapsible" style={{marginLeft: "250px"}}>{props.title}</button>
             <div className="content">
-                <p>{props.content}</p>
+                <p style={{marginLeft: "270px"}}>{props.content}</p>
             </div>
         </div>
     );

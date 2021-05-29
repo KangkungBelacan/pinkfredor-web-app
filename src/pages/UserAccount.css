@@ -98,6 +98,7 @@ input[type="text"],
 
 .Button:hover {
   background-color: rgb(230, 230, 230);
+  color: rgb(155, 155, 155);
 }
 
 .PassButton {
