@@ -23,6 +23,10 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import MoreVert from '@material-ui/icons/MoreVert';
+
+import PlayArrow from '@material-ui/icons/PlayArrow'
+import Queue from '@material-ui/icons/Queue';
+
 import { Icons } from 'material-table';
 
 const tableIcons: Icons = {
@@ -116,12 +120,24 @@ function Content(props: any): JSX.Element {
         },
     ]
 
+    function test_callback(uid:any) {
+        console.log(contextMenuActive)
+        console.log(uid)
+    }
+
     var contextMenuItems = [
         {
-            icon: "",
+            icon: <PlayArrow style={{color:"black"}}/>,
             label: "Play",
-            callback: ""
-        }
+            uid: "play",
+            callback: test_callback
+        },
+        {
+            icon: <Queue style={{color:"black"}} />,
+            label: "Add to queue",
+            uid: "addtoq",
+            callback: test_callback
+        },
     ]
 
     const [topBarSelection, setTopBar] = useState(0);
@@ -130,18 +146,6 @@ function Content(props: any): JSX.Element {
     const [contextMenuX, setContextMenuX] = useState("0");
     const [contextMenuY, setContextMenuY] = useState("0");
     const [contextMenuActive, setContextMenuActive] = useState(null);
-
-    function handleDocumentClick(e:any) {
-    // return element object or null
-    const isOutside = e.target.className != "context-menu"
-    if (contextMenuVisible && isOutside) {
-        setContextMenuVisible(false);
-    }
-  };
-
-    useEffect(()=>{
-        document.addEventListener("click", handleDocumentClick)
-    }, [])
 
     return (
         <div className="container-fluid mainapp-content-container" style={{ color: "#ffffff" }}>
@@ -158,8 +162,8 @@ function Content(props: any): JSX.Element {
                     <div className={topBarSelection === 3 ? "content-top-bar-items-container selected" : "content-top-bar-items-container"} onClick={() => { setTopBar(3); }}>Albums</div>
                     <div className={topBarSelection === 4 ? "content-top-bar-items-container selected" : "content-top-bar-items-container"} onClick={() => { setTopBar(4); }}>Genres</div>
                 </div>
-                <div className="songs-section" style={{ display: 'flex', flexDirection: 'column', }}>
-                    <ContextMenu x={contextMenuX} y={contextMenuY} visible={contextMenuVisible} />
+                <ContextMenu x={contextMenuX} y={contextMenuY} visible={contextMenuVisible} items={contextMenuItems}/>
+                <div className="songs-section" style={{ display: 'flex', flexDirection: 'column', }} onClick={() => setContextMenuVisible(false)}>
                     <MaterialTable
                         icons={tableIcons}
                         columns={song_columns}
