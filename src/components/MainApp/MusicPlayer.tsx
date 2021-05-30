@@ -4,6 +4,7 @@ import { faPlayCircle, faPauseCircle, faStepBackward, faStepForward, faForward, 
 import { useWindowSize } from "../../global-imports";
 import MusicPlayerContext from "../../context/MusicPlayerContext";
 import Sound, { ReactSoundProps } from "react-sound";
+import VolumeBar from './MusicPlayerSubComponent/VolumeBar';
 
 const stepBackward = <FontAwesomeIcon icon={faStepBackward} />
 const stepForward = <FontAwesomeIcon icon={faStepForward} />
@@ -134,7 +135,7 @@ function MusicPlayer(props: any): JSX.Element {
                     <div className="player-misc-controls col-md-3 d-md-flex d-none" style={{ display: 'flex', justifyContent: 'flex-end'}}>
                         <button className="player-controls-button-misc">{bars}</button>
                         <div className="player-misc-controls-volume-slider-container">
-                            <input type="range" min='0' max='100' value={volume} onChange={(evt) => {setVolume(parseInt(evt.target.value))}} className="player-misc-controls-volume-slider" style={{ backgroundSize: (volume - 0) * 100 / (100 - 0) + '% 100%' }} onInput={(event: any) => setVolume(event.currentTarget.value)} />
+                            <VolumeBar setVolume={setVolume}/>
                         </div>
                         <p style={{ color: 'white', fontSize: '15px', margin:'0 5px'}}>{volumeUp}</p>
                     </div>
