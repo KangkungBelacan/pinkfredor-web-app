@@ -7,29 +7,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {Route} from "react-router";
 import { useMediaQuery } from 'react-responsive';
 import MusicPlayerContext from "../../context/MusicPlayerContext";
-import { ReactSoundProps } from "react-sound";
+import MusicPlayerContextDefaultValues from "../../context/MusicPlayerContextDefaultValues";
 function App() {
     const [showNavBar, setNavBarDisplay] = useState(false);
-    const isMobile = useMediaQuery({query: '(max-width: 768px'});
-
-    // ====================================
-    // Music Player Context values
-    // ====================================
-    const [status, setStatus] = useState<ReactSoundProps["playStatus"]>("PAUSED");
-    const [nowPlayingURL, setNowPlayingURL] = useState("");
-    const [progress, setProgress] = useState(50);
-    const [volume, setVolume] = useState(100);
-    const [queue, setQueue] = useState([]);
-    const ContextValues = {
-        status, setStatus, 
-        nowPlayingURL, setNowPlayingURL,
-        progress, setProgress,
-        volume, setVolume,
-        queue, setQueue
-    }; 
-    // ====================================
-    // ====================================
-    
+    const isMobile = useMediaQuery({query: '(max-width: 768px)'});
+    const ContextValues = MusicPlayerContextDefaultValues();
     return (
         <div className="mainapp-body">
             <MusicPlayerContext.Provider value={ContextValues}>

@@ -17,7 +17,8 @@ const volumeUp = <FontAwesomeIcon icon={faVolumeUp} />
 //Music Player Component.
 function MusicPlayer(props: any): JSX.Element {
     const [width] = useWindowSize();
-    const [playing, setPlaying] = useState(false);
+    const [playingTitle, setPlayingTitle] = useState("Song Title");
+    const [playingArtist, setPlayingArtist] = useState("Song Artist");
     const [currentPos, setCurrentPos] = useState("0:00");
     const [maxDuration, setMaxDuration] = useState("0:00");
     const {
@@ -29,15 +30,45 @@ function MusicPlayer(props: any): JSX.Element {
     } = React.useContext(MusicPlayerContext);
 
     const play_song = () => {
-        if(!playing) {
-            setNowPlayingURL(`/api/driveapi/files/download?token=${localStorage.token}&fileid=1fFEGOusvSIFTA141ytEkwzrY_B1MkYAu`);
+        if(status !== "PLAYING") {
+            if(nowPlayingURL === "") {
+                if(queue.length === 0) {
+                    return;
+                }
+                setNowPlayingURL(queue[0].playingURL);
+                setPlayingTitle(queue[0].song_title);
+                setPlayingArtist(queue[0].song_artist);
+                queue[0].current = true;
+                setQueue(queue);
+            }
+            setStatus("PLAYING");
+            return;
+        } 
+        setStatus("PAUSED");
+    };
+
+    const next_song = () => {
+        if(queue.length === 0) {
+            return;
+        }
+        let next_idx = 0;
+        for(let i = 0; i < queue.length; i++) {
+            if(queue[i].current && i < (queue.length-1)) {
+                next_idx = i+1;
+                queue[i].current = false;
+            }
+        }
+        setNowPlayingURL(queue[next_idx].playingURL);
+        setPlayingTitle(queue[next_idx].song_title);
+        setPlayingArtist(queue[next_idx].song_artist);
+        queue[next_idx].current = true;
+        if(status !== "PLAYING") {
             setStatus("PLAYING");
         }
-        setPlaying(!playing);
     };
 
     let min = 0
-    let max = 90
+    let max = 100;
 
     function format(time: any) {
         // Hours, minutes and seconds
@@ -79,17 +110,17 @@ function MusicPlayer(props: any): JSX.Element {
                     <div className='player-song-info col-md-3 col-7'>
                         <img className='player-song-info-cover' src={props.song_cover} alt='Example_Song_Cover'></img>
                         <div style={{display: "inline-block", paddingLeft: "10px"}}>
-                            <p className="player-song-info-title">Song Title</p>
-                            <p className="player-song-info-artist">Song Artist</p>
+                            <p className="player-song-info-title">{playingTitle}</p>
+                            <p className="player-song-info-artist">{playingArtist}</p>
                         </div>
                     </div>
                     <div className="player-controls col-md-6 col-3">
                         <div className="player-controls-buttons">
                             <button className="player-controls-button-misc d-md-inline-block d-none">{stepBackward}</button>
                             <button className="player-controls-button-misc d-md-inline-block d-none">{backward}</button>
-                            <button className="player-controls-button-play" onClick={play_song}>{playing === true ? pauseCircle : playCircle}</button>
+                            <button className="player-controls-button-play" onClick={play_song}>{status === "PLAYING" ? pauseCircle : playCircle}</button>
                             <button className="player-controls-button-misc d-md-inline-block d-none">{forward}</button>
-                            <button className="player-controls-button-misc">{stepForward}</button>
+                            <button className="player-controls-button-misc" onClick={next_song}>{stepForward}</button>
                             <button className="player-controls-button-misc d-md-none d-inline-block">{bars}</button>
                         </div>
                         <div className="player-controls-progress-bar d-md-flex d-none">
