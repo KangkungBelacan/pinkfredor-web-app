@@ -19,8 +19,10 @@ function MusicPlayer(props: any): JSX.Element {
     const [width] = useWindowSize();
     const [playingTitle, setPlayingTitle] = useState("Song Title");
     const [playingArtist, setPlayingArtist] = useState("Song Artist");
-    const [currentPos, setCurrentPos] = useState("0:00");
+    // const [currentPos, setCurrentPos] = useState("0:00");
     const [maxDuration, setMaxDuration] = useState("0:00");
+    const [progressSlidermin]  = useState(0);
+    const [progressSlidermax, setProgressSlidermax]  = useState(0);
     const {
         status, setStatus, 
         nowPlayingURL, setNowPlayingURL,
@@ -67,9 +69,6 @@ function MusicPlayer(props: any): JSX.Element {
         }
     };
 
-    let min = 0
-    let max = 100;
-
     function format(time: any) {
         // Hours, minutes and seconds
         var hrs = ~~(time / 3600);
@@ -94,11 +93,12 @@ function MusicPlayer(props: any): JSX.Element {
                 autoLoad={true}
                 onLoading={(args?:any) => {
                     setMaxDuration(format(args.duration / 1000));
+                    setProgressSlidermax(Math.round(args.duration / 1000))
                 }}
                 onPlaying={(args?:any) => {
                     // console.log(args);
-                    setCurrentPos(format(args.position / 1000));
-                    setProgress(Math.round(args.position / args.duration * 100))
+                    // setCurrentPos(format(args.position / 1000));
+                    setProgress(Math.round(args.position / args.duration * Math.round(args.duration / 1000)))
                 }}
                 onFinishedPlaying={() => {setStatus("PAUSED")}}
                 onError={() => {}}
@@ -124,9 +124,9 @@ function MusicPlayer(props: any): JSX.Element {
                             <button className="player-controls-button-misc d-md-none d-inline-block">{bars}</button>
                         </div>
                         <div className="player-controls-progress-bar d-md-flex d-none">
-                            <p className="player-progress">{currentPos}</p>
+                            <p className="player-progress">{format(progress)}</p>
                             <div className="player-progress-slider-container">
-                                <input type="range" min={min} max={max} value={progress} className="player-progress-slider" style={{ backgroundSize: (progress - min) * 100 / (max - min) + '% 100%' }} onInput={(event: any) => setProgress(event.currentTarget.value)} />
+                                <input type="range" min={progressSlidermin} max={progressSlidermax} value={progress} className="player-progress-slider" style={{ backgroundSize: (progress / progressSlidermax * 100) + '% 100%' }} onInput={(event: any) => setProgress(event.currentTarget.value)} />
                             </div>
                             <p className="player-progress">{maxDuration}</p>
                         </div>
