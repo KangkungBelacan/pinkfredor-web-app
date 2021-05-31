@@ -5,6 +5,7 @@ import { useWindowSize } from "../../global-imports";
 import MusicPlayerContext from "../../context/MusicPlayerContext";
 import Sound, { ReactSoundProps } from "react-sound";
 import VolumeBar from './MusicPlayerSubComponent/VolumeBar';
+import NowPlayingQueuePopUp from './MusicPlayerSubComponent/NowPlayingQueuePopUp';
 
 const stepBackward = <FontAwesomeIcon icon={faStepBackward} />
 const stepForward = <FontAwesomeIcon icon={faStepForward} />
@@ -136,6 +137,7 @@ function MusicPlayer(props: any): JSX.Element {
 
     return (
         <div>
+            <NowPlayingQueuePopUp />
             <Sound  
                 url={nowPlayingURL}
                 playStatus={status}
