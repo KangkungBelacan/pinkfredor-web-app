@@ -62,6 +62,13 @@
     /* width: 500px; */
 }
 
+@media only screen and (max-width: 768px) {
+    .player-controls {
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+}
+
 .player-controls-buttons {
     display: flex;
     align-items: center;

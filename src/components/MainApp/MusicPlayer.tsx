@@ -145,7 +145,7 @@ function MusicPlayer(props: any): JSX.Element {
                             <p className="player-song-info-artist">{playingArtist}</p>
                         </div>
                     </div>
-                    <div className="player-controls col-md-6 col-3">
+                    <div className="player-controls col-md-6 col-5">
                         <div className="player-controls-buttons">
                             <button className="player-controls-button-misc d-md-inline-block d-none" onClick={prev_song}>{stepBackward}</button>
                             <button className="player-controls-button-misc d-md-inline-block d-none" onClick={()=>{(progress-5) >= 0 ? setCurPos(progress * 1000 - 5000) : setCurPos(0) }}>{backward}</button>
