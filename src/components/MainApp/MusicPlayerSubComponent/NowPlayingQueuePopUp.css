@@ -1,0 +1,15 @@
+.now-playing-queue-item-row {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.now-playing-queue-item-row:last-child {
+    border-bottom: 0px solid #dee2e6;
+}
+
+.now-playing-queue-grip {
+    cursor: move;
+}
+
+.now-playing-queue-ellipsis {
+    cursor: pointer;
+}
