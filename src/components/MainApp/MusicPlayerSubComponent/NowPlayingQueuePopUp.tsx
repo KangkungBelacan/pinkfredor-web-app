@@ -108,6 +108,68 @@ const NowPlayingQueuePopUp = (props: any) => {
                             <FontAwesomeIcon icon="ellipsis-v" />
                         </div> */}
                     </div>
+                    <div className="row now-playing-queue-item-row">
+                        <div className="col-1 d-flex align-items-center now-playing-queue-grip">
+                            <FontAwesomeIcon icon="grip-vertical" />
+                        </div>
+                        <div className="col-8 now-playing-queue-item-content">
+                            <div className="now-playing-queue-item-content-title">
+                                29-Q
+                            </div>
+                            <div className="now-playing-queue-item-content-artist">
+                                鹿乃
+                            </div>
+                        </div>
+                        <div className="col-2 d-flex align-items-center now-playing-queue-content-length">
+                            0:49
+                        </div>
+                        <Dropdown style={{padding: "0"}} className="col-1 d-flex align-items-center now-playing-queue-ellipsis">
+                            <Dropdown.Toggle
+                                as={CustomToggle}
+                                id="dropdown-custom-components"
+                            ></Dropdown.Toggle>
+
+                            <Dropdown.Menu as={CustomMenu}>
+                                <Dropdown.Item eventKey="1">Play</Dropdown.Item>
+                                <Dropdown.Item eventKey="2">Add to...</Dropdown.Item>
+                                <Dropdown.Item eventKey="3">Remove</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        {/* <div className="col-1 d-flex align-items-center now-playing-queue-ellipsis">
+                            <FontAwesomeIcon icon="ellipsis-v" />
+                        </div> */}
+                    </div>
+                    <div className="row now-playing-queue-item-row">
+                        <div className="col-1 d-flex align-items-center now-playing-queue-grip">
+                            <FontAwesomeIcon icon="grip-vertical" />
+                        </div>
+                        <div className="col-8 now-playing-queue-item-content">
+                            <div className="now-playing-queue-item-content-title">
+                                夜に駆ける
+                            </div>
+                            <div className="now-playing-queue-item-content-artist">
+                                YOASOBI
+                            </div>
+                        </div>
+                        <div className="col-2 d-flex align-items-center now-playing-queue-content-length">
+                            3:22
+                        </div>
+                        <Dropdown style={{padding: "0"}} className="col-1 d-flex align-items-center now-playing-queue-ellipsis">
+                            <Dropdown.Toggle
+                                as={CustomToggle}
+                                id="dropdown-custom-components"
+                            ></Dropdown.Toggle>
+
+                            <Dropdown.Menu as={CustomMenu}>
+                                <Dropdown.Item eventKey="1">Play</Dropdown.Item>
+                                <Dropdown.Item eventKey="2">Add to...</Dropdown.Item>
+                                <Dropdown.Item eventKey="3">Remove</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        {/* <div className="col-1 d-flex align-items-center now-playing-queue-ellipsis">
+                            <FontAwesomeIcon icon="ellipsis-v" />
+                        </div> */}
+                    </div>
                 </div>
             </ModalBody>
             <ModalFooter

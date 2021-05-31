@@ -1,9 +1,20 @@
+
+
 .now-playing-queue-item-row {
-    border-bottom: 1px solid #dee2e6;
+    /* border-bottom: 1px solid #dee2e6; */
+    margin-bottom: 10px;
 }
 
 .now-playing-queue-item-row:last-child {
-    border-bottom: 0px solid #dee2e6;
+    /* border-bottom: 0px solid #dee2e6; */
+    margin-bottom: 0;
+}
+
+
+.now-playing-queue-item-content-artist,
+.now-playing-queue-content-length {
+    font-size: small;
+    color: rgb(155,155,155);
 }
 
 .now-playing-queue-grip {
