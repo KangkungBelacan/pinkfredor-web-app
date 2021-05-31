@@ -34,10 +34,6 @@ function MusicPlayer(props: any): JSX.Element {
         queue, setQueue
     } = React.useContext(MusicPlayerContext);
 
-    const progressBarOnMouseUp = (evt: any) => {
-        
-    };
-
     const play_song = () => {
         if(status !== "PLAYING") {
             if(nowPlayingURL === "") {
@@ -56,7 +52,33 @@ function MusicPlayer(props: any): JSX.Element {
         setStatus("PAUSED");
     };
 
+    const prev_song = () => {
+        setCurPos(0);
+        setProgress(0);
+        setProgressSlidermax(1);
+        if(queue.length === 0) {
+            return;
+        }
+        let next_idx = queue.length - 1;
+        for(let i = queue.length - 1; i !== -1; i--) {
+            if(queue[i].current && i !== 0) {
+                next_idx = i-1;
+                queue[i].current = false;
+            }
+        }
+        setNowPlayingURL(queue[next_idx].playingURL);
+        setPlayingTitle(queue[next_idx].song_title);
+        setPlayingArtist(queue[next_idx].song_artist);
+        queue[next_idx].current = true;
+        if(status !== "PLAYING") {
+            setStatus("PLAYING");
+        }
+    };
+
     const next_song = () => {
+        setCurPos(0);
+        setProgress(0);
+        setProgressSlidermax(1);
         if(queue.length === 0) {
             return;
         }
@@ -109,7 +131,7 @@ function MusicPlayer(props: any): JSX.Element {
                     if(!isDraggingProgressBar)
                         setProgress(Math.round(args.position / args.duration * Math.round(args.duration / 1000)))
                 }}
-                onFinishedPlaying={() => {setStatus("PAUSED")}}
+                onFinishedPlaying={next_song}
                 onError={() => {}}
                 volume={volume}
                 />
@@ -125,10 +147,10 @@ function MusicPlayer(props: any): JSX.Element {
                     </div>
                     <div className="player-controls col-md-6 col-3">
                         <div className="player-controls-buttons">
-                            <button className="player-controls-button-misc d-md-inline-block d-none">{stepBackward}</button>
-                            <button className="player-controls-button-misc d-md-inline-block d-none">{backward}</button>
+                            <button className="player-controls-button-misc d-md-inline-block d-none" onClick={prev_song}>{stepBackward}</button>
+                            <button className="player-controls-button-misc d-md-inline-block d-none" onClick={()=>{(progress-5) >= 0 ? setCurPos(progress * 1000 - 5000) : setCurPos(0) }}>{backward}</button>
                             <button className="player-controls-button-play" onClick={play_song}>{status === "PLAYING" ? pauseCircle : playCircle}</button>
-                            <button className="player-controls-button-misc d-md-inline-block d-none">{forward}</button>
+                            <button className="player-controls-button-misc d-md-inline-block d-none" onClick={()=>{(progress+5) <= progressSlidermax ? setCurPos(progress * 1000 + 5000) : setCurPos(progressSlidermax * 1000)}}>{forward}</button>
                             <button className="player-controls-button-misc" onClick={next_song}>{stepForward}</button>
                             <button className="player-controls-button-misc d-md-none d-inline-block">{bars}</button>
                         </div>
