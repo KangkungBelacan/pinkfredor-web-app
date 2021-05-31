@@ -23,7 +23,7 @@ function MusicPlayer(props: any): JSX.Element {
     // const [currentPos, setCurrentPos] = useState("0:00");
     const [maxDuration, setMaxDuration] = useState("0:00");
     const [progressSlidermin]  = useState(0);
-    const [progressSlidermax, setProgressSlidermax]  = useState(0);
+    const [progressSlidermax, setProgressSlidermax]  = useState(1);
     const {
         status, setStatus, 
         nowPlayingURL, setNowPlayingURL,
