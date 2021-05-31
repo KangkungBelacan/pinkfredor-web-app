@@ -22,8 +22,10 @@ function MusicPlayer(props: any): JSX.Element {
     const [playingArtist, setPlayingArtist] = useState("Song Artist");
     // const [currentPos, setCurrentPos] = useState("0:00");
     const [maxDuration, setMaxDuration] = useState("0:00");
+    const [curPos, setCurPos] = useState((undefined as any));
     const [progressSlidermin]  = useState(0);
     const [progressSlidermax, setProgressSlidermax]  = useState(1);
+    const [isDraggingProgressBar, setisDraggingProgressBar] = useState(false);
     const {
         status, setStatus, 
         nowPlayingURL, setNowPlayingURL,
@@ -31,6 +33,10 @@ function MusicPlayer(props: any): JSX.Element {
         volume, setVolume,
         queue, setQueue
     } = React.useContext(MusicPlayerContext);
+
+    const progressBarOnMouseUp = (evt: any) => {
+        
+    };
 
     const play_song = () => {
         if(status !== "PLAYING") {
@@ -92,6 +98,7 @@ function MusicPlayer(props: any): JSX.Element {
                 url={nowPlayingURL}
                 playStatus={status}
                 autoLoad={true}
+                playFromPosition={curPos}
                 onLoading={(args?:any) => {
                     setMaxDuration(format(args.duration / 1000));
                     setProgressSlidermax(Math.round(args.duration / 1000))
@@ -99,7 +106,8 @@ function MusicPlayer(props: any): JSX.Element {
                 onPlaying={(args?:any) => {
                     // console.log(args);
                     // setCurrentPos(format(args.position / 1000));
-                    setProgress(Math.round(args.position / args.duration * Math.round(args.duration / 1000)))
+                    if(!isDraggingProgressBar)
+                        setProgress(Math.round(args.position / args.duration * Math.round(args.duration / 1000)))
                 }}
                 onFinishedPlaying={() => {setStatus("PAUSED")}}
                 onError={() => {}}
@@ -127,7 +135,19 @@ function MusicPlayer(props: any): JSX.Element {
                         <div className="player-controls-progress-bar d-md-flex d-none">
                             <p className="player-progress">{format(progress)}</p>
                             <div className="player-progress-slider-container">
-                                <input type="range" min={progressSlidermin} max={progressSlidermax} value={progress} className="player-progress-slider" style={{ backgroundSize: (progress / progressSlidermax * 100) + '% 100%' }} onInput={(event: any) => setProgress(event.currentTarget.value)} />
+                                <input 
+                                    type="range" 
+                                    onMouseDown={() => setisDraggingProgressBar(true)} 
+                                    onMouseUp={(evt: any) => {
+                                        setCurPos(parseInt(evt.currentTarget.value) * 1000);
+                                        setisDraggingProgressBar(false);
+                                    }} 
+                                    min={progressSlidermin} 
+                                    max={progressSlidermax} 
+                                    value={progress} 
+                                    className="player-progress-slider" 
+                                    style={{ backgroundSize: (progress / progressSlidermax * 100) + '% 100%' }} 
+                                    onInput={(event: any) => setProgress(event.currentTarget.value)} />
                             </div>
                             <p className="player-progress">{maxDuration}</p>
                         </div>
