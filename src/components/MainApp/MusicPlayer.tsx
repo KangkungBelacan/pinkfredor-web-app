@@ -175,7 +175,7 @@ function MusicPlayer(props: any): JSX.Element {
                             <button className="player-controls-button-play" onClick={play_song}>{status === "PLAYING" ? pauseCircle : playCircle}</button>
                             <button className="player-controls-button-misc d-md-inline-block d-none" onClick={seek_forward}>{forward}</button>
                             <button className="player-controls-button-misc" onClick={next_song}>{stepForward}</button>
-                            <button className="player-controls-button-misc d-md-none d-inline-block">{bars}</button>
+                            <button className="player-controls-button-misc d-md-none d-inline-block" onClick={() => setshowNowPlayingQueuePopup(true)}>{bars}</button>
                         </div>
                         <div className="player-controls-progress-bar d-md-flex d-none">
                             <p className="player-progress">{format(progress)}</p>
