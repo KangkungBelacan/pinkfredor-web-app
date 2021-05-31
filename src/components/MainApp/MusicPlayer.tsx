@@ -52,6 +52,26 @@ function MusicPlayer(props: any): JSX.Element {
         setStatus("PAUSED");
     };
 
+    const seek_back = ()=>{
+        if((progress-5) >= 0) {
+            setCurPos(progress * 1000 - 5000)
+            setProgress(progress-5)
+            return
+        }
+        setCurPos(0) 
+        setProgress(0)
+    };
+
+    const seek_forward = ()=>{
+        if((progress+5) <= progressSlidermax) {
+            setCurPos(progress * 1000 + 5000)
+            setProgress(progress+5)
+            return
+        }
+        setCurPos(progressSlidermax * 1000)
+        setProgress(progressSlidermax)
+    };
+
     const prev_song = () => {
         setCurPos(0);
         setProgress(0);
@@ -148,9 +168,9 @@ function MusicPlayer(props: any): JSX.Element {
                     <div className="player-controls col-md-6 col-5">
                         <div className="player-controls-buttons">
                             <button className="player-controls-button-misc d-md-inline-block d-none" onClick={prev_song}>{stepBackward}</button>
-                            <button className="player-controls-button-misc d-md-inline-block d-none" onClick={()=>{(progress-5) >= 0 ? setCurPos(progress * 1000 - 5000) : setCurPos(0) }}>{backward}</button>
+                            <button className="player-controls-button-misc d-md-inline-block d-none" onClick={seek_back}>{backward}</button>
                             <button className="player-controls-button-play" onClick={play_song}>{status === "PLAYING" ? pauseCircle : playCircle}</button>
-                            <button className="player-controls-button-misc d-md-inline-block d-none" onClick={()=>{(progress+5) <= progressSlidermax ? setCurPos(progress * 1000 + 5000) : setCurPos(progressSlidermax * 1000)}}>{forward}</button>
+                            <button className="player-controls-button-misc d-md-inline-block d-none" onClick={seek_forward}>{forward}</button>
                             <button className="player-controls-button-misc" onClick={next_song}>{stepForward}</button>
                             <button className="player-controls-button-misc d-md-none d-inline-block">{bars}</button>
                         </div>
