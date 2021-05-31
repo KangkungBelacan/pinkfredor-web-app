@@ -24,6 +24,7 @@ function MusicPlayer(props: any): JSX.Element {
     // const [currentPos, setCurrentPos] = useState("0:00");
     const [maxDuration, setMaxDuration] = useState("0:00");
     const [curPos, setCurPos] = useState((undefined as any));
+    const [showNowPlayingQueuePopup, setshowNowPlayingQueuePopup] = useState(false);
     const [progressSlidermin]  = useState(0);
     const [progressSlidermax, setProgressSlidermax]  = useState(1);
     const [isDraggingProgressBar, setisDraggingProgressBar] = useState(false);
@@ -137,7 +138,7 @@ function MusicPlayer(props: any): JSX.Element {
 
     return (
         <div>
-            <NowPlayingQueuePopUp />
+            <NowPlayingQueuePopUp showNowPlayingQueuePopup={showNowPlayingQueuePopup} setshowNowPlayingQueuePopup={setshowNowPlayingQueuePopup}/>
             <Sound  
                 url={nowPlayingURL}
                 playStatus={status}
@@ -197,7 +198,7 @@ function MusicPlayer(props: any): JSX.Element {
                         </div>
                     </div>
                     <div className="player-misc-controls col-md-3 d-md-flex d-none" style={{ display: 'flex', justifyContent: 'flex-end'}}>
-                        <button className="player-controls-button-misc">{bars}</button>
+                        <button className="player-controls-button-misc" onClick={() => setshowNowPlayingQueuePopup(true)}>{bars}</button>
                         <div className="player-misc-controls-volume-slider-container">
                             <VolumeBar setVolume={setVolume}/>
                         </div>
