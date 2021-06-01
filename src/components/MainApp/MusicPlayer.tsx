@@ -43,8 +43,8 @@ function MusicPlayer(props: any): JSX.Element {
                     return;
                 }
                 setNowPlayingURL(queue[0].playingURL);
-                // setPlayingTitle(queue[0].song_title);
-                // setPlayingArtist(queue[0].song_artist);
+                setPlayingTitle(queue[0].song_title);
+                setPlayingArtist(queue[0].song_artist);
                 queue[0].current = true;
                 setQueue(queue);
             }
@@ -85,8 +85,8 @@ function MusicPlayer(props: any): JSX.Element {
         for(let i = queue.length - 1; i !== -1; i--) {
             if(queue[i].current && i !== 0) {
                 next_idx = i-1;
-                queue[i].current = false;
             }
+            queue[i].current = false;
         }
         setNowPlayingURL(queue[next_idx].playingURL);
         setPlayingTitle(queue[next_idx].song_title);
@@ -107,10 +107,10 @@ function MusicPlayer(props: any): JSX.Element {
         }
         let next_idx = 0;
         for(let i = 0; i < queue.length; i++) {
-            queue[i].current = false;
             if(queue[i].current && i < (queue.length-1)) {
                 next_idx = i+1;
             }
+            queue[i].current = false;
         }
         setNowPlayingURL(queue[next_idx].playingURL);
         setPlayingTitle(queue[next_idx].song_title);

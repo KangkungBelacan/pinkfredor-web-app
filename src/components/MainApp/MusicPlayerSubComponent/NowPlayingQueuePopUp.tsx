@@ -5,39 +5,23 @@ import ModalFooter from "react-bootstrap/ModalFooter";
 import ModalTitle from "react-bootstrap/ModalTitle";
 import "./NowPlayingQueuePopUp.css";
 import MusicPlayerContext from "../../../context/MusicPlayerContext";
-import React from "react";
+import React, {useState} from "react";
 import NowPlayingQueuePopUpRow from "./NowPlayingQueuePopUpRow";
 const NowPlayingQueuePopUp = (props: any) => {
     const {
-        status,
-        setStatus,
-        nowPlayingURL,
-        setNowPlayingURL,
-        progress,
-        setProgress,
         queue,
-        setQueue,
     } = React.useContext(MusicPlayerContext);
+    const [nowPlayingCounter, setNowPlayingCounter] = useState("00/00");
 
     let queue_rows:any = [];
+    let playcount = 1;
     for(let i = 0; i < queue.length; i++) {
         queue_rows.push(<NowPlayingQueuePopUpRow change_song_in_queue={props.change_song_in_queue} playingURL={queue[i].playingURL} song_title={queue[i].song_title} song_artist={queue[i].song_artist} is_playing={queue[i].current} />);
-    }
-
-    const change_song = (playingURL: string) => {
-        for(let i = 0; i < queue.length; i++) {
-            if(queue[i].playingURL === playingURL) {
-                setNowPlayingURL(queue[i].playingURL);
-                queue[i].current = true;
-                if(status !== "PLAYING") {
-                    setStatus("PLAYING");
-                }
-            } else {
-                queue[i].current = false;
-            }
+        if(queue[i].current && `${playcount}/${queue.length}` !== nowPlayingCounter) {
+            setNowPlayingCounter(`${playcount}/${queue.length}`)
         }
-        setQueue(queue);
-    };
+        playcount++;
+    }
 
     return (
         <Modal show={props.showNowPlayingQueuePopup}>
@@ -48,7 +32,7 @@ const NowPlayingQueuePopUp = (props: any) => {
                     borderBottom: "0px",
                 }}
             >
-                <ModalTitle>Now Playing (00/00)</ModalTitle>
+                <ModalTitle>Now Playing ({nowPlayingCounter})</ModalTitle>
             </ModalHeader>
             <ModalBody
                 style={{ color: "white", backgroundColor: "rgb(18,18,18)" }}
