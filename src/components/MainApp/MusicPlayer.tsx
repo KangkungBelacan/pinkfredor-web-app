@@ -122,12 +122,12 @@ function MusicPlayer(props: any): JSX.Element {
         }
     };
 
-    const change_song_in_queue = (playingURL: string) => {
+    const change_song_in_queue = (item_id: string) => {
         setCurPos(0);
         setProgress(0);
         setProgressSlidermax(1);
         for(let i = 0; i < queue.length; i++) {
-            if(queue[i].playingURL === playingURL) {
+            if(queue[i].item_id === item_id) {
                 setNowPlayingURL(queue[i].playingURL);
                 setPlayingTitle(queue[i].song_title);
                 setPlayingArtist(queue[i].song_artist);

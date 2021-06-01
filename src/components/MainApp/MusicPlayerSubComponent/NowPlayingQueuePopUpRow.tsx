@@ -51,14 +51,14 @@ const NowPlayingQueuePopUpRow = (props: NowPlayingQueuePopUpRowProps) => {
 
     const change_song = () => {
         if (!props.is_playing) {
-            props.parent_controls.change_song_in_queue(props.playingURL);
+            props.parent_controls.change_song_in_queue(props.item_id);
         }
     };
 
-    const remove_song_from_queue = (playingURL: string) => {
+    const remove_song_from_queue = () => {
         setQueue(
             queue.filter((item: any) => {
-                if(item.playingURL === playingURL) {
+                if(item.item_id === props.item_id) {
                     if(item.current) {
                         if(queue.length === 1) {
                             // Stop operation
@@ -68,7 +68,7 @@ const NowPlayingQueuePopUpRow = (props: NowPlayingQueuePopUpRowProps) => {
                         }
                     }
                 }
-                return item.playingURL !== playingURL;
+                return item.item_id !== props.item_id;
             })
         );
     };
@@ -127,9 +127,7 @@ const NowPlayingQueuePopUpRow = (props: NowPlayingQueuePopUpRowProps) => {
                     <Dropdown.Item eventKey="2">Add to...</Dropdown.Item>
                     <Dropdown.Item
                         eventKey="3"
-                        onClick={() => {
-                            remove_song_from_queue(props.playingURL);
-                        }}
+                        onClick={remove_song_from_queue}
                     >
                         Remove
                     </Dropdown.Item>

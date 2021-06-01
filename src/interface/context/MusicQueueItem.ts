@@ -1,5 +1,11 @@
 export interface MusicQueueItem {
-    // Indicate its the current loaded url
+    /**
+     * Self generated id to help identify
+     */
+    item_id: string;
+    /**
+     * Indicate if its the current loaded url
+     */
     current: boolean;
     playingURL: string;
     song_title: string;

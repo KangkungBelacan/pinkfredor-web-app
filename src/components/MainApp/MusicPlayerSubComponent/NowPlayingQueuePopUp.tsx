@@ -11,20 +11,23 @@ const NowPlayingQueuePopUp = (props: any) => {
     const {
         queue,
     } = React.useContext(MusicPlayerContext);
-    const [nowPlayingCounter, setNowPlayingCounter] = useState("00/00");
+    const [nowPlayingCounter, setNowPlayingCounter] = useState("(00/00)");
 
     let queue_rows:any = [];
     let playcount = 1;
+    if(queue.length === 0 && nowPlayingCounter !== "(00/00)") {
+        setNowPlayingCounter(`(00/00)`);
+    }
     for(let i = 0; i < queue.length; i++) {
-        queue_rows.push(<NowPlayingQueuePopUpRow parent_controls={props.parent_controls} playingURL={queue[i].playingURL} song_title={queue[i].song_title} song_artist={queue[i].song_artist} is_playing={queue[i].current} />);
-        if(queue[i].current && `${playcount}/${queue.length}` !== nowPlayingCounter) {
-            setNowPlayingCounter(`${playcount}/${queue.length}`)
+        queue_rows.push(<NowPlayingQueuePopUpRow key={`queue-item-${queue[i].item_id}`} item_id={queue[i].item_id} parent_controls={props.parent_controls} playingURL={queue[i].playingURL} song_title={queue[i].song_title} song_artist={queue[i].song_artist} is_playing={queue[i].current} />);
+        if(queue[i].current && `(${playcount}/${queue.length})` !== nowPlayingCounter) {
+            setNowPlayingCounter(`(${playcount}/${queue.length})`)
         }
         playcount++;
     }
 
     return (
-        <Modal show={props.showNowPlayingQueuePopup}>
+        <Modal show={props.showNowPlayingQueuePopup} onHide={() => {props.setshowNowPlayingQueuePopup(false)}}>
             <ModalHeader
                 style={{
                     color: "white",
@@ -32,7 +35,7 @@ const NowPlayingQueuePopUp = (props: any) => {
                     borderBottom: "0px",
                 }}
             >
-                <ModalTitle>Now Playing ({nowPlayingCounter})</ModalTitle>
+                <ModalTitle>Now Playing {nowPlayingCounter}</ModalTitle>
             </ModalHeader>
             <ModalBody
                 style={{ color: "white", backgroundColor: "rgb(18,18,18)" }}
