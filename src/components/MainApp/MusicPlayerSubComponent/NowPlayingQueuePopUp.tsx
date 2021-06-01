@@ -12,25 +12,12 @@ const NowPlayingQueuePopUp = (props: any) => {
     const { queue, setQueue } = React.useContext(MusicPlayerContext);
     const [nowPlayingCounter, setNowPlayingCounter] = useState("");
 
-    let queue_rows: any = [];
     let playcount = 1;
     if (queue.length === 0 && nowPlayingCounter !== "") {
         setNowPlayingCounter(``);
     }
 
     for (let i = 0; i < queue.length; i++) {
-        queue_rows.push(
-            <NowPlayingQueuePopUpRow
-                key={`queue-item-${queue[i].item_id}`}
-                item_id={queue[i].item_id}
-                parent_controls={props.parent_controls}
-                playingURL={queue[i].playingURL}
-                song_title={queue[i].song_title}
-                song_artist={queue[i].song_artist}
-                is_playing={queue[i].current}
-                index={i}
-            />
-        );
         if (
             queue[i].current &&
             `(${playcount}/${queue.length})` !== nowPlayingCounter
@@ -41,18 +28,18 @@ const NowPlayingQueuePopUp = (props: any) => {
     }
 
     // When user finish dragging
-    const onDragEnd = (result:any) => {
+    const onDragEnd = (result: any) => {
         let item_id = result.draggableId;
 
         let old_idx = -1;
         let dest_idx = result.destination.index;
-        for(let i = 0; i < queue.length; i++) {
-            if(queue[i].item_id === item_id) {
+        for (let i = 0; i < queue.length; i++) {
+            if (queue[i].item_id === item_id) {
                 old_idx = i;
                 break;
             }
         }
-        if(old_idx === -1) {
+        if (old_idx === -1) {
             return;
         }
 
@@ -89,7 +76,18 @@ const NowPlayingQueuePopUp = (props: any) => {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                {queue_rows}
+                                {queue.map((cur: any, i: any, arr: any) => {
+                                    return <NowPlayingQueuePopUpRow
+                                        key={`queue-item-${cur.item_id}`}
+                                        item_id={cur.item_id}
+                                        parent_controls={props.parent_controls}
+                                        playingURL={cur.playingURL}
+                                        song_title={cur.song_title}
+                                        song_artist={cur.song_artist}
+                                        is_playing={cur.current}
+                                        index={i}
+                                    />;
+                                })}
                                 {provided.placeholder}
                             </div>
                         )}
