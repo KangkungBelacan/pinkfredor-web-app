@@ -43,8 +43,8 @@ function MusicPlayer(props: any): JSX.Element {
                     return;
                 }
                 setNowPlayingURL(queue[0].playingURL);
-                setPlayingTitle(queue[0].song_title);
-                setPlayingArtist(queue[0].song_artist);
+                // setPlayingTitle(queue[0].song_title);
+                // setPlayingArtist(queue[0].song_artist);
                 queue[0].current = true;
                 setQueue(queue);
             }
@@ -92,6 +92,7 @@ function MusicPlayer(props: any): JSX.Element {
         setPlayingTitle(queue[next_idx].song_title);
         setPlayingArtist(queue[next_idx].song_artist);
         queue[next_idx].current = true;
+        setQueue(queue);
         if(status !== "PLAYING") {
             setStatus("PLAYING");
         }
@@ -115,9 +116,30 @@ function MusicPlayer(props: any): JSX.Element {
         setPlayingTitle(queue[next_idx].song_title);
         setPlayingArtist(queue[next_idx].song_artist);
         queue[next_idx].current = true;
+        setQueue(queue);
         if(status !== "PLAYING") {
             setStatus("PLAYING");
         }
+    };
+
+    const change_song_in_queue = (playingURL: string) => {
+        setCurPos(0);
+        setProgress(0);
+        setProgressSlidermax(1);
+        for(let i = 0; i < queue.length; i++) {
+            if(queue[i].playingURL === playingURL) {
+                setNowPlayingURL(queue[i].playingURL);
+                setPlayingTitle(queue[i].song_title);
+                setPlayingArtist(queue[i].song_artist);
+                queue[i].current = true;
+                if(status !== "PLAYING") {
+                    setStatus("PLAYING");
+                }
+            } else {
+                queue[i].current = false;
+            }
+        }
+        setQueue(queue);
     };
 
     function format(time: any) {
@@ -138,7 +160,7 @@ function MusicPlayer(props: any): JSX.Element {
 
     return (
         <div>
-            <NowPlayingQueuePopUp showNowPlayingQueuePopup={showNowPlayingQueuePopup} setshowNowPlayingQueuePopup={setshowNowPlayingQueuePopup}/>
+            <NowPlayingQueuePopUp change_song_in_queue={change_song_in_queue} showNowPlayingQueuePopup={showNowPlayingQueuePopup} setshowNowPlayingQueuePopup={setshowNowPlayingQueuePopup}/>
             <Sound  
                 url={nowPlayingURL}
                 playStatus={status}

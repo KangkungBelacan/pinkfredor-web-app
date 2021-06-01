@@ -10,6 +10,9 @@
     margin-bottom: 0;
 }
 
+.now-playing-queue-item-content {
+    cursor: pointer;
+}
 
 .now-playing-queue-item-content-artist,
 .now-playing-queue-content-length {
@@ -23,6 +26,16 @@
 
 .now-playing-queue-ellipsis {
     cursor: pointer;
+}
+
+.now-playing-queue-item-content-artist,
+.now-playing-queue-item-content-title {
+    opacity: 60%;
+}
+
+.now-playing-queue-item-row.playing .now-playing-queue-item-content-artist,
+.now-playing-queue-item-row.playing .now-playing-queue-item-content-title {
+    opacity: 100%;
 }
 
 .bootstrap-drop-down-container {
