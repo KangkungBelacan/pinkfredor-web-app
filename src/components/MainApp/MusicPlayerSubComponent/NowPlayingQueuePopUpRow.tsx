@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dropdown } from "react-bootstrap";
 import NowPlayingQueuePopUpRowProps from "../../../interface/components/MainApp/NowPlayingQueuePopUpRowProps";
+import MusicPlayerContext from "../../../context/MusicPlayerContext";
 const NowPlayingQueuePopUpRow = (props: NowPlayingQueuePopUpRowProps) => {
+    const { queue, setQueue } = React.useContext(MusicPlayerContext);
     const CustomToggle = React.forwardRef(
         ({ children, onClick }: any, ref: any) => (
             <div
@@ -55,11 +57,30 @@ const NowPlayingQueuePopUpRow = (props: NowPlayingQueuePopUpRowProps) => {
         }
     );
 
-    const rowContentOnClick = () => {
+    const change_song = () => {
         if (!props.is_playing) {
-            props.change_song_in_queue(props.playingURL);
+            props.parent_controls.change_song_in_queue(props.playingURL);
         }
     };
+
+    const remove_song_from_queue = (playingURL: string) => {
+        setQueue(
+            queue.filter((item: any) => {
+                if(item.playingURL === playingURL) {
+                    if(item.current) {
+                        if(queue.length === 1) {
+                            // Stop operation
+                            props.parent_controls.stop_song(); 
+                        } else {
+                           props.parent_controls.next_song();
+                        }
+                    }
+                }
+                return item.playingURL !== playingURL;
+            })
+        );
+    };
+
     return (
         <div
             className={
@@ -77,7 +98,7 @@ const NowPlayingQueuePopUpRow = (props: NowPlayingQueuePopUpRowProps) => {
                         ? "col-9 now-playing-queue-item-content"
                         : "col-10 now-playing-queue-item-content"
                 }
-                onClick={rowContentOnClick}
+                onClick={change_song}
             >
                 <div className="now-playing-queue-item-content-title">
                     {props.song_title}
@@ -108,9 +129,18 @@ const NowPlayingQueuePopUpRow = (props: NowPlayingQueuePopUpRowProps) => {
                 ></Dropdown.Toggle>
 
                 <Dropdown.Menu as={CustomMenu}>
-                    <Dropdown.Item eventKey="1">Play</Dropdown.Item>
+                    <Dropdown.Item eventKey="1" onClick={change_song}>
+                        Play
+                    </Dropdown.Item>
                     <Dropdown.Item eventKey="2">Add to...</Dropdown.Item>
-                    <Dropdown.Item eventKey="3">Remove</Dropdown.Item>
+                    <Dropdown.Item
+                        eventKey="3"
+                        onClick={() => {
+                            remove_song_from_queue(props.playingURL);
+                        }}
+                    >
+                        Remove
+                    </Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
             {/* <div className="col-1 d-flex align-items-center now-playing-queue-ellipsis">

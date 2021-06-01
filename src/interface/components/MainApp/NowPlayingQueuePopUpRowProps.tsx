@@ -4,5 +4,7 @@ export default interface NowPlayingQueuePopUpRowProps extends GenericProps {
     song_artist: string;
     is_playing: boolean;
     playingURL: string;
-    change_song_in_queue: (playingURL: string)=>{};
+
+    // Music controls from MusicPlaying.tsx
+    parent_controls: any;
 }

@@ -142,6 +142,10 @@ function MusicPlayer(props: any): JSX.Element {
         setQueue(queue);
     };
 
+    const stop_song = () => {
+        setStatus("STOPPED");
+    };
+
     function format(time: any) {
         // Hours, minutes and seconds
         var hrs = ~~(time / 3600);
@@ -158,9 +162,17 @@ function MusicPlayer(props: any): JSX.Element {
         return ret;
     }
 
+    const parent_controls = {
+        play_song,
+        seek_back,
+        seek_forward,
+        prev_song,
+        next_song,
+        change_song_in_queue,stop_song};
+
     return (
         <div>
-            <NowPlayingQueuePopUp change_song_in_queue={change_song_in_queue} showNowPlayingQueuePopup={showNowPlayingQueuePopup} setshowNowPlayingQueuePopup={setshowNowPlayingQueuePopup}/>
+            <NowPlayingQueuePopUp parent_controls={parent_controls} showNowPlayingQueuePopup={showNowPlayingQueuePopup} setshowNowPlayingQueuePopup={setshowNowPlayingQueuePopup}/>
             <Sound  
                 url={nowPlayingURL}
                 playStatus={status}

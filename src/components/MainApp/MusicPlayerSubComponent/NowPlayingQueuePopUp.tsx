@@ -16,7 +16,7 @@ const NowPlayingQueuePopUp = (props: any) => {
     let queue_rows:any = [];
     let playcount = 1;
     for(let i = 0; i < queue.length; i++) {
-        queue_rows.push(<NowPlayingQueuePopUpRow change_song_in_queue={props.change_song_in_queue} playingURL={queue[i].playingURL} song_title={queue[i].song_title} song_artist={queue[i].song_artist} is_playing={queue[i].current} />);
+        queue_rows.push(<NowPlayingQueuePopUpRow parent_controls={props.parent_controls} playingURL={queue[i].playingURL} song_title={queue[i].song_title} song_artist={queue[i].song_artist} is_playing={queue[i].current} />);
         if(queue[i].current && `${playcount}/${queue.length}` !== nowPlayingCounter) {
             setNowPlayingCounter(`${playcount}/${queue.length}`)
         }
