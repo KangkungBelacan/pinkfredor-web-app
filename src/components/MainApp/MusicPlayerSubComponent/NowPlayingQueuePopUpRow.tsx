@@ -34,7 +34,6 @@ const NowPlayingQueuePopUpRow = (props: NowPlayingQueuePopUpRowProps) => {
             { children, style, className, "aria-labelledby": labeledBy }: any,
             ref: any
         ) => {
-            const [value, setValue] = useState("");
             return (
                 <div
                     ref={ref}
@@ -43,13 +42,6 @@ const NowPlayingQueuePopUpRow = (props: NowPlayingQueuePopUpRowProps) => {
                     aria-labelledby={labeledBy}
                 >
                     <ul className="list-unstyled" style={{ marginBottom: "0" }}>
-                        {/* {React.Children.toArray(children).filter(
-                            (child:any) =>
-                                !value ||
-                                child.props.children
-                                    .toLowerCase()
-                                    .startsWith(value)
-                        )} */}
                         {children}
                     </ul>
                 </div>
