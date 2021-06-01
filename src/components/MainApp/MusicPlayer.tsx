@@ -107,9 +107,9 @@ function MusicPlayer(props: any): JSX.Element {
         }
         let next_idx = 0;
         for(let i = 0; i < queue.length; i++) {
+            queue[i].current = false;
             if(queue[i].current && i < (queue.length-1)) {
                 next_idx = i+1;
-                queue[i].current = false;
             }
         }
         setNowPlayingURL(queue[next_idx].playingURL);

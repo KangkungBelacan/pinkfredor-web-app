@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dropdown } from "react-bootstrap";
 import NowPlayingQueuePopUpRowProps from "../../../interface/components/MainApp/NowPlayingQueuePopUpRowProps";
@@ -54,12 +54,31 @@ const NowPlayingQueuePopUpRow = (props: NowPlayingQueuePopUpRowProps) => {
             );
         }
     );
+
+    const rowContentOnClick = () => {
+        if (!props.is_playing) {
+            props.change_song_in_queue(props.playingURL);
+        }
+    };
     return (
-        <div className={props.is_playing ? "row now-playing-queue-item-row playing" : "row now-playing-queue-item-row"}>
+        <div
+            className={
+                props.is_playing
+                    ? "row now-playing-queue-item-row playing"
+                    : "row now-playing-queue-item-row"
+            }
+        >
             <div className="col-1 d-flex align-items-center now-playing-queue-grip">
                 <FontAwesomeIcon icon="grip-vertical" />
             </div>
-            <div className={props.is_playing ? "col-9 now-playing-queue-item-content" : "col-10 now-playing-queue-item-content"} onClick={() => {props.change_song_in_queue(props.playingURL)}}>
+            <div
+                className={
+                    props.is_playing
+                        ? "col-9 now-playing-queue-item-content"
+                        : "col-10 now-playing-queue-item-content"
+                }
+                onClick={rowContentOnClick}
+            >
                 <div className="now-playing-queue-item-content-title">
                     {props.song_title}
                 </div>
@@ -70,8 +89,14 @@ const NowPlayingQueuePopUpRow = (props: NowPlayingQueuePopUpRowProps) => {
             {/* <div className="col-2 d-flex align-items-center now-playing-queue-content-length">
                 3:48
             </div> */}
-            <div className={props.is_playing ? "d-flex align-items-center col-1" : "d-none"}>
-                <FontAwesomeIcon icon="play" size="xs"/>
+            <div
+                className={
+                    props.is_playing
+                        ? "d-flex align-items-center col-1"
+                        : "d-none"
+                }
+            >
+                <FontAwesomeIcon icon="play" size="xs" />
             </div>
             <Dropdown
                 style={{ padding: "0" }}
