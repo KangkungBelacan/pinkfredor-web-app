@@ -1,5 +1,4 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dropdown } from "react-bootstrap";
 import CustomBootstrapDropDownProps from "../../interface/components/generic/CustomBootstrapDropDownProps";
 import "./CustomBootstrapDropDown.css";
@@ -21,7 +20,8 @@ const CustomBootstrapDropDown = (props: CustomBootstrapDropDownProps) => {
                 }}
             >
                 {children}
-                <FontAwesomeIcon icon="ellipsis-v" />
+                {props.icon()}
+                {/* <FontAwesomeIcon icon="ellipsis-v" /> */}
             </div>
         )
     );
@@ -50,8 +50,8 @@ const CustomBootstrapDropDown = (props: CustomBootstrapDropDownProps) => {
 
     return (
         <Dropdown
-            style={props.style}
-            className={props.className}
+            style={props.style ? props.style : {}}
+            className={props.className ? props.className : ""}
         >
             <Dropdown.Toggle
                 as={CustomToggle}
@@ -59,7 +59,7 @@ const CustomBootstrapDropDown = (props: CustomBootstrapDropDownProps) => {
             ></Dropdown.Toggle>
 
             <Dropdown.Menu as={CustomMenu}>
-                {...props.items}
+                {props.items}
             </Dropdown.Menu>
         </Dropdown>
     );

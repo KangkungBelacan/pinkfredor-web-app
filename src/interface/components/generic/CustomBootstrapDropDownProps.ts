@@ -12,4 +12,10 @@ export default interface CustomBootstrapDropDownProps extends GenericProps {
      * Refer to react-bootstrap
      */
     items: Array<any>;
+
+    /**
+     * Icon to use
+     * Pass in a function to render your icon
+     */
+    icon: () => {};
 }
