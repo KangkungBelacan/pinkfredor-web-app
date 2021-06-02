@@ -1,11 +1,9 @@
 // import ReactDOM from 'react-dom'
-import { forwardRef } from 'react';
+import { forwardRef, useState } from 'react';
 import "./Content.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, useEffect } from "react";
-import MaterialTable, { MTableBodyRow } from "material-table";
-import ContextMenu from "./ContextMenu"
-// import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
+import MaterialTable from "material-table";
+import { Button, ButtonGroup, Dropdown } from 'react-bootstrap';
 
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
@@ -54,6 +52,7 @@ interface Element {
 }
 
 function Content(props: any): JSX.Element {
+    const axios = require('axios').default;
 
     const song_columns = [
         { title: "Title", field: "title" },
@@ -120,32 +119,8 @@ function Content(props: any): JSX.Element {
         },
     ]
 
-    function test_callback(uid:any) {
-        console.log(contextMenuActive)
-        console.log(uid)
-    }
-
-    var contextMenuItems = [
-        {
-            icon: <PlayArrow style={{color:"black"}}/>,
-            label: "Play",
-            uid: "play",
-            callback: test_callback
-        },
-        {
-            icon: <Queue style={{color:"black"}} />,
-            label: "Add to queue",
-            uid: "addtoq",
-            callback: test_callback
-        },
-    ]
-
     const [topBarSelection, setTopBar] = useState(0);
     const [songsTableData, setSongsTableData] = useState(example_songs);
-    const [contextMenuVisible, setContextMenuVisible] = useState(false);
-    const [contextMenuX, setContextMenuX] = useState("0");
-    const [contextMenuY, setContextMenuY] = useState("0");
-    const [contextMenuActive, setContextMenuActive] = useState(null);
 
     return (
         <div className="container-fluid mainapp-content-container" style={{ color: "#ffffff" }}>
@@ -162,8 +137,7 @@ function Content(props: any): JSX.Element {
                     <div className={topBarSelection === 3 ? "content-top-bar-items-container selected" : "content-top-bar-items-container"} onClick={() => { setTopBar(3); }}>Albums</div>
                     <div className={topBarSelection === 4 ? "content-top-bar-items-container selected" : "content-top-bar-items-container"} onClick={() => { setTopBar(4); }}>Genres</div>
                 </div>
-                <ContextMenu x={contextMenuX} y={contextMenuY} visible={contextMenuVisible} items={contextMenuItems}/>
-                <div className="songs-section" style={{ display: 'flex', flexDirection: 'column', }} onClick={() => setContextMenuVisible(false)}>
+                <div className="songs-section" style={{ display: 'flex', flexDirection: 'column', }} >
                     <MaterialTable
                         icons={tableIcons}
                         columns={song_columns}
@@ -174,21 +148,26 @@ function Content(props: any): JSX.Element {
                                 icon: MoreVert,
                                 tooltip: 'More Options',
                                 onClick: (event, rowData) => {
-
-                                    if (contextMenuActive != (rowData as any).uid) {
-                                        //TODO: get location of button and use it for xy
-                                        setContextMenuVisible(true)
-                                        setContextMenuX(event.pageX)
-                                        setContextMenuY(event.pageY)
-                                        setContextMenuActive((rowData as any).uid)
-                                    }
-
-                                    else if (contextMenuActive === (rowData as any).uid) {
-                                        setContextMenuVisible(!contextMenuVisible)
-                                    }
+                                    console.log(rowData)
+                                    window.alert("You clicked on " + (rowData as any).title + " Action: " + event.currentTarget.id)
                                 }
                             }
                         ]}
+                        components={{
+                            Action: props => (
+                                <Dropdown as={ButtonGroup}>
+                                    <Button id="play" onClick={(event) => props.action.onClick(event, props.data)} variant="success">Play</Button>
+
+                                    <Dropdown.Toggle split variant="success" id="dropdown-split-basic" />
+
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item id="addToQ" onClick={(event) => props.action.onClick(event, props.data)}>Add to queue</Dropdown.Item>
+                                        <Dropdown.Item id="playNext" onClick={(event) => props.action.onClick(event, props.data)}>Play next</Dropdown.Item>
+                                        <Dropdown.Item id="addToPlaylist" onClick={(event) => props.action.onClick(event, props.data)}>Add to playlist</Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            ),
+                        }}
                         options={{
                             actionsColumnIndex: -1
                         }}
