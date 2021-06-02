@@ -18,6 +18,8 @@ import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import { Icons } from "material-table";
 import { axios } from "../../../global-imports";
+import DARK_THEME from "./MaterialTableMUITheme";
+import { ThemeProvider } from "@material-ui/styles";
 const tableIcons: Icons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
     Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -115,39 +117,41 @@ const OSBTracks = () => {
             {loading ? (
                 "Loading..."
             ) : (
-                <MaterialTable
-                    icons={tableIcons}
-                    columns={[
-                        { title: "No.", field: "rowNum" },
-                        { title: "Filename", field: "fileName" },
-                        {
-                            title: "Drive Location",
-                            field: "driveLocation",
-                        },
-                        {
-                            title: "Title",
-                            field: "trackTitle",
-                        },
-                        {
-                            title: "Artist",
-                            field: "trackArtist",
-                        },
-                        {
-                            title: "Album Track No.",
-                            field: "trackAlbumTrNo",
-                        },
-                        {
-                            title: "Album",
-                            field: "trackAlbum",
-                        },
-                        {
-                            title: "Genre",
-                            field: "trackGenre",
-                        },
-                    ]}
-                    data={t_data as any}
-                    title="Tracks Listing"
-                />
+                <ThemeProvider theme={DARK_THEME}>
+                    <MaterialTable
+                        icons={tableIcons}
+                        columns={[
+                            { title: "No.", field: "rowNum" },
+                            { title: "Filename", field: "fileName" },
+                            {
+                                title: "Drive Location",
+                                field: "driveLocation",
+                            },
+                            {
+                                title: "Title",
+                                field: "trackTitle",
+                            },
+                            {
+                                title: "Artist",
+                                field: "trackArtist",
+                            },
+                            {
+                                title: "Album Track No.",
+                                field: "trackAlbumTrNo",
+                            },
+                            {
+                                title: "Album",
+                                field: "trackAlbum",
+                            },
+                            {
+                                title: "Genre",
+                                field: "trackGenre",
+                            },
+                        ]}
+                        data={t_data as any}
+                        title="Tracks Listing"
+                    />
+                </ThemeProvider>
             )}
         </div>
     );
