@@ -18,8 +18,9 @@ import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import { Icons } from "material-table";
 import { axios } from "../../../global-imports";
-import DARK_THEME from "./MaterialTableMUITheme";
-import { ThemeProvider } from "@material-ui/styles";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Dropdown } from "react-bootstrap";
+import React from "react";
 const tableIcons: Icons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
     Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -72,7 +73,7 @@ const OSBTracks = () => {
                 let file_item = files_response.data.files[keys[i]];
                 let parent_path = "/";
                 if (file_item.parents !== undefined) {
-                    while (file_item.parents.length != 0) {
+                    while (file_item.parents.length !== 0) {
                         parent_path +=
                             scan_folder_response.data[file_item.parents.pop()]
                                 .folder_name + "/";
@@ -117,41 +118,127 @@ const OSBTracks = () => {
             {loading ? (
                 "Loading..."
             ) : (
-                <ThemeProvider theme={DARK_THEME}>
-                    <MaterialTable
-                        icons={tableIcons}
-                        columns={[
-                            { title: "No.", field: "rowNum" },
-                            { title: "Filename", field: "fileName" },
-                            {
-                                title: "Drive Location",
-                                field: "driveLocation",
-                            },
-                            {
-                                title: "Title",
-                                field: "trackTitle",
-                            },
-                            {
-                                title: "Artist",
-                                field: "trackArtist",
-                            },
-                            {
-                                title: "Album Track No.",
-                                field: "trackAlbumTrNo",
-                            },
-                            {
-                                title: "Album",
-                                field: "trackAlbum",
-                            },
-                            {
-                                title: "Genre",
-                                field: "trackGenre",
-                            },
-                        ]}
-                        data={t_data as any}
-                        title="Tracks Listing"
-                    />
-                </ThemeProvider>
+                <MaterialTable
+                    icons={tableIcons}
+                    columns={[
+                        { title: "No.", field: "rowNum" },
+                        { title: "Filename", field: "fileName" },
+                        {
+                            title: "Drive Location",
+                            field: "driveLocation",
+                        },
+                        {
+                            title: "Title",
+                            field: "trackTitle",
+                        },
+                        {
+                            title: "Artist",
+                            field: "trackArtist",
+                        },
+                        {
+                            title: "Album Track No.",
+                            field: "trackAlbumTrNo",
+                        },
+                        {
+                            title: "Album",
+                            field: "trackAlbum",
+                        },
+                        {
+                            title: "Genre",
+                            field: "trackGenre",
+                        },
+                    ]}
+                    data={t_data as any}
+                    title="Tracks Listing"
+                    components={{
+                        Action: (props) => {
+                            let toggleButton = React.forwardRef(
+                                ({ children, onClick }: any, ref: any) => (
+                                    <button
+                                        className="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit"
+                                        tabIndex={0}
+                                        type="button"
+                                        title="More Options"
+                                        ref={ref}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            onClick(e);
+                                        }}
+                                    >
+                                        {children}
+                                        <span className="MuiIconButton-label">
+                                            <FontAwesomeIcon
+                                                icon="ellipsis-v"
+                                                size="xs"
+                                            />
+                                        </span>
+                                        <span className="MuiTouchRipple-root"></span>
+                                    </button>
+                                )
+                            );
+
+                            let moreOptionsMenu = React.forwardRef(
+                                (
+                                    {
+                                        children,
+                                        style,
+                                        className,
+                                        "aria-labelledby": labeledBy,
+                                    }: any,
+                                    ref: any
+                                ) => {
+                                    return (
+                                        <div
+                                            ref={ref}
+                                            style={style}
+                                            className={
+                                                className +
+                                                " bootstrap-drop-down-container"
+                                            }
+                                            aria-labelledby={labeledBy}
+                                        >
+                                            <ul
+                                                className="list-unstyled"
+                                                style={{
+                                                    marginBottom: "0",
+                                                }}
+                                            >
+                                                {children}
+                                            </ul>
+                                        </div>
+                                    );
+                                }
+                            );
+
+                            return (
+                                <Dropdown>
+                                    <Dropdown.Toggle
+                                        as={toggleButton}
+                                        id={"id"}
+                                    ></Dropdown.Toggle>
+                                    <Dropdown.Menu as={moreOptionsMenu}>
+                                        <Dropdown.Item eventKey="1">
+                                            Edit
+                                        </Dropdown.Item>
+                                        <Dropdown.Item eventKey="2">
+                                            Hide
+                                        </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            );
+                        },
+                    }}
+                    actions={[
+                        {
+                            icon: () => <FontAwesomeIcon icon="ellipsis-v" />,
+                            tooltip: "More Options",
+                            onClick: (event, rowData) => {},
+                        },
+                    ]}
+                    options={{
+                        actionsColumnIndex: -1,
+                    }}
+                />
             )}
         </div>
     );
