@@ -6,10 +6,14 @@ import Help from "./pages/Help"
 import UserAccount from "./pages/UserAccount";
 import Playground from "./pages/Playground";
 
+// Bootstrap
 import 'bootstrap/dist/css/bootstrap.min.css';
 // import $ from 'jquery';
 // import Popper from 'popper.js';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
+
+// Roboto font for material-ui
+import '@fontsource/roboto';
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
