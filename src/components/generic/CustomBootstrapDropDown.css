@@ -1,0 +1,14 @@
+.bootstrap-drop-down-container {
+    background-color: rgb(55,55,55);
+}
+
+.bootstrap-drop-down-container .dropdown-item {
+    color: white;
+}
+
+.bootstrap-drop-down-container .dropdown-item:hover {
+    background-color: red;
+}
+.bootstrap-drop-down-container .dropdown-item:active {
+    background-color: red;
+}
