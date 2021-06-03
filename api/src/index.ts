@@ -8,7 +8,7 @@ import {verifyRequestAuthorization} from "./util/auth";
 
 const bodyParser = require("body-parser");
 const app = express();
-const port = 8080;
+const port = process.env.PORT || 8080;
 
 // ======================================
 // ======================================
@@ -41,6 +41,9 @@ app.use(verifyRequestAuthorization);
 
 // Allow login checks
 app.post("/api/auth/check", api.auth.check);
+
+// BIG endpoint that fetch all indexes
+app.get("/api/indexes", api.indexes.__read);
 
 // Refer to index-files in firestore
 app.post("/api/indexes/files", api.indexes.files.__create);

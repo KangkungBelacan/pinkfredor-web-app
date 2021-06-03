@@ -54,3 +54,5 @@ package-lock.json
 **/*/.env
 api/src/drive_credentials.json
 .eslintcache
+
+api/pinkfredor-web-app-api.yaml
