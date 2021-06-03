@@ -47,9 +47,10 @@ const tableIcons: Icons = {
 };
 
 const song_columns = [
-    { title: "File name", field: "filename" },
+    { title: "Name", field: "title" },
     { title: "File size", field: "size" },
-    { title: "Parent directory", field: "parents" }
+    { title: "Parent directory", field: "parentDirectory" },
+    { title: "Format", field: "format"},
 ]
 
 const LinkGDrive = () => {
@@ -68,29 +69,6 @@ const LinkGDrive = () => {
         return <Redirect to="/" />;
     }
 
-    function getGDriveFolders() {
-        var data:any
-
-        let postData = {
-            "folder_only": true
-        };
-
-        let axiosConfig = {
-            headers: {
-                "accept": "*/*",
-                "Authorization": "Bearer " + localStorage.token,
-                "Content-Type": "application/json; charset=utf-8"
-            }
-        }
-
-        axios.post('/api/driveapi/files/scan', postData, axiosConfig)
-            .then((response: any) => {
-                data = response.data.files
-                console.log(response);
-            })
-            return data
-        }
-
     function getGDriveData() {
         let postData = {
             "folder_only": false
@@ -105,23 +83,30 @@ const LinkGDrive = () => {
         }
 
         axios.post('/api/driveapi/files/scan', postData, axiosConfig)
-            .then((response: any) => {
-                let data = response.data.files
-                let newData = Object.keys(data)
-                    .map(function(key) {
-                        data[key].size = (data[key].size/1024/1024).toFixed(2) + " MB"
-                        data[key].filename = (data[key].filename.split("."))[0]
-                        // var parentsName = data[key].parents.map((parent:any)=> {
-                                // return getGDriveFolders().data[parent].folder_name
-                        // })
-                        data[key] = {
-                            ...data[key],
-                            // parentsName: parentsName.join("/")
-                        }
-                        return data[key]
-                    });
-                setGDriveData(newData)
-                console.log(response);
+            .then(async (response: any) => {
+                postData.folder_only = true
+                let folderData = await axios.post('/api/driveapi/files/scan', postData, axiosConfig)
+                let data: any = response.data.files
+                for (let i = 0; i < Object.keys(data).length; i++) {
+                    let parentDirectory = "/"
+                    for (let j = 0; j < data[Object.keys(data)[i]].parents.length; j++) {
+                        parentDirectory += folderData.data[data[Object.keys(data)[i]].parents[j]].folder_name + "/"
+                    }
+                    let titleSplit = (data[Object.keys(data)[i]].filename).split(".")
+                    data[Object.keys(data)[i]] = {
+                        ...data[Object.keys(data)[i]],
+                        title: titleSplit[0],
+                        size: (data[Object.keys(data)[i]].size/1024/1024).toFixed(2) + " MB",
+                        parentDirectory: parentDirectory,
+                        format: titleSplit[1],
+                    }
+                }
+                console.log(data)
+                let dataValues: any = []
+                for (let i = 0; i < Object.keys(data).length; i++) {
+                    dataValues.push(data[Object.keys(data)[i]])
+                }
+                setGDriveData(dataValues)
             })
         }
 
