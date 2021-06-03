@@ -96,6 +96,30 @@ const OSBTracks = (props: any) => {
         });
     }
 
+    let artistLookUpObject:any = { "-": "-" };
+    let artistIds = Object.keys(props.indexesData.artists)
+    for(let i = 0; i < artistIds.length; i++) {
+        artistLookUpObject[artistIds[i]] = props.indexesData.artists[artistIds[i]].artist_name;
+    }
+
+    let albumLookUpObject:any = { "-": "-" };
+    let albumIds = Object.keys(props.indexesData.albums)
+    for(let i = 0; i < albumIds.length; i++) {
+        albumLookUpObject[albumIds[i]] = props.indexesData.albums[albumIds[i]].album_name;
+    }
+
+    let genreLookUpObject:any = { "-": "-" };
+    let genreIds = Object.keys(props.indexesData.genres)
+    for(let i = 0; i < genreIds.length; i++) {
+        genreLookUpObject[genreIds[i]] = props.indexesData.genres[genreIds[i]].genre_name;
+    }
+
+    let playlistLookUpObject:any = { "-": "-" };
+    let playlistIds = Object.keys(props.indexesData.playlists)
+    for(let i = 0; i < playlistIds.length; i++) {
+        playlistLookUpObject[playlistIds[i]] = props.indexesData.playlists[playlistIds[i]].playlist_name;
+    }
+
     return (
         <div style={{ maxWidth: "100%" }}>
             <div>
@@ -120,18 +144,21 @@ const OSBTracks = (props: any) => {
                         {
                             title: "Artist",
                             field: "trackArtist",
+                            lookup: artistLookUpObject
                         },
                         {
                             title: "Album Track No.",
-                            field: "trackAlbumTrNo",
+                            field: "trackAlbumTrNo"
                         },
                         {
                             title: "Album",
                             field: "trackAlbum",
+                            lookup: albumLookUpObject
                         },
                         {
                             title: "Genre",
                             field: "trackGenre",
+                            lookup: genreLookUpObject
                         },
                     ]}
                     data={t_data as any}
