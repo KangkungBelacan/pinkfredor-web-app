@@ -5,7 +5,26 @@ import { CategoriesTopBarItemProps } from "../../interface/components/MainApp/Ca
 import { Route } from "react-router";
 import React from "react";
 import * as OrganizerSubPage from "./OrganizerSubPage";
+import useAxios from "axios-hooks";
+import { resolveAny } from "dns/promises";
 const Organizer = (props: GenericProps) => {
+    const [{data: indexesData, loading: indexesLoading, error: indexesError}, indexesRefetch] = useAxios({
+        url: "/api/indexes",
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${localStorage.token}`
+        }
+    });
+    const [{data: folderData, loading: folderLoading, error: folderError}, folderRefetch] = useAxios({
+        url: "/api/driveapi/files/scan",
+        method: "POST",
+        data: {
+            folder_only: true
+        },
+        headers: {
+            Authorization: `Bearer ${localStorage.token}`
+        }
+    });
     let items: Array<CategoriesTopBarItemProps> = [
         {
             display_text: "Tracks",
@@ -28,7 +47,7 @@ const Organizer = (props: GenericProps) => {
             link: "/app/organize/Albums",
         },
     ];
-    return (
+    return indexesLoading || folderLoading ? <div style={{color: "white"}}>Loading...</div> : (
         <div
             className={props.className ? props.className : ""}
             style={props.style ? props.style : {}}
@@ -37,8 +56,8 @@ const Organizer = (props: GenericProps) => {
                 <CategoriesTopBar items={items} />
                 <div className="row" style={{overflowY:"auto", height: "calc(100% - 64px)", paddingTop: "12px"}}>
                     <Route path="/app/organize" exact component={ () => <div>Select one of the category</div> }  />
-                    <Route path="/app/organize/Tracks" component={OrganizerSubPage.OSBTracks} />
-                    <Route path="/app/organize/Artists" component={OrganizerSubPage.artists} />
+                    <Route path="/app/organize/Tracks" component={ () => <OrganizerSubPage.OSBTracks indexesData={indexesData} folderData={folderData} />} />
+                    <Route path="/app/organize/Artists" component={ () => <OrganizerSubPage.OSBArtists /> } />
                     <Route path="/app/organize/Genres" component={OrganizerSubPage.genres} />
                     <Route path="/app/organize/Albums" component={OrganizerSubPage.albums} />
                 </div>

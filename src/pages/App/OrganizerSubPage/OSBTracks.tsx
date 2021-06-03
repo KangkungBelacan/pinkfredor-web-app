@@ -50,219 +50,196 @@ const tableIcons: Icons = {
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-const OSBTracks = () => {
-    const [t_data, set_tdata] = useState(null);
-    const [loading, setLoading] = useState(true);
+const OSBTracks = (props: any) => {
     const [showEditModalBox, setShowEditModalBox] = useState(false);
     const [editModalRowData, seteditModalRowData] = useState({});
-
-    useEffect(() => {
-        const run = async () => {
-            let config: any = {
-                headers: {
-                    Authorization: `Bearer ${localStorage.token}`,
-                },
-            };
-            let files_response = await axios.get("/api/indexes/files", config);
-            let scan_folder_response = await axios.post(
-                "/api/driveapi/files/scan",
-                { folder_only: true },
-                config
-            );
-            // set_tdata(files_response.data);
-            let keys = Object.keys(files_response.data.files);
-            let t_data: any = [];
-            for (let i = 0; i < keys.length; i++) {
-                let file_item = files_response.data.files[keys[i]];
-                let parent_path = "/";
-                if (file_item.parents !== undefined) {
-                    while (file_item.parents.length !== 0) {
-                        parent_path +=
-                            scan_folder_response.data[file_item.parents.pop()]
-                                .folder_name + "/";
-                    }
-                }
-                t_data.push({
-                    rowNum: i + 1,
-                    driveLocation: parent_path,
-                    fileName: file_item.filename,
-                    trackTitle:
-                        file_item.file_metadata.song_title === undefined
-                            ? "-"
-                            : file_item.file_metadata.song_title,
-                    trackArtist:
-                        file_item.file_metadata.song_artistid === undefined
-                            ? "-"
-                            : file_item.file_metadata.song_artistid,
-                    trackAlbumTrNo:
-                        file_item.file_metadata.album_track_no === undefined
-                            ? "-"
-                            : file_item.file_metadata.album_track_no,
-                    trackAlbum:
-                        file_item.file_metadata.song_albumid === undefined
-                            ? "-"
-                            : file_item.file_metadata.song_albumid,
-                    trackGenre:
-                        file_item.file_metadata.song_genreid === undefined
-                            ? "-"
-                            : file_item.file_metadata.song_genreid,
-                });
+    
+    let files_response = props.indexesData;
+    let scan_folder_response = props.folderData;
+    // set_tdata(files_response.data);
+    let keys = Object.keys(files_response.files);
+    let t_data: any = [];
+    for (let i = 0; i < keys.length; i++) {
+        let file_item = files_response.files[keys[i]];
+        let parent_path = "/";
+        if (file_item.parents !== undefined) {
+            while (file_item.parents.length !== 0) {
+                parent_path +=
+                    scan_folder_response[file_item.parents.pop()]
+                        .folder_name + "/";
             }
-            set_tdata(t_data);
-            setLoading(false);
-        };
-        if (loading && !t_data) {
-            run();
         }
-    }, [loading, t_data]);
+        t_data.push({
+            rowNum: i + 1,
+            driveLocation: parent_path,
+            fileName: file_item.filename,
+            trackTitle:
+                file_item.file_metadata.song_title === undefined
+                    ? "-"
+                    : file_item.file_metadata.song_title,
+            trackArtist:
+                file_item.file_metadata.song_artistid === undefined
+                    ? "-"
+                    : file_item.file_metadata.song_artistid,
+            trackAlbumTrNo:
+                file_item.file_metadata.album_track_no === undefined
+                    ? "-"
+                    : file_item.file_metadata.album_track_no,
+            trackAlbum:
+                file_item.file_metadata.song_albumid === undefined
+                    ? "-"
+                    : file_item.file_metadata.song_albumid,
+            trackGenre:
+                file_item.file_metadata.song_genreid === undefined
+                    ? "-"
+                    : file_item.file_metadata.song_genreid,
+        });
+    }
 
     return (
         <div style={{ maxWidth: "100%" }}>
-            {loading ? (
-                "Loading..."
-            ) : (
-                <div>
-                    <EditTrackModal row_data={editModalRowData} show={showEditModalBox} setShow={setShowEditModalBox} />
-                    <MaterialTable
-                        icons={tableIcons}
-                        columns={[
-                            { title: "No.", field: "rowNum" },
-                            { title: "Filename", field: "fileName" },
-                            {
-                                title: "Drive Location",
-                                field: "driveLocation",
-                            },
-                            {
-                                title: "Title",
-                                field: "trackTitle",
-                            },
-                            {
-                                title: "Artist",
-                                field: "trackArtist",
-                            },
-                            {
-                                title: "Album Track No.",
-                                field: "trackAlbumTrNo",
-                            },
-                            {
-                                title: "Album",
-                                field: "trackAlbum",
-                            },
-                            {
-                                title: "Genre",
-                                field: "trackGenre",
-                            },
-                        ]}
-                        data={t_data as any}
-                        title="Tracks Listing"
-                        components={{
-                            Action: (props) => {
-                                let toggleButton = React.forwardRef(
-                                    ({ children, onClick }: any, ref: any) => (
-                                        <button
-                                            className="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit"
-                                            tabIndex={0}
-                                            type="button"
-                                            title="More Options"
+            <div>
+                <EditTrackModal
+                    row_data={editModalRowData}
+                    show={showEditModalBox}
+                    setShow={setShowEditModalBox}
+                />
+                <MaterialTable
+                    icons={tableIcons}
+                    columns={[
+                        { title: "No.", field: "rowNum" },
+                        { title: "Filename", field: "fileName" },
+                        {
+                            title: "Drive Location",
+                            field: "driveLocation",
+                        },
+                        {
+                            title: "Title",
+                            field: "trackTitle",
+                        },
+                        {
+                            title: "Artist",
+                            field: "trackArtist",
+                        },
+                        {
+                            title: "Album Track No.",
+                            field: "trackAlbumTrNo",
+                        },
+                        {
+                            title: "Album",
+                            field: "trackAlbum",
+                        },
+                        {
+                            title: "Genre",
+                            field: "trackGenre",
+                        },
+                    ]}
+                    data={t_data as any}
+                    title="Tracks Listing"
+                    components={{
+                        Action: (props) => {
+                            let toggleButton = React.forwardRef(
+                                ({ children, onClick }: any, ref: any) => (
+                                    <button
+                                        className="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit"
+                                        tabIndex={0}
+                                        type="button"
+                                        title="More Options"
+                                        ref={ref}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            onClick(e);
+                                        }}
+                                    >
+                                        {children}
+                                        <span className="MuiIconButton-label">
+                                            <FontAwesomeIcon
+                                                icon="ellipsis-v"
+                                                size="xs"
+                                            />
+                                        </span>
+                                        <span className="MuiTouchRipple-root"></span>
+                                    </button>
+                                )
+                            );
+
+                            let moreOptionsMenu = React.forwardRef(
+                                (
+                                    {
+                                        children,
+                                        style,
+                                        className,
+                                        "aria-labelledby": labeledBy,
+                                    }: any,
+                                    ref: any
+                                ) => {
+                                    return (
+                                        <div
                                             ref={ref}
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                onClick(e);
-                                            }}
+                                            style={style}
+                                            className={
+                                                className +
+                                                " bootstrap-drop-down-container"
+                                            }
+                                            aria-labelledby={labeledBy}
                                         >
-                                            {children}
-                                            <span className="MuiIconButton-label">
-                                                <FontAwesomeIcon
-                                                    icon="ellipsis-v"
-                                                    size="xs"
-                                                />
-                                            </span>
-                                            <span className="MuiTouchRipple-root"></span>
-                                        </button>
-                                    )
-                                );
-
-                                let moreOptionsMenu = React.forwardRef(
-                                    (
-                                        {
-                                            children,
-                                            style,
-                                            className,
-                                            "aria-labelledby": labeledBy,
-                                        }: any,
-                                        ref: any
-                                    ) => {
-                                        return (
-                                            <div
-                                                ref={ref}
-                                                style={style}
-                                                className={
-                                                    className +
-                                                    " bootstrap-drop-down-container"
-                                                }
-                                                aria-labelledby={labeledBy}
+                                            <ul
+                                                className="list-unstyled"
+                                                style={{
+                                                    marginBottom: "0",
+                                                }}
                                             >
-                                                <ul
-                                                    className="list-unstyled"
-                                                    style={{
-                                                        marginBottom: "0",
-                                                    }}
-                                                >
-                                                    {children}
-                                                </ul>
-                                            </div>
-                                        );
-                                    }
-                                );
+                                                {children}
+                                            </ul>
+                                        </div>
+                                    );
+                                }
+                            );
 
-                                return (
-                                    <Dropdown>
-                                        <Dropdown.Toggle
-                                            as={toggleButton}
-                                            id={"id"}
-                                        ></Dropdown.Toggle>
-                                        <Dropdown.Menu as={moreOptionsMenu}>
-                                            <Dropdown.Item 
-                                                onClick={
-                                                    ()=>{
-                                                        seteditModalRowData({
-                                                            // filename: props.
-                                                            // drive_location
-                                                            // track_title
-                                                            // track_artist
-                                                            // track_album
-                                                            // album_tr_no
-                                                            // track_genre
-                                                        });
-                                                        setShowEditModalBox(true);
-                                                    }
-                                                } 
-                                                eventKey="1">
-                                                Edit
-                                            </Dropdown.Item>
-                                            <Dropdown.Item eventKey="2">
-                                                Hide
-                                            </Dropdown.Item>
-                                        </Dropdown.Menu>
-                                    </Dropdown>
-                                );
-                            },
-                        }}
-                        actions={[
-                            {
-                                icon: () => (
-                                    <FontAwesomeIcon icon="ellipsis-v" />
-                                ),
-                                tooltip: "More Options",
-                                onClick: (event, rowData) => {},
-                            },
-                        ]}
-                        options={{
-                            actionsColumnIndex: -1,
-                        }}
-                    />
-                </div>
-            )}
+                            return (
+                                <Dropdown>
+                                    <Dropdown.Toggle
+                                        as={toggleButton}
+                                        id={"id"}
+                                    ></Dropdown.Toggle>
+                                    <Dropdown.Menu as={moreOptionsMenu}>
+                                        <Dropdown.Item
+                                            onClick={() => {
+                                                seteditModalRowData({
+                                                    // filename: props.
+                                                    // drive_location
+                                                    // track_title
+                                                    // track_artist
+                                                    // track_album
+                                                    // album_tr_no
+                                                    // track_genre
+                                                });
+                                                setShowEditModalBox(true);
+                                            }}
+                                            eventKey="1"
+                                        >
+                                            Edit
+                                        </Dropdown.Item>
+                                        <Dropdown.Item eventKey="2">
+                                            Hide
+                                        </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            );
+                        },
+                    }}
+                    actions={[
+                        {
+                            icon: () => <FontAwesomeIcon icon="ellipsis-v" />,
+                            tooltip: "More Options",
+                            onClick: (event, rowData) => {},
+                        },
+                    ]}
+                    options={{
+                        actionsColumnIndex: -1,
+                    }}
+                />
+            </div>
         </div>
     );
 };
