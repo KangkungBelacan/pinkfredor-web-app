@@ -21,7 +21,7 @@ import { axios } from "../../../global-imports";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dropdown } from "react-bootstrap";
 import React from "react";
-import EditModalBox from "../../../components/MainApp/OrganizerSubComponent/EditModalBox";
+import EditTrackModal from "../../../components/MainApp/OrganizerSubComponent/EditTrackModal";
 const tableIcons: Icons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
     Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -54,6 +54,8 @@ const OSBTracks = () => {
     const [t_data, set_tdata] = useState(null);
     const [loading, setLoading] = useState(true);
     const [showEditModalBox, setShowEditModalBox] = useState(false);
+    const [editModalRowData, seteditModalRowData] = useState({});
+
     useEffect(() => {
         const run = async () => {
             let config: any = {
@@ -120,7 +122,7 @@ const OSBTracks = () => {
                 "Loading..."
             ) : (
                 <div>
-                    <EditModalBox show={showEditModalBox} setShow={setShowEditModalBox} />
+                    <EditTrackModal row_data={editModalRowData} show={showEditModalBox} setShow={setShowEditModalBox} />
                     <MaterialTable
                         icons={tableIcons}
                         columns={[
@@ -220,7 +222,22 @@ const OSBTracks = () => {
                                             id={"id"}
                                         ></Dropdown.Toggle>
                                         <Dropdown.Menu as={moreOptionsMenu}>
-                                            <Dropdown.Item onClick={()=>setShowEditModalBox(true)} eventKey="1">
+                                            <Dropdown.Item 
+                                                onClick={
+                                                    ()=>{
+                                                        seteditModalRowData({
+                                                            // filename: props.
+                                                            // drive_location
+                                                            // track_title
+                                                            // track_artist
+                                                            // track_album
+                                                            // album_tr_no
+                                                            // track_genre
+                                                        });
+                                                        setShowEditModalBox(true);
+                                                    }
+                                                } 
+                                                eventKey="1">
                                                 Edit
                                             </Dropdown.Item>
                                             <Dropdown.Item eventKey="2">

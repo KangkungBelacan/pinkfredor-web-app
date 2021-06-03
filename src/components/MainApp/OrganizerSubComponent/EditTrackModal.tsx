@@ -1,11 +1,11 @@
-import { EditModalBoxProps } from "../../../interface/components/MainApp/OrganizerSubComponent/EditModalBoxProps";
 import Modal from "react-bootstrap/Modal";
 import ModalBody from "react-bootstrap/ModalBody";
 import ModalHeader from "react-bootstrap/ModalHeader";
 import ModalFooter from "react-bootstrap/ModalFooter";
 import ModalTitle from "react-bootstrap/ModalTitle";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-const EditModalBox = (props: EditModalBoxProps) => {
+import EditTrackModalProps from "../../../interface/components/MainApp/OrganizerSubComponent/EditTrackModalProps";
+const EditTrackModal = (props: EditTrackModalProps) => {
     const submitHandler = (evt: any) => {
         console.log(evt);
         return false;
@@ -133,7 +133,7 @@ const EditModalBox = (props: EditModalBoxProps) => {
                 >
                     <button
                         className="btn btn-danger"
-                        onClick={() => props.setShow(false)}
+                        onClick={(e: any) => {e.preventDefault();props.setShow(false)}}
                     >
                         Close
                     </button>
@@ -146,4 +146,4 @@ const EditModalBox = (props: EditModalBoxProps) => {
     );
 };
 
-export default EditModalBox;
+export default EditTrackModal;
