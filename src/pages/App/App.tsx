@@ -1,6 +1,6 @@
 import * as MainAppComponent from "./../../components/MainApp";
 import "./App.css";
-import example_song_cover from "./../../images/example-song-cover.jpeg";
+import example_song_cover from "./../../images/example-song-cover.png";
 import { useState } from "react";
 import * as AppSubPage from "./index";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

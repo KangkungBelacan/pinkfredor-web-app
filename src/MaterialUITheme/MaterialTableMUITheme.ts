@@ -1,7 +1,11 @@
 import { createMuiTheme } from "@material-ui/core/styles";
 const DARK_THEME = createMuiTheme({
     palette: {
-        type: "dark"
+        type: "dark",
+        background: {
+            default: "rgb(18, 18, 18)",
+            paper: "rgb(18, 18, 18)"
+        }
     },
     overrides: {
         MuiTableRow: {
