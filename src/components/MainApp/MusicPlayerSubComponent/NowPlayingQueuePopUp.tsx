@@ -7,7 +7,7 @@ import "./NowPlayingQueuePopUp.css";
 import MusicPlayerContext from "../../../context/MusicPlayerContext";
 import React, { useState } from "react";
 import NowPlayingQueuePopUpRow from "./NowPlayingQueuePopUpRow";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 const NowPlayingQueuePopUp = (props: any) => {
     const { queue, setQueue } = React.useContext(MusicPlayerContext);
     const [nowPlayingCounter, setNowPlayingCounter] = useState("");

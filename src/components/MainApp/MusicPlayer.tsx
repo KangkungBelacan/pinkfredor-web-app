@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlayCircle, faPauseCircle, faStepBackward, faStepForward, faForward, faBackward, faBars, faVolumeUp } from '@fortawesome/free-solid-svg-icons'
 import { useWindowSize } from "../../global-imports";
 import MusicPlayerContext from "../../context/MusicPlayerContext";
-import Sound, { ReactSoundProps } from "react-sound";
+import Sound from "react-sound";
 import VolumeBar from './MusicPlayerSubComponent/VolumeBar';
 import NowPlayingQueuePopUp from './MusicPlayerSubComponent/NowPlayingQueuePopUp';
 

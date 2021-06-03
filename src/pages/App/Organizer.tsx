@@ -6,7 +6,7 @@ import { Route } from "react-router";
 import React from "react";
 import * as OrganizerSubPage from "./OrganizerSubPage";
 import useAxios from "axios-hooks";
-import { resolveAny } from "dns/promises";
+
 const Organizer = (props: GenericProps) => {
     const [{data: indexesData, loading: indexesLoading, error: indexesError}, indexesRefetch] = useAxios({
         url: "/api/indexes",
@@ -56,7 +56,7 @@ const Organizer = (props: GenericProps) => {
                 <CategoriesTopBar items={items} />
                 <div className="row" style={{overflowY:"auto", height: "calc(100% - 64px)", paddingTop: "12px"}}>
                     <Route path="/app/organize" exact component={ () => <div>Select one of the category</div> }  />
-                    <Route path="/app/organize/Tracks" component={ () => <OrganizerSubPage.OSBTracks indexesData={indexesData} folderData={folderData} />} />
+                    <Route path="/app/organize/Tracks" component={ () => <OrganizerSubPage.OSBTracks indexesData={indexesData} indexesError={indexesError} indexesRefetch={indexesRefetch} folderData={folderData} folderError={folderError} folderRefetch={folderRefetch} />} />
                     <Route path="/app/organize/Artists" component={ () => <OrganizerSubPage.OSBArtists /> } />
                     <Route path="/app/organize/Genres" component={OrganizerSubPage.genres} />
                     <Route path="/app/organize/Albums" component={OrganizerSubPage.albums} />

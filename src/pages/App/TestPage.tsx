@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Sound, { ReactSoundProps } from "react-sound";
 
 const TestPage = () => {

@@ -1,6 +1,6 @@
 import MaterialTable from "material-table";
 
-import { forwardRef, useState, useEffect } from "react";
+import { forwardRef, useState } from "react";
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
 import Check from "@material-ui/icons/Check";
@@ -17,7 +17,6 @@ import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import { Icons } from "material-table";
-import { axios } from "../../../global-imports";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dropdown } from "react-bootstrap";
 import React from "react";
