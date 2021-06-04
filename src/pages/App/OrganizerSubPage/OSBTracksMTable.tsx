@@ -107,7 +107,7 @@ const OSBTracksMTable = (mtableProps: any) => {
                     lookup: mtableProps.passedData.genreLookUpObject,
                 },
             ]}
-            data={mtableProps.passedData.t_data as any}
+            data={mtableProps.t_data as any}
             title="Tracks Listing"
             components={{
                 Action: (props) => {

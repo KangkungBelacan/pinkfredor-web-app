@@ -5,7 +5,7 @@ import OSBTracksMTable from "./OSBTracksMTable";
 const OSBTracks = (props: any) => {
     const [showEditModalBox, setShowEditModalBox] = useState(false);
     const [editModalRowData, seteditModalRowData] = useState({});
-
+    const [t_data, set_t_data] = useState([]);
     const [passedData, setPassedData] = useState({});
 
     useEffect(() => {
@@ -95,8 +95,15 @@ const OSBTracks = (props: any) => {
         };
         if (Object.keys(passedData).length === 0) {
             setPassedData(passedDataInner);
+            set_t_data(t_data);
         }
-    }, [props.indexesData, props.folderData, passedData, props.indexesError, props.folderError]);
+    }, [
+        props.indexesData,
+        props.folderData,
+        passedData,
+        props.indexesError,
+        props.folderError,
+    ]);
 
     return (
         <div style={{ maxWidth: "100%" }}>
@@ -106,8 +113,14 @@ const OSBTracks = (props: any) => {
                     show={showEditModalBox}
                     setShow={setShowEditModalBox}
                     passedData={passedData}
+                    t_data={t_data}
+                    set_t_data={set_t_data}
                 />
-                <OSBTracksMTable passedData={passedData} />
+                {Object.keys(passedData).length === 0 ? (
+                    <div></div>
+                ) : (
+                    <OSBTracksMTable passedData={passedData} t_data={t_data} />
+                )}
             </div>
         </div>
     );

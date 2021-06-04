@@ -15,5 +15,14 @@ export default interface EditTrackModalProps extends EditModalBoxProps {
     /**
      * Data passed from parent component
      */
-    passedData: any
+    passedData: any,
+
+    /**
+     * t_data state
+     */
+    t_data: any
+    /**
+     * Function to change t_data state
+     */
+    set_t_data: any
 }

@@ -6,16 +6,19 @@ import ModalTitle from "react-bootstrap/ModalTitle";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import EditTrackModalProps from "../../../interface/components/MainApp/OrganizerSubComponent/EditTrackModalProps";
 import { axios } from "../../../global-imports";
-import {useState} from "react";
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const EditTrackModal = (props: EditTrackModalProps) => {
     const [saveText, setSaveText] = useState<any>("Save");
-    const [saveBtnDisabled, setsaveBtnDisabled] = useState(false)
+    const [saveBtnDisabled, setsaveBtnDisabled] = useState(false);
     const submitHandler = (evt: any) => {
         setsaveBtnDisabled(true);
         setSaveText(<FontAwesomeIcon icon="spinner" spin />);
         evt.preventDefault();
-        let song_title = evt.currentTarget[0].value.trim() === "" ? undefined : evt.currentTarget[0].value.trim();
+        let song_title =
+            evt.currentTarget[0].value.trim() === ""
+                ? undefined
+                : evt.currentTarget[0].value.trim();
         let artist_id =
             evt.currentTarget[1].value === "-"
                 ? undefined
@@ -35,14 +38,17 @@ const EditTrackModal = (props: EditTrackModalProps) => {
         let file_id = evt.currentTarget[5].defaultValue;
 
         let payload: any = {
-            file_metadata: {  },
+            file_metadata: {},
         };
 
-        if(song_title !== undefined) payload.file_metadata.song_title = song_title;
-        if(album_track_no !== undefined) payload.file_metadata.album_track_no = album_track_no;
-        if(artist_id !== undefined) payload.file_metadata.song_artistid = artist_id;
-        if(album_id !== undefined) payload.file_metadata.album_id = album_id;
-        if(genre_id !== undefined) payload.file_metadata.genre_id = genre_id;
+        if (song_title !== undefined)
+            payload.file_metadata.song_title = song_title;
+        if (album_track_no !== undefined)
+            payload.file_metadata.album_track_no = album_track_no;
+        if (artist_id !== undefined)
+            payload.file_metadata.song_artistid = artist_id;
+        if (album_id !== undefined) payload.file_metadata.album_id = album_id;
+        if (genre_id !== undefined) payload.file_metadata.genre_id = genre_id;
 
         axios({
             url: `/api/indexes/files/${file_id}`,
@@ -50,13 +56,26 @@ const EditTrackModal = (props: EditTrackModalProps) => {
             headers: {
                 Authorization: `Bearer ${localStorage.token}`,
             },
-            data: payload
+            data: payload,
         })
             .then((args: any) => {
+                // # Code to find the file_id and change its row data display
+                for(let i =0; i < props.t_data.length;i++) {
+                    if(props.t_data[i].file_id === file_id) {
+                        props.t_data[i].trackTitle = song_title === undefined ? "-" : song_title
+                        props.t_data[i].trackArtist = artist_id === undefined ? "-" : artist_id;
+                        props.t_data[i].trackAlbumTrNo = album_track_no === undefined ? "-" : album_track_no;
+                        props.t_data[i].trackAlbum = album_id === undefined ? "-" : album_id;
+                        props.t_data[i].trackGenre = genre_id === undefined ? "-" : genre_id;
+                        break;
+                    }
+                }
+                props.set_t_data(props.t_data);
+                // #
                 alert("Successfully updated Track info");
                 props.setShow(false);
                 setsaveBtnDisabled(false);
-                setSaveText("Save");    
+                setSaveText("Save");
             })
             .catch((args: any) => {
                 alert("Something went wrong. Please try again later");
@@ -259,7 +278,11 @@ const EditTrackModal = (props: EditTrackModalProps) => {
                     >
                         Close
                     </button>
-                    <Button variant="success" type="submit" disabled={saveBtnDisabled}>
+                    <Button
+                        variant="success"
+                        type="submit"
+                        disabled={saveBtnDisabled}
+                    >
                         {saveText}
                     </Button>
                 </ModalFooter>
