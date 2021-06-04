@@ -72,6 +72,11 @@ const OSBTracksMTable = (mtableProps: any) => {
         <MaterialTable
             icons={tableIcons}
             columns={[
+                {
+                    title: "file_id",
+                    field: "file_id",
+                    hidden: true
+                },
                 { title: "No.", field: "rowNum" },
                 { title: "Filename", field: "fileName" },
                 {
@@ -175,6 +180,7 @@ const OSBTracksMTable = (mtableProps: any) => {
                                     onClick={() => {
                                         mtableProps.passedData.seteditModalRowData(
                                             {
+                                                file_id: props.data.file_id,
                                                 filename: props.data.fileName,
                                                 drive_location: props.data.driveLocation,
                                                 track_title: props.data.trackTitle,

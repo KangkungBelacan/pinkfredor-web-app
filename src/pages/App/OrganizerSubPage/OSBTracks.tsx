@@ -9,6 +9,10 @@ const OSBTracks = (props: any) => {
     const [passedData, setPassedData] = useState({});
 
     useEffect(() => {
+        if (props.indexesError || props.folderError) {
+            alert("Something went wrong, please try again later");
+            return;
+        }
         let files_response = props.indexesData;
         let scan_folder_response = props.folderData;
         // set_tdata(files_response.data);
@@ -25,6 +29,7 @@ const OSBTracks = (props: any) => {
                 }
             }
             t_data.push({
+                file_id: keys[i],
                 rowNum: i + 1,
                 driveLocation: parent_path,
                 fileName: file_item.filename,

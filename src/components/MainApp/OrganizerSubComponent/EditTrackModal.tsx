@@ -5,10 +5,61 @@ import ModalFooter from "react-bootstrap/ModalFooter";
 import ModalTitle from "react-bootstrap/ModalTitle";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import EditTrackModalProps from "../../../interface/components/MainApp/OrganizerSubComponent/EditTrackModalProps";
+import { axios } from "../../../global-imports";
+import {useState} from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const EditTrackModal = (props: EditTrackModalProps) => {
+    const [saveText, setSaveText] = useState<any>("Save");
+    const [saveBtnDisabled, setsaveBtnDisabled] = useState(false)
     const submitHandler = (evt: any) => {
-        console.log(evt);
-        return false;
+        setsaveBtnDisabled(true);
+        setSaveText(<FontAwesomeIcon icon="spinner" spin />);
+        evt.preventDefault();
+        let song_title = evt.currentTarget[0].value.trim() === "" ? undefined : evt.currentTarget[0].value.trim();
+        let artist_id =
+            evt.currentTarget[1].value === "-"
+                ? undefined
+                : evt.currentTarget[1].value;
+        let album_id =
+            evt.currentTarget[2].value === "-"
+                ? undefined
+                : evt.currentTarget[2].value;
+        let album_track_no =
+            evt.currentTarget[3].value.trim() === ""
+                ? undefined
+                : evt.currentTarget[3].value.trim();
+        let genre_id =
+            evt.currentTarget[4].value === "-"
+                ? undefined
+                : evt.currentTarget[4].value;
+        let file_id = evt.currentTarget[5].defaultValue;
+
+        let payload: any = {
+            file_metadata: {  },
+        };
+
+        if(song_title !== undefined) payload.file_metadata.song_title = song_title;
+        if(album_track_no !== undefined) payload.file_metadata.album_track_no = album_track_no;
+        if(artist_id !== undefined) payload.file_metadata.song_artistid = artist_id;
+        if(album_id !== undefined) payload.file_metadata.album_id = album_id;
+        if(genre_id !== undefined) payload.file_metadata.genre_id = genre_id;
+
+        axios({
+            url: `/api/indexes/files/${file_id}`,
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${localStorage.token}`,
+            },
+            data: payload
+        })
+            .then((args: any) => {
+                alert("Successfully updated Track info");
+                props.setShow(false);
+            })
+            .catch((args: any) => {
+                alert("Something went wrong. Please try again later");
+                props.setShow(false);
+            });
     };
     return Object.keys(props.passedData).length === 0 ? (
         <div></div>
@@ -52,7 +103,9 @@ const EditTrackModal = (props: EditTrackModalProps) => {
                                     <Form.Control
                                         placeholder="Track Title"
                                         defaultValue={
-                                            props.row_data.track_title
+                                            props.row_data.track_title === "-"
+                                                ? ""
+                                                : props.row_data.track_title
                                         }
                                     />
                                 </Form.Group>
@@ -120,14 +173,6 @@ const EditTrackModal = (props: EditTrackModalProps) => {
                                         })}
                                     </Form.Control>
                                 </Form.Group>
-                                {/* <Form.Group controlId="TrackAlbum">
-                                    <Form.Control
-                                        placeholder="Track Album"
-                                        defaultValue={
-                                            props.row_data.track_album
-                                        }
-                                    />
-                                </Form.Group> */}
                             </Col>
                         </Row>
                         <Row style={{ paddingBottom: "1rem" }}>
@@ -146,7 +191,9 @@ const EditTrackModal = (props: EditTrackModalProps) => {
                                     <Form.Control
                                         placeholder="Album Track Number"
                                         defaultValue={
-                                            props.row_data.album_tr_no
+                                            props.row_data.album_tr_no === "-"
+                                                ? ""
+                                                : props.row_data.album_tr_no
                                         }
                                     />
                                 </Form.Group>
@@ -166,11 +213,27 @@ const EditTrackModal = (props: EditTrackModalProps) => {
                             <Col md={8} sm={12}>
                                 <Form.Group controlId="TrackGenre">
                                     <Form.Control
-                                        placeholder="Track Genre"
+                                        as="select"
                                         defaultValue={
                                             props.row_data.track_genre
                                         }
-                                    />
+                                    >
+                                        {Object.entries(
+                                            props.passedData.genreLookUpObject
+                                        ).map(([albumID, albumName]: any) => {
+                                            return (
+                                                <option value={albumID}>
+                                                    {albumName}
+                                                </option>
+                                            );
+                                        })}
+                                    </Form.Control>
+                                </Form.Group>
+                                <Form.Group controlId="FileID">
+                                    <Form.Control
+                                        defaultValue={props.row_data.file_id}
+                                        type="hidden"
+                                    ></Form.Control>
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -192,8 +255,8 @@ const EditTrackModal = (props: EditTrackModalProps) => {
                     >
                         Close
                     </button>
-                    <Button variant="success" type="submit">
-                        Save
+                    <Button variant="success" type="submit" disabled={saveBtnDisabled}>
+                        {saveText}
                     </Button>
                 </ModalFooter>
             </form>
