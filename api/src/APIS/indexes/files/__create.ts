@@ -35,7 +35,7 @@ const __create = async (req: any, res: any) => {
                 .collection("index-files")
                 .doc(req.app_user.id)
                 .set(req.body);
-            res.json(req.body);
+            res.json((await db.collection("index-files").doc(req.app_user.id).get()).data());
             return;
         }
 
@@ -44,7 +44,7 @@ const __create = async (req: any, res: any) => {
 
         let keys = Object.keys(req.body.files);
         for (let i = 0; i < keys.length; i++) {
-            if (doc_data.files[keys[i]] === undefined) {
+            if (doc_data.files[keys[i]] !== undefined) {
                 res.status(400);
                 res.json({
                     message: "Contains duplicate data, consider using PUT?",
@@ -61,6 +61,14 @@ const __create = async (req: any, res: any) => {
         }
 
         await doc.set(doc_data);
+        let new_files_data = (await db.collection("index-files").doc(req.app_user.id).get()).data();
+        let new_fileIDs = Object.keys(new_files_data.files);
+        for(let i = 0; i < new_fileIDs.length; i++) {
+            if( req.body.files[new_fileIDs[i]] === undefined) {
+                delete new_files_data.files[new_fileIDs[i]];
+            }
+        }
+        res.json(new_files_data);
     } catch (err: any) {
         res.json({ status: false });
     }
