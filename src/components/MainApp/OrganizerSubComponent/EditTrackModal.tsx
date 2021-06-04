@@ -55,10 +55,14 @@ const EditTrackModal = (props: EditTrackModalProps) => {
             .then((args: any) => {
                 alert("Successfully updated Track info");
                 props.setShow(false);
+                setsaveBtnDisabled(false);
+                setSaveText("Save");    
             })
             .catch((args: any) => {
                 alert("Something went wrong. Please try again later");
                 props.setShow(false);
+                setsaveBtnDisabled(false);
+                setSaveText("Save");
             });
     };
     return Object.keys(props.passedData).length === 0 ? (
