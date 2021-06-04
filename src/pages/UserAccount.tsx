@@ -4,9 +4,9 @@ import "./UserAccount.css";
 function UserAccount() {
     const link = "http://localhost:3000/"
     return (
-        <div className="core">
-        <UserAccountComponent.Sidebar line1="Home" link1={link} line2="App" link2={link+"app"} line3="Help" link3={link+"help"} line4="About" link4={link+""}/>
-            <div style={{marginLeft: "70px", marginTop: "-50px"}}>
+        <div className="flex">
+        <UserAccountComponent.NewSideBar/>
+            <div>
                 <h1>Account Settings</h1>
                 <h2>Personal Information</h2>
                 <div className="flex">

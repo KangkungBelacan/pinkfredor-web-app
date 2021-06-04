@@ -47,3 +47,10 @@
 .flexible {
   justify-content: center;
 }
+
+.image {
+  background-color: #f8f6cc;
+  background-image: url(/src/images/home-bg.png);
+  background-position: center;
+  height: 100vh;
+}

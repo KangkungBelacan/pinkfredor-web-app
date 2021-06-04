@@ -1,4 +1,4 @@
-import "./../../pages/UserAccount";
+import "../../pages/UserAccount";
 import { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome , faMobileAlt, faHandsHelping, faQuestionCircle} from '@fortawesome/free-solid-svg-icons'

@@ -1,9 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
-import "./SideNavBar.css";
+import "./NewSidebar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Profile from "./../../images/pfp.png";
 
-function SideNavBar(props: any): JSX.Element {
+function NewSidebar(props: any): JSX.Element {
     const current_path = useLocation().pathname;
     return (
         <div
@@ -29,7 +29,7 @@ function SideNavBar(props: any): JSX.Element {
                             <nav className="flex">
                                 <a href="http://localhost:3000/UserAccont" className="Nav-Items-Container">Settings</a>
                                 <div className="Nav-Items-Container">Log Out</div>
-                            </nav>                       
+                            </nav>
                         </div>
                         <div className="col-4 d-md-none d-block" style={{textAlign: "right", cursor: "pointer"}} onClick={() => { props.setNavBarDisplay(false); }}>
                             <FontAwesomeIcon icon="times"/>
@@ -164,4 +164,4 @@ function SideNavBar(props: any): JSX.Element {
     );
 }
 
-export default SideNavBar;
+export default NewSidebar;
