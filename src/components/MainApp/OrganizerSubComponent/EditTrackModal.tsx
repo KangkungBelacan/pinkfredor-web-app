@@ -10,7 +10,9 @@ const EditTrackModal = (props: EditTrackModalProps) => {
         console.log(evt);
         return false;
     };
-    return (
+    return Object.keys(props.passedData).length === 0 ? (
+        <div></div>
+    ) : (
         <Modal size="lg" show={props.show} onHide={() => props.setShow(false)}>
             <form onSubmit={submitHandler}>
                 <ModalHeader
@@ -21,9 +23,9 @@ const EditTrackModal = (props: EditTrackModalProps) => {
                     }}
                 >
                     <ModalTitle>
-                        Editing 05 たぶん.mp3
+                        Editing {props.row_data.filename}
                         <div style={{ fontSize: "small", color: "grey" }}>
-                            /Music/THE BOOK/
+                            {props.row_data.drive_location}
                         </div>
                     </ModalTitle>
                 </ModalHeader>
@@ -49,7 +51,9 @@ const EditTrackModal = (props: EditTrackModalProps) => {
                                 <Form.Group controlId="SongTitle">
                                     <Form.Control
                                         placeholder="Track Title"
-                                        defaultValue="Ho"
+                                        defaultValue={
+                                            props.row_data.track_title
+                                        }
                                     />
                                 </Form.Group>
                             </Col>
@@ -67,7 +71,22 @@ const EditTrackModal = (props: EditTrackModalProps) => {
                             </Col>
                             <Col md={8} sm={12}>
                                 <Form.Group controlId="TrackArtist">
-                                    <Form.Control placeholder="Track Artist" />
+                                    <Form.Control
+                                        as="select"
+                                        defaultValue={
+                                            props.row_data.track_artist
+                                        }
+                                    >
+                                        {Object.entries(
+                                            props.passedData.artistLookUpObject
+                                        ).map(([artistID, artistName]: any) => {
+                                            return (
+                                                <option value={artistID}>
+                                                    {artistName}
+                                                </option>
+                                            );
+                                        })}
+                                    </Form.Control>
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -84,8 +103,31 @@ const EditTrackModal = (props: EditTrackModalProps) => {
                             </Col>
                             <Col md={8} sm={12}>
                                 <Form.Group controlId="TrackAlbum">
-                                    <Form.Control placeholder="Track Album" />
+                                    <Form.Control
+                                        as="select"
+                                        defaultValue={
+                                            props.row_data.track_album
+                                        }
+                                    >
+                                        {Object.entries(
+                                            props.passedData.albumLookUpObject
+                                        ).map(([albumID, albumName]: any) => {
+                                            return (
+                                                <option value={albumID}>
+                                                    {albumName}
+                                                </option>
+                                            );
+                                        })}
+                                    </Form.Control>
                                 </Form.Group>
+                                {/* <Form.Group controlId="TrackAlbum">
+                                    <Form.Control
+                                        placeholder="Track Album"
+                                        defaultValue={
+                                            props.row_data.track_album
+                                        }
+                                    />
+                                </Form.Group> */}
                             </Col>
                         </Row>
                         <Row style={{ paddingBottom: "1rem" }}>
@@ -101,7 +143,12 @@ const EditTrackModal = (props: EditTrackModalProps) => {
                             </Col>
                             <Col md={8} sm={12}>
                                 <Form.Group controlId="AlbumTrackNo">
-                                    <Form.Control placeholder="Album Track Number" />
+                                    <Form.Control
+                                        placeholder="Album Track Number"
+                                        defaultValue={
+                                            props.row_data.album_tr_no
+                                        }
+                                    />
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -118,7 +165,12 @@ const EditTrackModal = (props: EditTrackModalProps) => {
                             </Col>
                             <Col md={8} sm={12}>
                                 <Form.Group controlId="TrackGenre">
-                                    <Form.Control placeholder="Track Genre" />
+                                    <Form.Control
+                                        placeholder="Track Genre"
+                                        defaultValue={
+                                            props.row_data.track_genre
+                                        }
+                                    />
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -133,7 +185,10 @@ const EditTrackModal = (props: EditTrackModalProps) => {
                 >
                     <button
                         className="btn btn-danger"
-                        onClick={(e: any) => {e.preventDefault();props.setShow(false)}}
+                        onClick={(e: any) => {
+                            e.preventDefault();
+                            props.setShow(false);
+                        }}
                     >
                         Close
                     </button>

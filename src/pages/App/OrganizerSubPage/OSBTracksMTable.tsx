@@ -175,13 +175,13 @@ const OSBTracksMTable = (mtableProps: any) => {
                                     onClick={() => {
                                         mtableProps.passedData.seteditModalRowData(
                                             {
-                                                // filename: props.
-                                                // drive_location
-                                                // track_title
-                                                // track_artist
-                                                // track_album
-                                                // album_tr_no
-                                                // track_genre
+                                                filename: props.data.fileName,
+                                                drive_location: props.data.driveLocation,
+                                                track_title: props.data.trackTitle,
+                                                track_artist:props.data.trackArtist ,
+                                                track_album: props.data.trackAlbum,
+                                                album_tr_no: props.data.trackAlbumTrNo,
+                                                track_genre: props.data.trackGenre,
                                             }
                                         );
                                         mtableProps.passedData.setShowEditModalBox(

@@ -100,6 +100,7 @@ const OSBTracks = (props: any) => {
                     row_data={editModalRowData}
                     show={showEditModalBox}
                     setShow={setShowEditModalBox}
+                    passedData={passedData}
                 />
                 <OSBTracksMTable passedData={passedData} />
             </div>

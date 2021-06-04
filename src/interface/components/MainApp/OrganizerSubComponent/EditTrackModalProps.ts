@@ -9,5 +9,10 @@ export default interface EditTrackModalProps extends EditModalBoxProps {
         track_album?: string,
         album_tr_no?: number,
         track_genre?: string
-    }
+    },
+
+    /**
+     * Data passed from parent component
+     */
+    passedData: any
 }
