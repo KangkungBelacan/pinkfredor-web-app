@@ -96,7 +96,7 @@ const OSBTracks = (props: any) => {
         if (Object.keys(passedData).length === 0) {
             setPassedData(passedDataInner);
         }
-    }, [props.indexesData, props.folderData, passedData]);
+    }, [props.indexesData, props.folderData, passedData, props.indexesError, props.folderError]);
 
     return (
         <div style={{ maxWidth: "100%" }}>
