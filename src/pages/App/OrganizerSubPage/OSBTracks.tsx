@@ -1,8 +1,9 @@
 import EditTrackModal from "../../../components/MainApp/OrganizerSubComponent/EditTrackModal";
 import React, { useState, useEffect } from "react";
 import OSBTracksMTable from "./OSBTracksMTable";
+import { GenericProps } from "../../../interface/GenericProps";
 
-const OSBTracks = (props: any) => {
+const OSBTracks = (props: GenericProps) => {
     const [showEditModalBox, setShowEditModalBox] = useState(false);
     const [editModalRowData, seteditModalRowData] = useState({});
     const [t_data, set_t_data] = useState([]);
@@ -106,7 +107,7 @@ const OSBTracks = (props: any) => {
     ]);
 
     return (
-        <div style={{ maxWidth: "100%" }}>
+        <div style={{ maxWidth: "100%" }} className={props.className === undefined ? "" : props.className}>
             <div>
                 <EditTrackModal
                     row_data={editModalRowData}
