@@ -1,6 +1,13 @@
 import MaterialTable from "material-table";
+import { useState } from "react";
 import TABLE_ICONS from "../../../components/generic/MaterialTableIcons";
+import EditArtistModal from "../../../components/MainApp/OrganizerSubComponent/EditArtistModal";
 const OSBArtists = (props: any) => {
+    const [showModal, setshowModal] = useState(false);
+    const [rowData, setRowData] = useState<{
+        artist_id: string;
+        artist_name: string;
+    }>({ artist_id: "", artist_name: "" });
     let t_data: any = [];
     let artistIds = Object.keys(props.API_DATA.indexesData.artists);
     let artistLookUpObject: any = {};
@@ -18,6 +25,13 @@ const OSBArtists = (props: any) => {
             className={props.className === undefined ? "" : props.className}
             style={props.style ? props.style : {}}
         >
+            <EditArtistModal
+                show={showModal}
+                setShow={setshowModal}
+                row_data={rowData}
+                files_indexes={props.API_DATA.indexesData.files}
+                artist_t_data_display={t_data}
+            />
             <MaterialTable
                 columns={[
                     {
@@ -37,6 +51,13 @@ const OSBArtists = (props: any) => {
                 data={t_data}
                 title="Artists"
                 icons={TABLE_ICONS}
+                onRowClick={(event, rowData, togglePanel) => {
+                    setRowData({
+                        artist_id: rowData?.artist_id,
+                        artist_name: rowData?.artistName
+                    });
+                    setshowModal(true);
+                }}
             />
         </div>
     );
