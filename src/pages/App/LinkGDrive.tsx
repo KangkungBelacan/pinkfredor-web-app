@@ -114,10 +114,14 @@ const LinkGDrive = () => {
                                 j > -1;
                                 j--
                             ) {
-                                parentDirectory +=
-                                    folderData.data[
-                                        data[dataKeys[i]].parents[j]
-                                    ].folder_name + "/";
+                                if (
+                                    data[dataKeys[i]].parents[j] !== undefined
+                                ) {
+                                    parentDirectory +=
+                                        folderData.data[
+                                            data[dataKeys[i]].parents[j]
+                                        ].folder_name + "/";
+                                }
                             }
                         }
                         let titleSplit = data[dataKeys[i]].filename.split(".");
