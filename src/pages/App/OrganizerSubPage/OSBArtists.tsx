@@ -30,6 +30,7 @@ const OSBArtists = (props: any) => {
                 setShow={setshowModal}
                 row_data={rowData}
                 files_indexes={props.API_DATA.indexesData.files}
+                artists_indexes={props.API_DATA.indexesData.artists}
                 artist_t_data_display={t_data}
             />
             <MaterialTable

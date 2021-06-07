@@ -1,18 +1,17 @@
 import MaterialTable from "material-table";
 import { useState } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import { Modal, Button, Form, Col, Row } from "react-bootstrap";
 import { EditArtistModalProps } from "../../../interface/components/MainApp/OrganizerSubComponent/EditArtistModalProps";
 import TABLE_ICONS from "../../generic/MaterialTableIcons";
-
+import { b64ToBlobURL } from "../../../global-imports";
+import empty_profile_icon from "../../../images/empty_profile_icon.png";
 const EditArtistModal = (props: EditArtistModalProps) => {
     const [saveText, setSaveText] = useState<any>("Save");
     const [saveBtnDisabled, setsaveBtnDisabled] = useState(false);
+    // const [artistArtURL, setartistArtURL] = useState<any>(empty_profile_icon);
+
     return (
-        <Modal
-            size={"lg"}
-            show={props.show}
-            onHide={() => props.setShow(false)}
-        >
+        <Modal size="xl" show={props.show} onHide={() => props.setShow(false)}>
             <Modal.Header
                 style={{
                     color: "white",
@@ -20,7 +19,14 @@ const EditArtistModal = (props: EditArtistModalProps) => {
                     borderBottom: "0px",
                 }}
             >
-                <Modal.Title>Editing {props.row_data.artist_name}</Modal.Title>
+                <Modal.Title>
+                    Editing{" "}
+                    {props.artists_indexes[props.row_data.artist_name] ===
+                    undefined
+                        ? ""
+                        : props.artists_indexes[props.row_data.artist_name]
+                              .artist_name}
+                </Modal.Title>
             </Modal.Header>
             <Modal.Body
                 style={{
@@ -35,12 +41,61 @@ const EditArtistModal = (props: EditArtistModalProps) => {
                             defaultValue={props.artist_id}
                         ></Form.Control>
                     </Form.Group>
-                    <Form.Group controlId="artistName">
-                        <Form.Control
-                            type="hidden"
-                            defaultValue={props.artist_id}
-                        ></Form.Control>
-                    </Form.Group>
+                    <Row style={{ paddingBottom: "1rem" }}>
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "center",
+                            }}
+                        >
+                            <img
+                                alt="artistArt"
+                                src={
+                                    props.artists_indexes[
+                                        props.row_data.artist_name
+                                    ] !== undefined &&
+                                    props.artists_indexes[
+                                        props.row_data.artist_name
+                                    ].artist_art !== undefined
+                                        ? b64ToBlobURL(
+                                              props.artists_indexes[
+                                                  props.row_data.artist_name
+                                              ].artist_art,
+                                              "image/jpeg"
+                                          )
+                                        : empty_profile_icon
+                                }
+                                style={{
+                                    borderRadius: "50%",
+                                    minHeight: "128px",
+                                    maxHeight: "128px",
+                                }}
+                            ></img>
+                        </div>
+                    </Row>
+                    <Row
+                        style={{ paddingBottom: "1rem" }}
+                        className="justify-content-center"
+                    >
+                        <Col md={6} sm={12}>
+                            <Form.Group controlId="SongTitle">
+                                <Form.Control
+                                    style={{ textAlign: "center" }}
+                                    placeholder="artistName"
+                                    defaultValue={
+                                        props.artists_indexes[
+                                            props.row_data.artist_name
+                                        ] === undefined
+                                            ? ""
+                                            : props.artists_indexes[
+                                                  props.row_data.artist_name
+                                              ].artist_name
+                                    }
+                                ></Form.Control>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+
                     <MaterialTable
                         icons={TABLE_ICONS}
                         columns={[
@@ -52,19 +107,25 @@ const EditArtistModal = (props: EditArtistModalProps) => {
                             {
                                 title: "No.",
                                 field: "rowNum",
+                                width: "48px"
                             },
                             {
                                 title: "Filename",
                                 field: "fileName",
+                                width: "auto"
                             },
                             {
                                 title: "Track Title",
                                 field: "trackTitle",
+                                width: "auto"
                             },
                         ]}
                         title={"Tracks selection"}
                         data={Object.entries(props.files_indexes).map(
                             ([file_id, file_item]: any, index) => {
+                                // if(Object.keys(file_item.file_metadata).length !== 0) {
+                                //     let pp = 3;
+                                // }
                                 return {
                                     file_id: file_id,
                                     rowNum: index + 1,
@@ -74,7 +135,10 @@ const EditArtistModal = (props: EditArtistModalProps) => {
                                         ? "-"
                                         : file_item.file_metadata.song_title,
                                     tableData: {
-                                        checked: true,
+                                        checked:
+                                            file_item.file_metadata
+                                                .song_artistid ===
+                                            props.row_data.artist_name,
                                     },
                                 };
                             }
@@ -82,11 +146,11 @@ const EditArtistModal = (props: EditArtistModalProps) => {
                         options={{
                             // paging: false,
                             // search: false,
-                            // tableLayout: "fixed",
+                            tableLayout: "fixed",
                             selection: true,
-                            selectionProps: (rowData: any) => ({
-                                disabled: rowData.file_id === "hi",
-                            }),
+                            // selectionProps: (rowData: any) => ({
+                            //     tableData: {checked: rowData.song_artistid === props.row_data.artist_name}
+                            // }),
                         }}
                     ></MaterialTable>
                 </Form>
