@@ -95,64 +95,6 @@ const EditArtistModal = (props: EditArtistModalProps) => {
                             </Form.Group>
                         </Col>
                     </Row>
-
-                    <MaterialTable
-                        icons={TABLE_ICONS}
-                        columns={[
-                            {
-                                title: "file_id",
-                                field: "file_id",
-                                hidden: true,
-                            },
-                            {
-                                title: "No.",
-                                field: "rowNum",
-                                width: "48px"
-                            },
-                            {
-                                title: "Filename",
-                                field: "fileName",
-                                width: "auto"
-                            },
-                            {
-                                title: "Track Title",
-                                field: "trackTitle",
-                                width: "auto"
-                            },
-                        ]}
-                        title={"Tracks selection"}
-                        data={Object.entries(props.files_indexes).map(
-                            ([file_id, file_item]: any, index) => {
-                                // if(Object.keys(file_item.file_metadata).length !== 0) {
-                                //     let pp = 3;
-                                // }
-                                return {
-                                    file_id: file_id,
-                                    rowNum: index + 1,
-                                    fileName: file_item.filename,
-                                    trackTitle: file_item.file_metadata
-                                        .song_title
-                                        ? "-"
-                                        : file_item.file_metadata.song_title,
-                                    tableData: {
-                                        checked:
-                                            file_item.file_metadata
-                                                .song_artistid ===
-                                            props.row_data.artist_name,
-                                    },
-                                };
-                            }
-                        )}
-                        options={{
-                            // paging: false,
-                            // search: false,
-                            tableLayout: "fixed",
-                            selection: true,
-                            // selectionProps: (rowData: any) => ({
-                            //     tableData: {checked: rowData.song_artistid === props.row_data.artist_name}
-                            // }),
-                        }}
-                    ></MaterialTable>
                 </Form>
             </Modal.Body>
             <Modal.Footer
