@@ -61,4 +61,4 @@ const b64ToBlobURL = (b64Data: string, contentType: string) => {
     return URL.createObjectURL(blob);
 };
 
-export { axios, useAxiosPOST, useWindowSize };
+export { axios, useAxiosPOST, useWindowSize, b64ToBlobURL };
