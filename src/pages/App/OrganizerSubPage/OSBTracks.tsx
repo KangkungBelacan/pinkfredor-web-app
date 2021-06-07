@@ -24,9 +24,11 @@ const OSBTracks = (props: GenericProps) => {
             let parent_path = "/";
             if (file_item.parents !== undefined) {
                 while (file_item.parents.length !== 0) {
-                    parent_path +=
-                        scan_folder_response[file_item.parents.pop()]
-                            .folder_name + "/";
+                    let parent_id = file_item.parents.pop();
+                    if (scan_folder_response[parent_id] !== undefined) {
+                        parent_path +=
+                            scan_folder_response[parent_id].folder_name + "/";
+                    }
                 }
             }
             t_data.push({
@@ -107,7 +109,10 @@ const OSBTracks = (props: GenericProps) => {
     ]);
 
     return (
-        <div style={{ maxWidth: "100%" }} className={props.className === undefined ? "" : props.className}>
+        <div
+            style={{ maxWidth: "100%" }}
+            className={props.className === undefined ? "" : props.className}
+        >
             <div>
                 <EditTrackModal
                     row_data={editModalRowData}
