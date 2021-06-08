@@ -10,12 +10,12 @@ const OSBTracks = (props: GenericProps) => {
     const [passedData, setPassedData] = useState({});
 
     useEffect(() => {
-        if (props.indexesError || props.folderError) {
+        if (props.API_DATA.indexesError || props.API_DATA.folderError) {
             alert("Something went wrong, please try again later");
             return;
         }
-        let files_response = props.indexesData;
-        let scan_folder_response = props.folderData;
+        let files_response = props.API_DATA.indexesData;
+        let scan_folder_response = props.API_DATA.folderData;
         // set_tdata(files_response.data);
         let keys = Object.keys(files_response.files);
         let t_data: any = [];
@@ -60,31 +60,31 @@ const OSBTracks = (props: GenericProps) => {
         }
 
         let artistLookUpObject: any = { "-": "-" };
-        let artistIds = Object.keys(props.indexesData.artists);
+        let artistIds = Object.keys(props.API_DATA.indexesData.artists);
         for (let i = 0; i < artistIds.length; i++) {
             artistLookUpObject[artistIds[i]] =
-                props.indexesData.artists[artistIds[i]].artist_name;
+                props.API_DATA.indexesData.artists[artistIds[i]].artist_name;
         }
 
         let albumLookUpObject: any = { "-": "-" };
-        let albumIds = Object.keys(props.indexesData.albums);
+        let albumIds = Object.keys(props.API_DATA.indexesData.albums);
         for (let i = 0; i < albumIds.length; i++) {
             albumLookUpObject[albumIds[i]] =
-                props.indexesData.albums[albumIds[i]].album_name;
+                props.API_DATA.indexesData.albums[albumIds[i]].album_name;
         }
 
         let genreLookUpObject: any = { "-": "-" };
-        let genreIds = Object.keys(props.indexesData.genres);
+        let genreIds = Object.keys(props.API_DATA.indexesData.genres);
         for (let i = 0; i < genreIds.length; i++) {
             genreLookUpObject[genreIds[i]] =
-                props.indexesData.genres[genreIds[i]].genre_name;
+                props.API_DATA.indexesData.genres[genreIds[i]].genre_name;
         }
 
         let playlistLookUpObject: any = { "-": "-" };
-        let playlistIds = Object.keys(props.indexesData.playlists);
+        let playlistIds = Object.keys(props.API_DATA.indexesData.playlists);
         for (let i = 0; i < playlistIds.length; i++) {
             playlistLookUpObject[playlistIds[i]] =
-                props.indexesData.playlists[playlistIds[i]].playlist_name;
+                props.API_DATA.indexesData.playlists[playlistIds[i]].playlist_name;
         }
 
         const passedDataInner = {
@@ -101,11 +101,8 @@ const OSBTracks = (props: GenericProps) => {
             set_t_data(t_data);
         }
     }, [
-        props.indexesData,
-        props.folderData,
         passedData,
-        props.indexesError,
-        props.folderError,
+        props.API_DATA
     ]);
 
     return (
