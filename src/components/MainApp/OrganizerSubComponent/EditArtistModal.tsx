@@ -10,36 +10,26 @@ const EditArtistModal = (props: EditArtistModalProps) => {
     const [saveBtnDisabled, setsaveBtnDisabled] = useState(false);
     const [artistArtSRC, setartistArtSRC] = useState(empty_profile_icon);
     // const [artistArtURL, setartistArtURL] = useState<any>(empty_profile_icon);
-    const [fileB64Data, setfileB64Data] = useState({b64: "", type: null});
+    const [fileB64Data, setfileB64Data] = useState({ b64: "", type: null });
 
     useEffect(() => {
         if (
-            fileB64Data.b64 === "" &&
-            props.artists_indexes[props.row_data.artist_name] !== undefined &&
-            props.artists_indexes[props.row_data.artist_name].artist_art !==
-                undefined
+            props.row_data.artist_art !== undefined &&
+            fileB64Data.b64 === ""
+            // props.artists_indexes[props.row_data.artist_name] !== undefined &&
+            // props.artists_indexes[props.row_data.artist_name].artist_art !==
+            //     undefined
         ) {
-            setartistArtSRC(
-                b64ToBlobURL(
-                    props.artists_indexes[props.row_data.artist_name].artist_art
-                        .b64,
-                    props.artists_indexes[props.row_data.artist_name].artist_art
-                        .mimeType
-                )
-            );
+            let { b64, mimeType }: any = JSON.parse(props.row_data.artist_art);
+            setartistArtSRC(b64ToBlobURL(b64, mimeType));
         }
-    }, [
-        props.artists_indexes,
-        props.row_data.artist_name,
-        fileB64Data,
-        props.show,
-    ]);
+    }, [props.row_data.artist_art, fileB64Data.b64, props.show]);
 
     const resetDefaults = () => {
         props.setShow(false);
         setsaveBtnDisabled(false);
         setSaveText("Save");
-        setfileB64Data({b64: "", type: null});
+        setfileB64Data({ b64: "", type: null });
         setartistArtSRC(empty_profile_icon);
     };
 
@@ -50,12 +40,12 @@ const EditArtistModal = (props: EditArtistModalProps) => {
         // console.log(evt);
 
         let payload: any = {
-            artist_name: evt.target[3].value
+            artist_name: evt.target[3].value,
         };
-        if(fileB64Data.b64 !== "") {
+        if (fileB64Data.b64 !== "") {
             payload.artist_art = {
                 b64: fileB64Data.b64,
-                mimeType: fileB64Data.type
+                mimeType: fileB64Data.type,
             };
         }
 
@@ -64,14 +54,31 @@ const EditArtistModal = (props: EditArtistModalProps) => {
             method: "PUT",
             data: payload,
             headers: {
-                Authorization: `Bearer ${localStorage.token}`
-            }
+                Authorization: `Bearer ${localStorage.token}`,
+            },
         })
             .then((response: any) => {
+                // Update t_data as well
+                for (let i = 0; i < props.artist_t_data_display.length; i++) {
+                    if (
+                        props.artist_t_data_display[i].artist_id ===
+                        props.row_data.artist_id
+                    ) {
+                        props.artist_t_data_display[i].artistName =
+                            payload.artist_name;
+                        if (payload.artist_art !== undefined) {
+                            props.artist_t_data_display[i].artist_art =
+                                JSON.stringify(payload.artist_art);
+                        }
+                        break;
+                    }
+                }
+                props.set_artist_t_data_display(props.artist_t_data_display);
                 alert("Artist updated successfully.");
                 resetDefaults();
             })
             .catch((error: any) => {
+                console.error(error);
                 alert("Something went wrong. Please try again later");
                 resetDefaults();
             });
@@ -83,7 +90,7 @@ const EditArtistModal = (props: EditArtistModalProps) => {
             return;
         }
         let filesize = evt.target.files[0].size;
-        if (filesize > 8000) {
+        if (filesize > 8000000) {
             alert("File size cannot exceed 8MB");
             return;
         }
@@ -99,7 +106,7 @@ const EditArtistModal = (props: EditArtistModalProps) => {
                 result = result.split(",").slice(1);
                 setfileB64Data({
                     b64: result,
-                    type: evt.target.files[0].type
+                    type: evt.target.files[0].type,
                 });
                 setartistArtSRC(b64ToBlobURL(result, evt.target.files[0].type));
             })
@@ -120,12 +127,7 @@ const EditArtistModal = (props: EditArtistModalProps) => {
                     }}
                 >
                     <Modal.Title>
-                        Editing{" "}
-                        {props.artists_indexes[props.row_data.artist_name] ===
-                        undefined
-                            ? ""
-                            : props.artists_indexes[props.row_data.artist_name]
-                                  .artist_name}
+                        Editing {props.row_data.artist_name}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body
@@ -199,15 +201,7 @@ const EditArtistModal = (props: EditArtistModalProps) => {
                                 <Form.Control
                                     style={{ textAlign: "center" }}
                                     placeholder="Artist Name"
-                                    defaultValue={
-                                        props.artists_indexes[
-                                            props.row_data.artist_name
-                                        ] === undefined
-                                            ? ""
-                                            : props.artists_indexes[
-                                                  props.row_data.artist_name
-                                              ].artist_name
-                                    }
+                                    defaultValue={props.row_data.artist_name}
                                 ></Form.Control>
                             </Form.Group>
                         </Col>
