@@ -61,4 +61,11 @@ const b64ToBlobURL = (b64Data: string, contentType: string) => {
     return URL.createObjectURL(blob);
 };
 
-export { axios, useAxiosPOST, useWindowSize, b64ToBlobURL };
+const fileToBase64 = (file: any) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+});
+
+export { axios, useAxiosPOST, useWindowSize, b64ToBlobURL, fileToBase64 };

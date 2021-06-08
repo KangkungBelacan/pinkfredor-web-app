@@ -1,0 +1,20 @@
+.upload-image-container {
+    cursor: pointer;
+}
+
+.upload-image-container:hover::after {
+    content: "Change Image";
+    width: 128px;
+    height: 128px;
+    color: white;
+    border-radius: 50%;
+    z-index: 1000;
+    margin-right: 100px;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* background-color: red; */
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 16px;
+}
