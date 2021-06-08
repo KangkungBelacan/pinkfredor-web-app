@@ -2,56 +2,84 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { Modal, Button, Form, Col, Row } from "react-bootstrap";
 import { EditArtistModalProps } from "../../../interface/components/MainApp/OrganizerSubComponent/EditArtistModalProps";
-import { b64ToBlobURL, fileToBase64 } from "../../../global-imports";
+import { axios, b64ToBlobURL, fileToBase64 } from "../../../global-imports";
 import empty_profile_icon from "../../../images/empty_profile_icon.png";
-import "./EditArtistModal.css"
+import "./EditArtistModal.css";
 const EditArtistModal = (props: EditArtistModalProps) => {
     const [saveText, setSaveText] = useState<any>("Save");
     const [saveBtnDisabled, setsaveBtnDisabled] = useState(false);
     const [artistArtSRC, setartistArtSRC] = useState(empty_profile_icon);
     // const [artistArtURL, setartistArtURL] = useState<any>(empty_profile_icon);
-    const [fileB64Data, setfileB64Data] = useState("");
+    const [fileB64Data, setfileB64Data] = useState({b64: "", type: null});
 
     useEffect(() => {
         if (
-            fileB64Data === "" &&
+            fileB64Data.b64 === "" &&
             props.artists_indexes[props.row_data.artist_name] !== undefined &&
             props.artists_indexes[props.row_data.artist_name].artist_art !==
                 undefined
         ) {
             setartistArtSRC(
                 b64ToBlobURL(
-                    props.artists_indexes[props.row_data.artist_name]
-                        .artist_art.b64,
-                        props.artists_indexes[props.row_data.artist_name]
-                        .artist_art.mimeType
+                    props.artists_indexes[props.row_data.artist_name].artist_art
+                        .b64,
+                    props.artists_indexes[props.row_data.artist_name].artist_art
+                        .mimeType
                 )
             );
         }
-    }, [props.artists_indexes, props.row_data.artist_name, fileB64Data, props.show]);
+    }, [
+        props.artists_indexes,
+        props.row_data.artist_name,
+        fileB64Data,
+        props.show,
+    ]);
 
     const resetDefaults = () => {
         props.setShow(false);
         setsaveBtnDisabled(false);
         setSaveText("Save");
-        setfileB64Data("");
-        setartistArtSRC(empty_profile_icon)
+        setfileB64Data({b64: "", type: null});
+        setartistArtSRC(empty_profile_icon);
     };
 
     const onSubmit = (evt: any) => {
         evt.preventDefault();
         setsaveBtnDisabled(true);
         setSaveText(<FontAwesomeIcon icon="spinner" spin />);
-        console.log(evt);
+        // console.log(evt);
 
-        alert("done!");
-        
-        resetDefaults();
+        let payload: any = {
+            artist_name: evt.target[3].value
+        };
+        if(fileB64Data.b64 !== "") {
+            payload.artist_art = {
+                b64: fileB64Data.b64,
+                mimeType: fileB64Data.type
+            };
+        }
+
+        axios({
+            url: `/api/indexes/artists/${props.row_data.artist_id}`,
+            method: "PUT",
+            data: payload,
+            headers: {
+                Authorization: `Bearer ${localStorage.token}`
+            }
+        })
+            .then((response: any) => {
+                alert("Artist updated successfully.");
+                resetDefaults();
+            })
+            .catch((error: any) => {
+                alert("Something went wrong. Please try again later");
+                resetDefaults();
+            });
     };
 
     const onFileChange = (evt: any) => {
         evt.preventDefault();
-        if(evt.target.files[0] === undefined) {
+        if (evt.target.files[0] === undefined) {
             return;
         }
         let filesize = evt.target.files[0].size;
@@ -69,7 +97,10 @@ const EditArtistModal = (props: EditArtistModalProps) => {
         fileToBase64(evt.target.files[0])
             .then((result: any) => {
                 result = result.split(",").slice(1);
-                setfileB64Data(result);
+                setfileB64Data({
+                    b64: result,
+                    type: evt.target.files[0].type
+                });
                 setartistArtSRC(b64ToBlobURL(result, evt.target.files[0].type));
             })
             .catch((err) => {
@@ -107,12 +138,12 @@ const EditArtistModal = (props: EditArtistModalProps) => {
                         id="artistImage"
                         type="file"
                         onChange={onFileChange}
-                        style={{display: "none"}}
+                        style={{ display: "none" }}
                     />
                     <Form.Group controlId="fileB64">
                         <Form.Control
                             type="hidden"
-                            value={fileB64Data}
+                            value={fileB64Data.b64}
                         ></Form.Control>
                     </Form.Group>
                     <Form.Group controlId="aritstId">
@@ -128,7 +159,10 @@ const EditArtistModal = (props: EditArtistModalProps) => {
                                 justifyContent: "center",
                             }}
                         >
-                            <label htmlFor="artistImage" className="upload-image-container">
+                            <label
+                                htmlFor="artistImage"
+                                className="upload-image-container"
+                            >
                                 <img
                                     alt="artistArt"
                                     src={artistArtSRC}
@@ -141,13 +175,15 @@ const EditArtistModal = (props: EditArtistModalProps) => {
                             </label>
                         </div>
                     </Row>
-                    <Row style={{
-                        fontSize: "small",
-                        color: "grey",
-                        textAlign: "center",
-                        justifyContent: "center",
-                        paddingBottom: "1rem"
-                    }}>
+                    <Row
+                        style={{
+                            fontSize: "small",
+                            color: "grey",
+                            textAlign: "center",
+                            justifyContent: "center",
+                            paddingBottom: "1rem",
+                        }}
+                    >
                         <Col xs={6}>
                             Allowed Extensions: *.png, *.jpg, *.jpeg
                             <br />
@@ -159,7 +195,7 @@ const EditArtistModal = (props: EditArtistModalProps) => {
                         className="justify-content-center"
                     >
                         <Col md={6} sm={12}>
-                            <Form.Group controlId="SongTitle">
+                            <Form.Group controlId="artistName">
                                 <Form.Control
                                     style={{ textAlign: "center" }}
                                     placeholder="Artist Name"
