@@ -9,7 +9,7 @@ export interface AlbumItem extends Item {
      */
     album_art?: {
         b64?: string,
-        type?: string
+        mimeType?: string
     };
 
     year_released?: number
