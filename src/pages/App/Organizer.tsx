@@ -8,24 +8,51 @@ import * as OrganizerSubPage from "./OrganizerSubPage";
 import useAxios from "axios-hooks";
 
 const Organizer = (props: GenericProps) => {
-    const [{data: indexesData, loading: indexesLoading, error: indexesError}, indexesRefetch] = useAxios({
+    const [
+        { data: indexesData, loading: indexesLoading, error: indexesError },
+        indexesRefetch,
+    ] = useAxios({
         url: "/api/indexes",
         method: "GET",
         headers: {
-            Authorization: `Bearer ${localStorage.token}`
-        }
+            Authorization: `Bearer ${localStorage.token}`,
+        },
     });
-    const [{data: folderData, loading: folderLoading, error: folderError}, folderRefetch] = useAxios({
+    const [
+        { data: filesData, loading: filesLoading, error: filesError },
+        filesRefetch,
+    ] = useAxios({
+        url: "/api/indexes/files",
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${localStorage.token}`,
+        },
+    });
+
+    const [
+        { data: artistsData, loading: artistsLoading, error: artistsError },
+        artistsRefetch,
+    ] = useAxios({
+        url: "/api/indexes/artists",
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${localStorage.token}`,
+        },
+    });
+
+    const [
+        { data: folderData, loading: folderLoading, error: folderError },
+        folderRefetch,
+    ] = useAxios({
         url: "/api/driveapi/files/scan",
         method: "POST",
         data: {
-            folder_only: true
+            folder_only: true,
         },
         headers: {
-            Authorization: `Bearer ${localStorage.token}`
-        }
+            Authorization: `Bearer ${localStorage.token}`,
+        },
     });
-
     const API_DATA = {
         indexesData,
         indexesLoading,
@@ -36,6 +63,23 @@ const Organizer = (props: GenericProps) => {
         folderError,
         folderRefetch,
     };
+    const API_FILES = {
+        filesData,
+        filesLoading,
+        filesError,
+        filesRefetch,
+        folderData,
+        folderLoading,
+        folderError,
+        folderRefetch,
+    };
+    const API_ARTISTS = {
+        artistsData,
+        artistsLoading,
+        artistsError,
+        artistsRefetch,
+    };
+  
     let items: Array<CategoriesTopBarItemProps> = [
         {
             display_text: "Tracks",
@@ -58,7 +102,7 @@ const Organizer = (props: GenericProps) => {
             link: "/app/organize/Albums",
         },
     ];
-    return indexesLoading || folderLoading ? <div style={{color: "white"}}>Loading...</div> : (
+    return (
         <div
             className={props.className ? props.className : ""}
             style={props.style ? props.style : {}}
@@ -66,11 +110,37 @@ const Organizer = (props: GenericProps) => {
             <div className="organizer-body">
                 <CategoriesTopBar items={items} />
                 {/* <div className="row" style={{overflowY:"auto", height: "calc(100% - 64px)", paddingTop: "12px"}}> */}
-                    <Route path="/app/organize" exact component={ () => <div>Select one of the category</div> }  />
-                    <Route path="/app/organize/Tracks" component={ () => <OrganizerSubPage.OSBTracks className="row organizer-subpage-content-container" API_DATA={API_DATA} />} />
-                    <Route path="/app/organize/Artists" component={ () => <OrganizerSubPage.OSBArtists className="row organizer-subpage-content-container" API_DATA={API_DATA}/> } />
-                    <Route path="/app/organize/Genres" component={OrganizerSubPage.genres} />
-                    <Route path="/app/organize/Albums" component={OrganizerSubPage.albums} />
+                <Route
+                    path="/app/organize"
+                    exact
+                    component={() => <div>Select one of the category</div>}
+                />
+                <Route
+                    path="/app/organize/Tracks"
+                    component={() => (
+                        <OrganizerSubPage.OSBTracks
+                            className="row organizer-subpage-content-container"
+                            API_DATA={API_DATA}
+                        />
+                    )}
+                />
+                <Route
+                    path="/app/organize/Artists"
+                    component={() => (
+                        <OrganizerSubPage.OSBArtists
+                            className="row organizer-subpage-content-container"
+                            API_ARTISTS={API_ARTISTS}
+                        />
+                    )}
+                />
+                <Route
+                    path="/app/organize/Genres"
+                    component={OrganizerSubPage.genres}
+                />
+                <Route
+                    path="/app/organize/Albums"
+                    component={OrganizerSubPage.albums}
+                />
                 {/* </div> */}
             </div>
         </div>
