@@ -7,7 +7,10 @@ export interface AlbumItem extends Item {
     /**
      * Base64 encoded album art
      */
-    album_art?: string;
+    album_art?: {
+        b64?: string,
+        type?: string
+    };
 
     year_released?: number
 
