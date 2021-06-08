@@ -22,8 +22,9 @@ const EditArtistModal = (props: EditArtistModalProps) => {
             setartistArtSRC(
                 b64ToBlobURL(
                     props.artists_indexes[props.row_data.artist_name]
-                        .artist_art,
-                    "image/jpeg"
+                        .artist_art.b64,
+                        props.artists_indexes[props.row_data.artist_name]
+                        .artist_art.mimeType
                 )
             );
         }

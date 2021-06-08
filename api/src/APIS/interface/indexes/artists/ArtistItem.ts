@@ -5,6 +5,6 @@ export interface ArtistItem extends Item {
     artist_name: string;
     artist_art?: {
         b64?: string,
-        type?: string
+        mimeType?: string
     };
 }
