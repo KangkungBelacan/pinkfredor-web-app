@@ -64,7 +64,7 @@ const Organizer = (props: GenericProps) => {
             style={props.style ? props.style : {}}
         >
             <div className="organizer-body">
-                <CategoriesTopBar indexesRefetch={indexesRefetch} items={items} />
+                <CategoriesTopBar items={items} />
                 {/* <div className="row" style={{overflowY:"auto", height: "calc(100% - 64px)", paddingTop: "12px"}}> */}
                     <Route path="/app/organize" exact component={ () => <div>Select one of the category</div> }  />
                     <Route path="/app/organize/Tracks" component={ () => <OrganizerSubPage.OSBTracks className="row organizer-subpage-content-container" API_DATA={API_DATA} />} />

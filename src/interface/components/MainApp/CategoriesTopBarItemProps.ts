@@ -26,6 +26,4 @@ export interface CategoriesTopBarItemProps extends GenericProps {
     CustomIconElementProps?: {[key:string]: any};
 
     display_text: string;
-
-    indexesRefetch?: any
 }

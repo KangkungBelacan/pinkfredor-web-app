@@ -8,7 +8,7 @@ const CategoriesTopBar = (props: CategoriesTopBarProps) => {
     if (props.items !== undefined) {
         for (let i = 0; i < props.items.length; i++) {
             content_components.push(
-                <CategoriesTopBarItem indexesRefetch={props.indexesRefetch} key={`CategoriesTopBarItem-${i}`} {...props.items[i]} />
+                <CategoriesTopBarItem key={`CategoriesTopBarItem-${i}`} {...props.items[i]} />
             );
         }
     }
