@@ -14,8 +14,8 @@ const port = process.env.PORT || 8080;
 // ======================================
 
 // Use bodyParser middleware to get form data in json
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false, limit: "10mb" }));
+app.use(bodyParser.json({limit: "10mb"}));
 
 // ======================================
 // API Routes (Open)
