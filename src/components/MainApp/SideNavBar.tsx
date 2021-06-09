@@ -23,12 +23,12 @@ function SideNavBar(props: any): JSX.Element {
                 <div className="sidebar-header">
                     <div className="row">
                         <div className="col-md-12 col-8">
-                            <h3>Pinkfredor</h3>
+                            <h3 style={{textAlign:"center"}}>Pinkfredor</h3>
                             <img src={Profile} alt="Avatar" className="center" style={{width:"40%",borderRadius:"50%"}}></img>
                             <h3 style={{fontSize:"20px",textAlign:"center"}}>Looz</h3>
                             <nav className="flex">
-                                <a href="http://localhost:3000/UserAccont" className="Nav-Items-Container">Settings</a>
-                                <div className="Nav-Items-Container">Log Out</div>
+                                <a href="http://localhost:3000/UserAccont" className="Nav-Items-Container" style={{margin:"10px"}}>Settings</a>
+                                <div className="Nav-Items-Container" style={{margin:"10px"}}>Log Out</div>
                             </nav>                       
                         </div>
                         <div className="col-4 d-md-none d-block" style={{textAlign: "right", cursor: "pointer"}} onClick={() => { props.setNavBarDisplay(false); }}>

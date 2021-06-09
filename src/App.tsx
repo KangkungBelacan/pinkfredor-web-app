@@ -3,7 +3,6 @@ import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import MainApp from "./pages/MainApp";
 import Help from "./pages/Help"
-import UserAccount from "./pages/UserAccount";
 import Playground from "./pages/Playground";
 
 // Bootstrap
@@ -42,7 +41,6 @@ function App() {
                 <Route path="/Auth" component={Auth} />
                 <Route path="/app" component={MainApp} />
                 <Route path="/help" component={Help} />
-                <Route path="/UserAccount" component={UserAccount} />
                 <Route path="/Playground" component={Playground} />
             </Switch>
         </Router>

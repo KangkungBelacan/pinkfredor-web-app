@@ -13,17 +13,17 @@ const Password = (props: any) => {
     }
     return (
         <div>
-          <br/><h2>Change your password</h2>
+          <br/><h2 className="Text">Change your password</h2>
           <div className="flex">
             <div>
               <label className="Label" htmlFor="CurrentPass">Current Password</label><br/>
               <button className="PassButton" onClick={visibility}>Show</button>
-              <input id="CurrentPass" type="text" placeholder="Current Password"></input>
+              <input className="Input" id="CurrentPass" type="text" placeholder="Current Password"></input>
             </div>
             <div>
               <label className="Label" htmlFor="NewPass">New Password</label><br/>
               <button className="PassButton" onClick={visibility}>Show</button>
-              <input id="NewPass" type="text" placeholder="New Password"></input>
+              <input className="Input" id="NewPass" type="text" placeholder="New Password"></input>
             </div>
           </div>
           <div className="flex">

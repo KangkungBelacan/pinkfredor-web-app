@@ -1,4 +1,3 @@
-// import app_img from "./../images/Logo.png";
 import * as HelpComponent from "./../components/Help";
 import "./Help.css";
 
