@@ -10,6 +10,9 @@ const OSBTracks = (props: GenericProps) => {
     const [passedData, setPassedData] = useState({});
 
     useEffect(() => {
+        if (props.API_DATA.indexesLoading || props.API_DATA.folderLoading) {
+            return;
+        }
         if (props.API_DATA.indexesError || props.API_DATA.folderError) {
             alert("Something went wrong, please try again later");
             return;
@@ -84,7 +87,9 @@ const OSBTracks = (props: GenericProps) => {
         let playlistIds = Object.keys(props.API_DATA.indexesData.playlists);
         for (let i = 0; i < playlistIds.length; i++) {
             playlistLookUpObject[playlistIds[i]] =
-                props.API_DATA.indexesData.playlists[playlistIds[i]].playlist_name;
+                props.API_DATA.indexesData.playlists[
+                    playlistIds[i]
+                ].playlist_name;
         }
 
         const passedDataInner = {
@@ -102,15 +107,26 @@ const OSBTracks = (props: GenericProps) => {
         }
     }, [
         passedData,
-        props.API_DATA
+        props.API_DATA,
+        props.API_DATA.indexesLoading,
+        props.API_DATA.folderLoading,
     ]);
 
-    return (
+    return props.API_DATA.indexesLoading || props.API_DATA.folderLoading ? (
+        <div>Loading...</div>
+    ) : (
         <div
             style={{ maxWidth: "100%" }}
             className={props.className === undefined ? "" : props.className}
         >
             <div>
+                <button
+                    onClick={() => {
+                        props.API_DATA.indexesRefetch();
+                    }}
+                >
+                    Refresh
+                </button>
                 <EditTrackModal
                     row_data={editModalRowData}
                     show={showEditModalBox}
