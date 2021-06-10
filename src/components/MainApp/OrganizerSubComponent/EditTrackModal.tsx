@@ -189,7 +189,7 @@ const EditTrackModal = (props: EditTrackModalProps) => {
                                             props.passedData.albumLookUpObject
                                         ).map(([albumID, albumName]: any) => {
                                             return (
-                                                <option value={albumID}>
+                                                <option key={`edit_track_modal_${albumID}`} value={albumID}>
                                                     {albumName}
                                                 </option>
                                             );
@@ -243,10 +243,10 @@ const EditTrackModal = (props: EditTrackModalProps) => {
                                     >
                                         {Object.entries(
                                             props.passedData.genreLookUpObject
-                                        ).map(([albumID, albumName]: any) => {
+                                        ).map(([genreID, genreName]: any) => {
                                             return (
-                                                <option value={albumID}>
-                                                    {albumName}
+                                                <option key={`edit_track_modal_${genreID}`} value={genreID}>
+                                                    {genreName}
                                                 </option>
                                             );
                                         })}

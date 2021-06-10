@@ -1,6 +1,6 @@
-import { EditModalBoxProps } from "./EditModalBoxProps";
+import { ModalBoxProps } from "./ModalBoxProps";
 
-export interface EditArtistModalProps extends EditModalBoxProps {
+export interface EditArtistModalProps extends ModalBoxProps {
     row_data: {
         artist_id: string;
         artist_name: string;

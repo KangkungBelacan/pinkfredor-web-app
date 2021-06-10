@@ -1,6 +1,6 @@
-import { EditModalBoxProps } from "./EditModalBoxProps";
+import { ModalBoxProps } from "./ModalBoxProps";
 
-export default interface EditTrackModalProps extends EditModalBoxProps {
+export default interface EditTrackModalProps extends ModalBoxProps {
     row_data: {
         file_id?: string,
         filename?: string,

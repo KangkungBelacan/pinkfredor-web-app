@@ -3,23 +3,28 @@ import { useEffect, useState } from "react";
 import TABLE_ICONS from "../../../components/generic/MaterialTableIcons";
 import EditArtistModal from "../../../components/MainApp/OrganizerSubComponent/EditArtistModal";
 import useAxios from "axios-hooks";
+import AddArtistModal from "../../../components/MainApp/OrganizerSubComponent/AddArtistModal";
 const OSBArtists = (props: any) => {
     const [showModal, setshowModal] = useState(false);
+    const [showAddModalBox, setshowAddModalBox] = useState(false);
     const [rowData, setRowData] = useState<{
         artist_id: string;
         artist_name: string;
         artist_art?: any;
     }>({ artist_id: "", artist_name: "" });
     const [t_data, set_t_data] = useState<any>([]);
-    const [{data: artistsData, loading: artistsLoading, error: artistsError}, artistsRefetch] = useAxios({
+    const [
+        { data: artistsData, loading: artistsLoading, error: artistsError },
+        artistsRefetch,
+    ] = useAxios({
         url: "/api/indexes/artists",
         method: "GET",
         headers: {
-            Authorization: `Bearer ${localStorage.token}`
-        }
+            Authorization: `Bearer ${localStorage.token}`,
+        },
     });
     useEffect(() => {
-        if(artistsLoading) {
+        if (artistsLoading) {
             return;
         }
         let inner_t_data: any = [];
@@ -28,12 +33,9 @@ const OSBArtists = (props: any) => {
             inner_t_data.push({
                 artist_id: artistIds[i],
                 rowNum: i + 1,
-                artistName:
-                    artistsData.artists[artistIds[i]]
-                        .artist_name,
+                artistName: artistsData.artists[artistIds[i]].artist_name,
                 artist_art: JSON.stringify(
-                    artistsData.artists[artistIds[i]]
-                        .artist_art
+                    artistsData.artists[artistIds[i]].artist_art
                 ),
             });
         }
@@ -49,6 +51,10 @@ const OSBArtists = (props: any) => {
             className={props.className === undefined ? "" : props.className}
             style={props.style ? props.style : {}}
         >
+            <AddArtistModal
+                show={showAddModalBox}
+                setShow={setshowAddModalBox}
+            />
             <EditArtistModal
                 show={showModal}
                 setShow={setshowModal}
@@ -73,9 +79,7 @@ const OSBArtists = (props: any) => {
                     {
                         title: "Artist Name",
                         field: "artistName",
-                    },
-                    { title: "Albums", field: "albumCount" },
-                    { title: "Tracks", field: "trackCount" },
+                    }
                 ]}
                 data={t_data}
                 title="Artists"
