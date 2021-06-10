@@ -2,6 +2,7 @@ import MaterialTable from "material-table";
 import { useEffect, useState } from "react";
 import TABLE_ICONS from "../../../components/generic/MaterialTableIcons";
 import EditArtistModal from "../../../components/MainApp/OrganizerSubComponent/EditArtistModal";
+import useAxios from "axios-hooks";
 const OSBArtists = (props: any) => {
     const [showModal, setshowModal] = useState(false);
     const [rowData, setRowData] = useState<{
@@ -10,21 +11,28 @@ const OSBArtists = (props: any) => {
         artist_art?: any;
     }>({ artist_id: "", artist_name: "" });
     const [t_data, set_t_data] = useState<any>([]);
+    const [{data: artistsData, loading: artistsLoading, error: artistsError}, artistsRefetch] = useAxios({
+        url: "/api/indexes/artists",
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${localStorage.token}`
+        }
+    });
     useEffect(() => {
-        if(props.API_ARTISTS.artistsLoading) {
+        if(artistsLoading) {
             return;
         }
         let inner_t_data: any = [];
-        let artistIds = Object.keys(props.API_ARTISTS.artistsData.artists);
+        let artistIds = Object.keys(artistsData.artists);
         for (let i = 0; i < artistIds.length; i++) {
             inner_t_data.push({
                 artist_id: artistIds[i],
                 rowNum: i + 1,
                 artistName:
-                    props.API_ARTISTS.artistsData.artists[artistIds[i]]
+                    artistsData.artists[artistIds[i]]
                         .artist_name,
                 artist_art: JSON.stringify(
-                    props.API_ARTISTS.artistsData.artists[artistIds[i]]
+                    artistsData.artists[artistIds[i]]
                         .artist_art
                 ),
             });
@@ -32,9 +40,9 @@ const OSBArtists = (props: any) => {
         if (t_data.length === 0) {
             set_t_data(inner_t_data);
         }
-    }, [t_data, props.API_ARTISTS.artistsData, props.API_ARTISTS.artistsLoading]);
+    }, [t_data, artistsData, artistsLoading]);
 
-    return props.API_ARTISTS.artistsLoading ? (
+    return artistsLoading ? (
         <div>Loading...</div>
     ) : (
         <div
@@ -45,7 +53,7 @@ const OSBArtists = (props: any) => {
                 show={showModal}
                 setShow={setshowModal}
                 row_data={rowData}
-                artists_indexes={props.API_ARTISTS.artistsData.artists}
+                artists_indexes={artistsData.artists}
                 artist_t_data_display={t_data}
                 set_artist_t_data_display={set_t_data}
             />

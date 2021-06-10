@@ -31,6 +31,7 @@ const CategoriesTopBarItem = (props: CategoriesTopBarItemProps) => {
                 (active ? " selected" : "")
             }
             style={props.style ? { ...props.style, ...CONT_STYLE } : CONT_STYLE}
+            onClick={props.onClick ? props.onClick : () => {}}
         >
             {props.faIconClass !== undefined ? (
                 <FontAwesomeIcon size="lg" icon={props.faIconClass} />

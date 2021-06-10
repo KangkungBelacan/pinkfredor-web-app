@@ -13,7 +13,7 @@ export interface CategoriesTopBarItemProps extends GenericProps {
      * Which page should it link to?
      * e.g. /app/organize/Album
      */
-    link?:string,
+    link?: string;
 
     /**
      * If you prefer your own icon over Font-Awesome icons, pass me a React Component that render your icon
@@ -23,7 +23,9 @@ export interface CategoriesTopBarItemProps extends GenericProps {
     /**
      * Your own props
      */
-    CustomIconElementProps?: {[key:string]: any};
+    CustomIconElementProps?: { [key: string]: any };
 
     display_text: string;
+
+    onClick?: () => any;
 }

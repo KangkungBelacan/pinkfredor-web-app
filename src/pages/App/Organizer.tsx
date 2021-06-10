@@ -5,91 +5,18 @@ import { CategoriesTopBarItemProps } from "../../interface/components/MainApp/Ca
 import { Route } from "react-router";
 import React from "react";
 import * as OrganizerSubPage from "./OrganizerSubPage";
-import useAxios from "axios-hooks";
 
 const Organizer = (props: GenericProps) => {
-    const [
-        { data: indexesData, loading: indexesLoading, error: indexesError },
-        indexesRefetch,
-    ] = useAxios({
-        url: "/api/indexes",
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${localStorage.token}`,
-        },
-    });
-    const [
-        { data: filesData, loading: filesLoading, error: filesError },
-        filesRefetch,
-    ] = useAxios({
-        url: "/api/indexes/files",
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${localStorage.token}`,
-        },
-    });
-
-    const [
-        { data: artistsData, loading: artistsLoading, error: artistsError },
-        artistsRefetch,
-    ] = useAxios({
-        url: "/api/indexes/artists",
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${localStorage.token}`,
-        },
-    });
-
-    const [
-        { data: folderData, loading: folderLoading, error: folderError },
-        folderRefetch,
-    ] = useAxios({
-        url: "/api/driveapi/files/scan",
-        method: "POST",
-        data: {
-            folder_only: true,
-        },
-        headers: {
-            Authorization: `Bearer ${localStorage.token}`,
-        },
-    });
-    const API_DATA = {
-        indexesData,
-        indexesLoading,
-        indexesError,
-        indexesRefetch,
-        folderData,
-        folderLoading,
-        folderError,
-        folderRefetch,
-    };
-    const API_FILES = {
-        filesData,
-        filesLoading,
-        filesError,
-        filesRefetch,
-        folderData,
-        folderLoading,
-        folderError,
-        folderRefetch,
-    };
-    const API_ARTISTS = {
-        artistsData,
-        artistsLoading,
-        artistsError,
-        artistsRefetch,
-    };
-  
     let items: Array<CategoriesTopBarItemProps> = [
         {
             display_text: "Tracks",
             faIconClass: "music",
-            link: "/app/organize/Tracks",
+            link: "/app/organize/Tracks"
         },
         {
             display_text: "Artists",
             faIconClass: "users",
-            link: "/app/organize/Artists",
+            link: "/app/organize/Artists"
         },
         {
             display_text: "Genres",
@@ -120,7 +47,6 @@ const Organizer = (props: GenericProps) => {
                     component={() => (
                         <OrganizerSubPage.OSBTracks
                             className="row organizer-subpage-content-container"
-                            API_DATA={API_DATA}
                         />
                     )}
                 />
@@ -129,13 +55,12 @@ const Organizer = (props: GenericProps) => {
                     component={() => (
                         <OrganizerSubPage.OSBArtists
                             className="row organizer-subpage-content-container"
-                            API_ARTISTS={API_ARTISTS}
                         />
                     )}
                 />
                 <Route
                     path="/app/organize/Genres"
-                    component={OrganizerSubPage.genres}
+                    component={OrganizerSubPage.OSBGenres}
                 />
                 <Route
                     path="/app/organize/Albums"

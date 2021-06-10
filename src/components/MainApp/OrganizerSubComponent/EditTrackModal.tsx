@@ -157,7 +157,7 @@ const EditTrackModal = (props: EditTrackModalProps) => {
                                             props.passedData.artistLookUpObject
                                         ).map(([artistID, artistName]: any) => {
                                             return (
-                                                <option value={artistID}>
+                                                <option key={`edit_tracks_${artistID}`} value={artistID}>
                                                     {artistName}
                                                 </option>
                                             );

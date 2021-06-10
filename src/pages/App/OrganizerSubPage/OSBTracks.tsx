@@ -2,23 +2,50 @@ import EditTrackModal from "../../../components/MainApp/OrganizerSubComponent/Ed
 import React, { useState, useEffect } from "react";
 import OSBTracksMTable from "./OSBTracksMTable";
 import { GenericProps } from "../../../interface/GenericProps";
+import useAxios from "axios-hooks";
 
 const OSBTracks = (props: GenericProps) => {
     const [showEditModalBox, setShowEditModalBox] = useState(false);
     const [editModalRowData, seteditModalRowData] = useState({});
     const [t_data, set_t_data] = useState([]);
     const [passedData, setPassedData] = useState({});
+    const [
+        { data: indexesData, loading: indexesLoading, error: indexesError },
+        indexesRefetch,
+    ] = useAxios({
+        url: "/api/indexes",
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${localStorage.token}`,
+        },
+    });
+
+    const [
+        { data: folderData, loading: folderLoading, error: folderError },
+        folderRefetch,
+    ] = useAxios({
+        url: "/api/driveapi/files/scan",
+        method: "POST",
+        data: {
+            folder_only: true,
+        },
+        headers: {
+            Authorization: `Bearer ${localStorage.token}`,
+        },
+    });
 
     useEffect(() => {
-        if (props.API_DATA.indexesLoading || props.API_DATA.folderLoading) {
+        if (indexesLoading || folderLoading) {
             return;
         }
-        if (props.API_DATA.indexesError || props.API_DATA.folderError) {
+        if (indexesError || folderError) {
             alert("Something went wrong, please try again later");
+            console.error(indexesError);
+            console.error(folderError);
             return;
         }
-        let files_response = props.API_DATA.indexesData;
-        let scan_folder_response = props.API_DATA.folderData;
+        let files_response = indexesData;
+        let scan_folder_response = folderData;
         // set_tdata(files_response.data);
         let keys = Object.keys(files_response.files);
         let t_data: any = [];
@@ -63,33 +90,31 @@ const OSBTracks = (props: GenericProps) => {
         }
 
         let artistLookUpObject: any = { "-": "-" };
-        let artistIds = Object.keys(props.API_DATA.indexesData.artists);
+        let artistIds = Object.keys(indexesData.artists);
         for (let i = 0; i < artistIds.length; i++) {
             artistLookUpObject[artistIds[i]] =
-                props.API_DATA.indexesData.artists[artistIds[i]].artist_name;
+                indexesData.artists[artistIds[i]].artist_name;
         }
 
         let albumLookUpObject: any = { "-": "-" };
-        let albumIds = Object.keys(props.API_DATA.indexesData.albums);
+        let albumIds = Object.keys(indexesData.albums);
         for (let i = 0; i < albumIds.length; i++) {
             albumLookUpObject[albumIds[i]] =
-                props.API_DATA.indexesData.albums[albumIds[i]].album_name;
+                indexesData.albums[albumIds[i]].album_name;
         }
 
         let genreLookUpObject: any = { "-": "-" };
-        let genreIds = Object.keys(props.API_DATA.indexesData.genres);
+        let genreIds = Object.keys(indexesData.genres);
         for (let i = 0; i < genreIds.length; i++) {
             genreLookUpObject[genreIds[i]] =
-                props.API_DATA.indexesData.genres[genreIds[i]].genre_name;
+                indexesData.genres[genreIds[i]].genre_name;
         }
 
         let playlistLookUpObject: any = { "-": "-" };
-        let playlistIds = Object.keys(props.API_DATA.indexesData.playlists);
+        let playlistIds = Object.keys(indexesData.playlists);
         for (let i = 0; i < playlistIds.length; i++) {
             playlistLookUpObject[playlistIds[i]] =
-                props.API_DATA.indexesData.playlists[
-                    playlistIds[i]
-                ].playlist_name;
+                indexesData.playlists[playlistIds[i]].playlist_name;
         }
 
         const passedDataInner = {
@@ -107,12 +132,15 @@ const OSBTracks = (props: GenericProps) => {
         }
     }, [
         passedData,
-        props.API_DATA,
-        props.API_DATA.indexesLoading,
-        props.API_DATA.folderLoading,
+        indexesLoading,
+        folderLoading,
+        folderData,
+        folderError,
+        indexesData,
+        indexesError,
     ]);
 
-    return props.API_DATA.indexesLoading || props.API_DATA.folderLoading ? (
+    return indexesLoading || folderLoading ? (
         <div>Loading...</div>
     ) : (
         <div
@@ -120,13 +148,6 @@ const OSBTracks = (props: GenericProps) => {
             className={props.className === undefined ? "" : props.className}
         >
             <div>
-                <button
-                    onClick={() => {
-                        props.API_DATA.indexesRefetch();
-                    }}
-                >
-                    Refresh
-                </button>
                 <EditTrackModal
                     row_data={editModalRowData}
                     show={showEditModalBox}
