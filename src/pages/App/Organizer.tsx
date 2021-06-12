@@ -64,7 +64,7 @@ const Organizer = (props: GenericProps) => {
                 />
                 <Route
                     path="/app/organize/Albums"
-                    component={OrganizerSubPage.albums}
+                    component={OrganizerSubPage.OSBAlbums}
                 />
                 {/* </div> */}
             </div>
