@@ -3,6 +3,7 @@ import useAxios from "axios-hooks";
 import { axios } from "../../../global-imports";
 import TABLE_ICONS from "../../../components/generic/MaterialTableIcons";
 import { useEffect, useState } from "react";
+import { KeyboardReturnOutlined } from "@material-ui/icons";
 const OSBAlbums = () => {
     const [
         { data: indexesData, loading: indexesLoading, error: indexesError },
@@ -125,19 +126,78 @@ const OSBAlbums = () => {
             editable={{
                 onRowAdd: (newData: any) =>
                     new Promise((resolve, reject) => {
-                        axios()
+                        let album_name = newData.albumName;
+                        let artist_id = newData.albumArtist;
+
+                        let payload: any = {
+                            albums: [
+                                {
+                                    album_name: album_name,
+                                },
+                            ],
+                        };
+
+                        if (newData.albumName === undefined || newData.albumName.trim() === "") {
+                            alert("Album Name cannot be empty");
+                            reject();
+                            return;
+                        }
+
+                        payload.albums[0].album_name = newData.albumName.trim();
+
+                        if (
+                            newData.yearReleased !== undefined &&
+                            newData.yearReleased.trim() !== ""
+                        ) {
+                            payload.albums[0].year_released = newData.yearReleased.trim();
+                        }
+
+                        if (artist_id !== undefined && artist_id !== "") {
+                            payload.albums[0].artist_id = artist_id;
+                        }
+
+                        axios({
+                            url: "/api/indexes/albums",
+                            method: "POST",
+                            data: payload,
+                            headers: {
+                                Authorization: `Bearer ${localStorage.token}`,
+                            },
+                        })
                             .then((response: any) => {
+                                alert("Successfully added album");
+                                newData.album_id = Object.keys(
+                                    response.data.albums
+                                )[0];
                                 set_t_data([...t_data, newData]);
                                 resolve(true);
                             })
                             .catch((error: any) => {
                                 console.error(error);
+                                alert("Unable to add album");
                                 reject();
                             });
                     }),
                 onRowUpdate: (newData: any, oldData: any) =>
                     new Promise((resolve, reject) => {
-                        axios()
+
+                        let payload: any = {
+                            album_name: newData.albumName,
+                            year_released: newData.yearReleased
+                        };
+
+                        if(newData.albumArtist !== undefined) {
+                            payload.artistid = newData.albumArtist 
+                        }
+
+                        axios({
+                            url: `/api/indexes/albums/${oldData.album_id}`,
+                            method: "PUT",
+                            headers: {
+                                Authorization: `Bearer ${localStorage.token}`,
+                            },
+                            data: payload
+                        })
                             .then((response: any) => {
                                 const dataUpdate = [...t_data];
                                 const index = oldData.tableData.id;
@@ -152,7 +212,13 @@ const OSBAlbums = () => {
                     }),
                 onRowDelete: (oldData: any) =>
                     new Promise((resolve, reject) => {
-                        axios()
+                        axios({
+                            url: `/api/indexes/albums/${oldData.album_id}`,
+                            method: "DELETE",
+                            headers: {
+                                Authorization: `Bearer ${localStorage.token}`
+                            }
+                        })
                             .then((response: any) => {
                                 const dataDelete = [...t_data];
                                 const index = oldData.tableData.id;
@@ -162,6 +228,7 @@ const OSBAlbums = () => {
                             })
                             .catch((error: any) => {
                                 console.error(error);
+                                alert("Something went wrong. Unable to delete album");
                                 reject();
                             });
                     }),
