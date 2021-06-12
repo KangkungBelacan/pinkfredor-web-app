@@ -40,17 +40,17 @@ const OSBAlbums = () => {
 
         Object.entries(indexesData.artists).forEach(
             ([artistID, artistData]: any) => {
-                lookup.artists.artistID = artistData.artist_name;
+                lookup.artists[`${artistID}`] = artistData.artist_name;
             }
         );
         Object.entries(indexesData.genres).forEach(
             ([genreID, genreData]: any) => {
-                lookup.genres.genreID = genreData.genre_name;
+                lookup.genres[`${genreID}`] = genreData.genre_name;
             }
         );
         Object.entries(indexesData.albums).forEach(
             ([albumID, albumData]: any) => {
-                lookup.albums.albumID = albumData.album_name;
+                lookup.albums[`${albumID}`] = albumData.album_name;
             }
         );
         Object.entries(indexesData.files).forEach(([fileID, fileData]: any) => {
