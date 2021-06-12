@@ -16,15 +16,21 @@ const AddArtistModal = (props: AddArtistModalProps) => {
         }
     }, [props.reset]);
 
-    const resetDefaults = () => {};
+    const resetDefaults = () => {
+        setAddText("Add");
+        setaddBtnDisabled(false);
+    };
     const onSubmit = (evt: any) => {
+        evt.preventDefault();
         setAddText(<FontAwesomeIcon icon="spinner" spin />);
         setaddBtnDisabled(true);
 
-        let payload: any = {};
+        let payload: any = {
+            artists: [{}],
+        };
 
-        payload.artist_name = evt.target[3].value;
-        if (payload.artist_name.trim() === "") {
+        payload.artists[0].artist_name = evt.target[3].value.trim();
+        if (payload.artists[0].artist_name === "") {
             alert("Artist Name cannot be empty");
             setAddText("Add");
             setaddBtnDisabled(false);
@@ -32,7 +38,7 @@ const AddArtistModal = (props: AddArtistModalProps) => {
         }
 
         if (fileB64Data.b64 !== "") {
-            payload.artist_art = {
+            payload.artists[0].artist_art = {
                 b64: fileB64Data.b64,
                 mimeType: fileB64Data.type,
             };
@@ -44,12 +50,29 @@ const AddArtistModal = (props: AddArtistModalProps) => {
             headers: {
                 Authorization: `Bearer ${localStorage.token}`,
             },
+            data: payload,
         })
             .then((response: any) => {
                 alert("Successfully added artist");
+                resetDefaults();
+                let returned_data: any = Object.values(
+                    response.data.artists
+                )[0];
+                const new_t_data = [
+                    {
+                        artist_id: returned_data.artistid,
+                        rowNum: -1,
+                        artistName: returned_data.artist_name,
+                        artist_art: JSON.stringify(returned_data.artist_art),
+                    },
+                    ...props.t_data,
+                ];
+                props.set_t_data(new_t_data);
+                props.setShow(false);
             })
             .catch((error: any) => {
                 alert("Something went wrong, please try again later");
+                resetDefaults();
                 console.error(error);
             });
     };

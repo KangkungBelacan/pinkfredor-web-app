@@ -3,7 +3,10 @@ import { useEffect, useState } from "react";
 import TABLE_ICONS from "../../../components/generic/MaterialTableIcons";
 import EditArtistModal from "../../../components/MainApp/OrganizerSubComponent/EditArtistModal";
 import useAxios from "axios-hooks";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AddArtistModal from "../../../components/MainApp/OrganizerSubComponent/AddArtistModal";
+import { Button } from "react-bootstrap";
+import { axios } from "../../../global-imports";
 const OSBArtists = (props: any) => {
     const [showModal, setshowModal] = useState(false);
     const [showAddModalBox, setshowAddModalBox] = useState(false);
@@ -46,6 +49,12 @@ const OSBArtists = (props: any) => {
 
     return artistsLoading ? (
         <div>Loading...</div>
+    ) : artistsError ? (
+        <div>
+            An error occured
+            <br />
+            Please try again later
+        </div>
     ) : (
         <div
             className={props.className === undefined ? "" : props.className}
@@ -54,6 +63,8 @@ const OSBArtists = (props: any) => {
             <AddArtistModal
                 show={showAddModalBox}
                 setShow={setshowAddModalBox}
+                t_data={t_data}
+                set_t_data={set_t_data}
             />
             <EditArtistModal
                 show={showModal}
@@ -79,10 +90,59 @@ const OSBArtists = (props: any) => {
                     {
                         title: "Artist Name",
                         field: "artistName",
-                    }
+                    },
                 ]}
                 data={t_data}
-                title="Artists"
+                editable={{
+                    onRowDelete: (oldData: any) =>
+                        new Promise((resolve, reject) => {
+                            let aid = oldData.artist_id;
+                            axios({
+                                url: `/api/indexes/artists/${aid}`,
+                                method: "DELETE",
+                                headers: {
+                                    Authorization: `Bearer ${localStorage.token}`,
+                                },
+                            })
+                                .then((response: any) => {
+                                    const dataDelete = [...t_data];
+                                    const index = oldData.tableData.id;
+                                    dataDelete.splice(index, 1);
+                                    set_t_data([...dataDelete]);
+                                    resolve(true);
+                                })
+                                .catch((error: any) => {
+                                    console.error(error);
+                                    alert("Unable to remove this artist");
+                                    reject();
+                                });
+                        }),
+                }}
+                title={
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                        <h6
+                            className="MuiTypography-root MuiTypography-h6"
+                            style={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                display: "inline",
+                            }}
+                        >
+                            Artist
+                        </h6>
+                        <Button
+                            size="sm"
+                            style={{ marginLeft: "10px" }}
+                            onClick={() => {
+                                setshowAddModalBox(true);
+                            }}
+                        >
+                            <FontAwesomeIcon size="xs" icon={"plus"} />
+                        </Button>
+                    </div>
+                }
+                // title="Artist"
                 icons={TABLE_ICONS}
                 onRowClick={(event, rowData, togglePanel) => {
                     setRowData({
