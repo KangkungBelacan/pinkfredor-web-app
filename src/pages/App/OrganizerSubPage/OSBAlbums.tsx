@@ -1,5 +1,6 @@
 import MaterialTable from "material-table";
 import useAxios from "axios-hooks";
+import { axios } from "../../../global-imports";
 import TABLE_ICONS from "../../../components/generic/MaterialTableIcons";
 import { useEffect, useState } from "react";
 const OSBAlbums = () => {
@@ -124,15 +125,45 @@ const OSBAlbums = () => {
             editable={{
                 onRowAdd: (newData: any) =>
                     new Promise((resolve, reject) => {
-                        resolve(true);
+                        axios()
+                            .then((response: any) => {
+                                set_t_data([...t_data, newData]);
+                                resolve(true);
+                            })
+                            .catch((error: any) => {
+                                console.error(error);
+                                reject();
+                            });
                     }),
                 onRowUpdate: (newData: any, oldData: any) =>
                     new Promise((resolve, reject) => {
-                        resolve(true);
+                        axios()
+                            .then((response: any) => {
+                                const dataUpdate = [...t_data];
+                                const index = oldData.tableData.id;
+                                dataUpdate[index] = newData;
+                                set_t_data([...dataUpdate]);
+                                resolve(true);
+                            })
+                            .catch((error: any) => {
+                                console.error(error);
+                                reject();
+                            });
                     }),
                 onRowDelete: (oldData: any) =>
                     new Promise((resolve, reject) => {
-                        resolve(true);
+                        axios()
+                            .then((response: any) => {
+                                const dataDelete = [...t_data];
+                                const index = oldData.tableData.id;
+                                dataDelete.splice(index, 1);
+                                set_t_data([...dataDelete]);
+                                resolve(true);
+                            })
+                            .catch((error: any) => {
+                                console.error(error);
+                                reject();
+                            });
                     }),
             }}
         />
