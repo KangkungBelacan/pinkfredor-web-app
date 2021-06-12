@@ -3,7 +3,7 @@ import useAxios from "axios-hooks";
 import { axios } from "../../../global-imports";
 import TABLE_ICONS from "../../../components/generic/MaterialTableIcons";
 import { useEffect, useState } from "react";
-import { KeyboardReturnOutlined } from "@material-ui/icons";
+import AlbumDetailsPane from "../../../components/MainApp/OrganizerSubComponent/AlbumDetailsPane";
 const OSBAlbums = () => {
     const [
         { data: indexesData, loading: indexesLoading, error: indexesError },
@@ -121,7 +121,8 @@ const OSBAlbums = () => {
             data={t_data}
             icons={TABLE_ICONS}
             detailPanel={(rowData: any) => {
-                return <div>{JSON.stringify(rowData)}</div>;
+                // return <div>{JSON.stringify(rowData)}</div>;
+                return <AlbumDetailsPane rowData={rowData} />;
             }}
             editable={{
                 onRowAdd: (newData: any) =>
@@ -137,7 +138,10 @@ const OSBAlbums = () => {
                             ],
                         };
 
-                        if (newData.albumName === undefined || newData.albumName.trim() === "") {
+                        if (
+                            newData.albumName === undefined ||
+                            newData.albumName.trim() === ""
+                        ) {
                             alert("Album Name cannot be empty");
                             reject();
                             return;
@@ -149,7 +153,8 @@ const OSBAlbums = () => {
                             newData.yearReleased !== undefined &&
                             newData.yearReleased.trim() !== ""
                         ) {
-                            payload.albums[0].year_released = newData.yearReleased.trim();
+                            payload.albums[0].year_released =
+                                newData.yearReleased.trim();
                         }
 
                         if (artist_id !== undefined && artist_id !== "") {
@@ -180,14 +185,13 @@ const OSBAlbums = () => {
                     }),
                 onRowUpdate: (newData: any, oldData: any) =>
                     new Promise((resolve, reject) => {
-
                         let payload: any = {
                             album_name: newData.albumName,
-                            year_released: newData.yearReleased
+                            year_released: newData.yearReleased,
                         };
 
-                        if(newData.albumArtist !== undefined) {
-                            payload.artistid = newData.albumArtist 
+                        if (newData.albumArtist !== undefined) {
+                            payload.artistid = newData.albumArtist;
                         }
 
                         axios({
@@ -196,7 +200,7 @@ const OSBAlbums = () => {
                             headers: {
                                 Authorization: `Bearer ${localStorage.token}`,
                             },
-                            data: payload
+                            data: payload,
                         })
                             .then((response: any) => {
                                 const dataUpdate = [...t_data];
@@ -216,8 +220,8 @@ const OSBAlbums = () => {
                             url: `/api/indexes/albums/${oldData.album_id}`,
                             method: "DELETE",
                             headers: {
-                                Authorization: `Bearer ${localStorage.token}`
-                            }
+                                Authorization: `Bearer ${localStorage.token}`,
+                            },
                         })
                             .then((response: any) => {
                                 const dataDelete = [...t_data];
@@ -228,7 +232,9 @@ const OSBAlbums = () => {
                             })
                             .catch((error: any) => {
                                 console.error(error);
-                                alert("Something went wrong. Unable to delete album");
+                                alert(
+                                    "Something went wrong. Unable to delete album"
+                                );
                                 reject();
                             });
                     }),
