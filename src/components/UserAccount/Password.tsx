@@ -17,12 +17,10 @@ const Password = (props: any) => {
           <div className="flex">
             <div style={{margin:"10px"}}>
               <label className="Label" htmlFor="CurrentPass">Current Password</label><br/>
-              <button className="PassButton" onClick={visibility}>Show</button>
               <input className="Input" id="CurrentPass" type="text" placeholder="Current Password"></input>
             </div>
             <div style={{margin:"10px"}}>
               <label className="Label" htmlFor="NewPass">New Password</label><br/>
-              <button className="PassButton" onClick={visibility}>Show</button>
               <input className="Input" id="NewPass" type="text" placeholder="New Password"></input>
             </div>
           </div>

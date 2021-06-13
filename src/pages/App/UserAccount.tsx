@@ -1,7 +1,6 @@
 import { CategoriesTopBarItemProps } from "../../interface/components/MainApp/CategoriesTopBarItemProps";
 import CategoriesTopBar from "../../components/MainApp/CategoriesTopBar";
 import * as UserAccountComponent from "../../components/UserAccount";
-import { Route } from "react-router";
 import "./UserAccount.css";
 
 function UserAccount() {
@@ -24,7 +23,6 @@ function UserAccount() {
     ];
     return (
         <div className="mainapp-content-container">
-            <CategoriesTopBar items={items} />
             <div style={{height: "calc(85vh - 64px)", overflowY: "auto"}}>
                 <h1 className="Text" style={{ margin: "10px" }}>
                     Account Settings
