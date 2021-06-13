@@ -1,4 +1,5 @@
 import { Redirect } from "react-router-dom";
+import useAxios from "axios-hooks";
 import { useAxiosPOST } from "./../../global-imports";
 import { forwardRef, useState, useEffect } from "react";
 import MaterialTable from "material-table";
@@ -60,18 +61,79 @@ const song_columns = [
 ];
 
 const LinkGDrive = () => {
-    useEffect(() => {
-        getGDriveData(false);
-    }, []);
-
-    const axios = require("axios").default;
-    const [gDriveData, setGDriveData] = useState<any[]>([]);
-
+    const [tableData, setTableData] = useState<any>([]);
     const { data, loading } = useAxiosPOST(
         "/api/driveapi/authurl",
         {},
         localStorage.token
     );
+
+    const [
+        {
+            data: driveFilesData,
+            loading: driveFilesLoading,
+            error: driveFilesError,
+        },
+        driveFilesRefetch,
+    ] = useAxios({
+        url: "/api/driveapi/files/scan",
+        method: "POST",
+        data: {
+            folder_only: false,
+        },
+        headers: {
+            Authorization: `Bearer ${localStorage.token}`,
+        },
+    });
+
+    const [
+        {
+            data: indexFilesData,
+            loading: indexFilesLoading,
+            error: indexFilesError,
+        },
+        indexFilesRefetch,
+    ] = useAxios({
+        url: "/api/indexes/files",
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${localStorage.token}`,
+        },
+    });
+
+    useEffect(() => {
+        if (
+            driveFilesLoading ||
+            driveFilesError ||
+            indexFilesLoading ||
+            indexFilesError
+        )
+            return;
+        console.log(driveFilesData);
+        console.log(indexFilesData);
+        let driveFiles = driveFilesData.files;
+        let indexFiles = indexFilesData.files;
+        let newTableData = []; //Reformat data so it can be put into table and updated to user index.
+        let driveFilesKeys = Object.keys(driveFiles);
+        let indexFilesKeys = Object.keys(indexFiles);
+        for (let i = 0; i < driveFilesKeys.length; i++) {
+            if (indexFilesKeys.includes(driveFiles[driveFilesKeys[i]].id)) {
+                continue;
+            }
+            let currentItem = driveFiles[driveFilesKeys[i]];
+            let formattedItem = {
+                ...currentItem,
+                file_metadata: {
+                    album_track_no: 0,
+                    song_title: currentItem.fileName,
+                    song_artistid: "",
+                    song_albumid: "",
+                    song_genreid: "",
+                    song_comment: "",
+                },
+            };
+        }
+    }, [driveFilesData, driveFilesLoading, indexFilesData, indexFilesLoading]);
 
     if (loading) {
         return <div>Loading...</div>;
@@ -81,214 +143,15 @@ const LinkGDrive = () => {
         return <Redirect to="/" />;
     }
 
-    function getGDriveData(shouldReturn: boolean) {
-        return new Promise((resolve) => {
-            let postData = {
-                folder_only: false,
-            };
-
-            let axiosConfig = {
-                headers: {
-                    accept: "*/*",
-                    Authorization: "Bearer " + localStorage.token,
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-            };
-
-            axios
-                .post("/api/driveapi/files/scan", postData, axiosConfig)
-                .then(async (response: any) => {
-                    postData.folder_only = true;
-                    let folderData = await axios.post(
-                        "/api/driveapi/files/scan",
-                        postData,
-                        axiosConfig
-                    );
-                    let data: any = response.data.files;
-                    let dataKeys = Object.keys(data);
-                    for (let i = 0; i < dataKeys.length; i++) {
-                        let parentDirectory = "/";
-                        if (data[dataKeys[i]].parents.length != 0) {
-                            for (
-                                let j = data[dataKeys[i]].parents.length - 1;
-                                j > -1;
-                                j--
-                            ) {
-                                if (
-                                    data[dataKeys[i]].parents[j] !== undefined
-                                ) {
-                                    parentDirectory +=
-                                        folderData.data[
-                                            data[dataKeys[i]].parents[j]
-                                        ].folder_name + "/";
-                                }
-                            }
-                        }
-                        let titleSplit = data[dataKeys[i]].filename.split(".");
-                        data[dataKeys[i]] = {
-                            ...data[dataKeys[i]],
-                            title: titleSplit[0],
-                            mbSize:
-                                (data[dataKeys[i]].size / 1024 / 1024).toFixed(
-                                    2
-                                ) + " MB",
-                            parentDirectory: parentDirectory,
-                            format: titleSplit[1],
-                        };
-                    }
-
-                    if (shouldReturn) {
-                        resolve(data);
-                    } else {
-                        let dataValues: any = [];
-                        for (let i = 0; i < dataKeys.length; i++) {
-                            dataValues.push(data[dataKeys[i]]);
-                        }
-                        setGDriveData(dataValues);
-                    }
-                });
-        });
-    }
-
-    function updateUserIndex() {
-        axios({
-            url: "/api/indexes/files",
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${localStorage.token}`,
-            },
-        })
-            .then(async (response: any) => {
-                let existingIndexFiles = response.data.files;
-                let existingIndexFilesKeys = Object.keys(existingIndexFiles);
-
-                getGDriveData(true)
-                    .then((response: any) => {
-                        let driveFiles = response;
-                        let driveFilesKeys = Object.keys(driveFiles as any);
-                        let newFiles = [];
-                        for (let i = 0; i < driveFilesKeys.length; i++) {
-                            if (
-                                existingIndexFilesKeys.includes(
-                                    driveFilesKeys[i]
-                                )
-                            ) {
-                                // If file is already in index
-                                continue;
-                            } else if (
-                                !existingIndexFilesKeys.includes(
-                                    driveFilesKeys[i]
-                                )
-                            ) {
-                                // If file does not exist in index
-                                newFiles.push(driveFiles[driveFilesKeys[i]]);
-                            }
-                        }
-                        let newFilesObject = {};
-                        for (let i = 0; i < newFiles.length; i++) {
-                            let driveFile = newFiles[i];
-                            newFilesObject = {
-                                ...newFilesObject,
-                                [driveFile.id]: {
-                                    id: driveFile.id,
-                                    filename: driveFile.filename,
-                                    parents: driveFile.parents,
-                                    size: driveFile.size,
-                                    file_metadata: {
-                                        album_track_no: 0,
-                                        song_title: driveFile.title,
-                                        song_artistid: "",
-                                        song_albumid: "",
-                                        song_genreid: "",
-                                        song_comment: "",
-                                    },
-                                },
-                            };
-                        } // for loop ends
-                        newFilesObject = {
-                            files: {
-                                ...newFilesObject,
-                            },
-                        };
-                        axios({
-                            url: "/api/indexes/files",
-                            method: "POST",
-                            headers: {
-                                Authorization: `Bearer ${localStorage.token}`,
-                            },
-                            data: newFilesObject,
-                        })
-                            .then((response: any) => {
-                                console.log(response);
-                            })
-                            .catch((error: any) => {
-                                console.log(error);
-                            });
-                    })
-                    .catch((error: any) => {
-                        console.log(error);
-                    });
-            })
-            .catch((error: any) => {
-                getGDriveData(true).then((response: any) => {
-                    let driveFiles = response;
-                    let driveFilesKeys = Object.keys(driveFiles as any);
-                    let newFiles: any = [];
-                    let newFilesObject = {};
-                    for (let i = 0; i < newFiles.length; i++) {
-                        let driveFile = driveFiles[driveFilesKeys[i]];
-                        newFilesObject = {
-                            ...newFilesObject,
-                            [driveFile.id]: {
-                                id: driveFile.id,
-                                filename: driveFile.filename,
-                                parents: driveFile.parents,
-                                size: driveFile.size,
-                                file_metadata: {
-                                    album_track_no: 0,
-                                    song_title: driveFile.title,
-                                    song_artistid: "",
-                                    song_albumid: "",
-                                    song_genreid: "",
-                                    song_comment: "",
-                                },
-                            },
-                        };
-                    } // for loop ends
-                    newFilesObject = {
-                        files: {
-                            ...newFilesObject,
-                        },
-                    };
-                    axios({
-                        url: "/api/indexes/files",
-                        method: "POST",
-                        headers: {
-                            Authorization: `Bearer ${localStorage.token}`,
-                        },
-                        data: newFilesObject,
-                    })
-                        .then((response: any) => {
-                            console.log(response);
-                        })
-                        .catch((error: any) => {
-                            console.log(error);
-                        });
-                });
-            });
-    }
-
     return (
         <div>
             <a href={(data as any).url} target="_blank" rel="noreferrer">
                 <button>Click here to link GDrive</button>
             </a>
-            <button onClick={() => getGDriveData(false)}>
+            <button onClick={() => driveFilesRefetch()}>
                 Update GDrive data
             </button>
-            <button onClick={updateUserIndex}>
-                Update user index with new GDdrive data
-            </button>
+            <button>Update user index with new GDdrive data</button>
             <div
                 className="add-songs"
                 style={{ display: "flex", flexDirection: "column" }}
@@ -296,8 +159,8 @@ const LinkGDrive = () => {
                 <MaterialTable
                     icons={tableIcons}
                     columns={song_columns}
-                    data={gDriveData}
-                    title="Music files in your google drive"
+                    data={tableData}
+                    title="New Music files in your google drive that don't exist in your file index"
                     actions={[
                         {
                             icon: MoreVert,
