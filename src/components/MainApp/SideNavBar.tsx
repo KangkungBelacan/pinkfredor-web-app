@@ -23,20 +23,23 @@ function SideNavBar(props: any): JSX.Element {
                 <div className="sidebar-header">
                     <div className="row">
                         <div className="col-md-12 col-8">
-                            <h3 style={{textAlign:"center"}}>Pinkfredor</h3>
-                            <img src={Profile} alt="Avatar" className="center" style={{width:"40%",borderRadius:"50%"}}></img>
-                            <h3 style={{fontSize:"20px",textAlign:"center"}}>Looz</h3>
+                            <div className="flex">
+                                <div>
+                                    <h3 style={{textAlign:"center"}}>Pinkfredor</h3><br/>
+                                    <img src={Profile} alt="Avatar" className="center" style={{borderRadius:"50%"}}></img>
+                                    <h3 style={{fontSize:"20px",textAlign:"center"}}>Looz</h3>
+                                </div>
+                            </div>
                             <nav className="flex">
                                 <a href="http://localhost:3000/UserAccont" className="Nav-Items-Container" style={{margin:"10px"}}>Settings</a>
                                 <div className="Nav-Items-Container" style={{margin:"10px"}}>Log Out</div>
-                            </nav>                       
+                            </nav>
                         </div>
                         <div className="col-4 d-md-none d-block" style={{textAlign: "right", cursor: "pointer"}} onClick={() => { props.setNavBarDisplay(false); }}>
                             <FontAwesomeIcon icon="times"/>
                         </div>
                     </div>
                 </div>
-
                 <ul className="list-unstyled components">
                     <li>
                         <Link
@@ -53,6 +56,22 @@ function SideNavBar(props: any): JSX.Element {
                                 <FontAwesomeIcon icon="vial" />
                                 <span className="item-container-text fs-lg">
                                     Test Page
+                                </span>
+                            </div>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to="/app/user"
+                            style={{textDecoration: "none",color: "inherit"}}>
+                            <div
+                                className={
+                                    current_path.startsWith("/app/user")
+                                        ? "item-container selected"
+                                        : "item-container"}>
+                                <FontAwesomeIcon icon="user"/>
+                                <span className="item-container-text fs-lg">
+                                    User Page
                                 </span>
                             </div>
                         </Link>

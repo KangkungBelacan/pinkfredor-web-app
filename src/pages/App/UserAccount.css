@@ -73,6 +73,7 @@
   }
   
   .Nav-Items-Container {
+    border-bottom: 3px #34363d solid;
     color: #ffffff;
     padding: 2px 10px 2px 10px;
     text-decoration: none;
@@ -99,3 +100,11 @@
   .Text {
     color: rgb(255, 255, 255);
   }
+
+  .user-content-container {
+    /* display: flex; */
+    overflow-y: auto;
+    align-items: stretch;
+    flex-direction: row;
+    width: 100%;
+}
