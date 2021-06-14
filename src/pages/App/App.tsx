@@ -15,16 +15,13 @@ function App() {
     return (
         <div className="mainapp-body">
             <MusicPlayerContext.Provider value={ContextValues}>
+                <MainAppComponent.SideNavBar
+                    isMobile={isMobile}
+                    setNavBarDisplay={setNavBarDisplay}
+                    navBar={showNavBar}
+                />
                 <div className="mainapp-grid-container">
-                    <MainAppComponent.SideNavBar
-                        isMobile={isMobile}
-                        setNavBarDisplay={setNavBarDisplay}
-                        navBar={showNavBar}
-                    />
-                    {/* <MainAppComponent.Content
-                        navBarState={showNavBar}
-                        setNavBar={setNavBarDisplay}
-                    /> */}
+                    <div className="d-md-block d-none"></div>
                     <div
                         className="container-fluid"
                         style={{
