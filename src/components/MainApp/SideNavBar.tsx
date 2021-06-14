@@ -11,7 +11,7 @@ function SideNavBar(props: any): JSX.Element {
             style={{ 
                 marginLeft: props.navBar && props.isMobile ? "250px" : "", 
                 position: props.isMobile ? "fixed" : "static", 
-                height: "85vh",
+                // height: "85vh",
                 zIndex: props.isMobile ? 1000 : 1
             }}
         >
