@@ -75,6 +75,10 @@
         flex-direction: row;
         justify-content: flex-end;
     }
+
+    .mainapp-grid-container {
+        grid-template-columns: 1fr;
+    }
 }
 
 .player-controls-buttons {

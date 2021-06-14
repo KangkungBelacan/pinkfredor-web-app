@@ -28,7 +28,7 @@ function App() {
                     <div
                         className="container-fluid"
                         style={{
-                            // width: isMobile ? "100%" : "calc(100% - 250px)",
+                            overflowX: "auto",
                         }}
                     >
                         <div className="row d-md-none d-block">
