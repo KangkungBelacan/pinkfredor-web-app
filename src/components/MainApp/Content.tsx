@@ -1,5 +1,5 @@
 // import ReactDOM from 'react-dom'
-import { forwardRef, useState, useEffect } from "react";
+import React, { forwardRef, useState, useEffect } from "react";
 import "./Content.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MaterialTable from "material-table";
@@ -22,10 +22,11 @@ import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import MoreVert from "@material-ui/icons/MoreVert";
 
-import PlayArrow from "@material-ui/icons/PlayArrow";
-import Queue from "@material-ui/icons/Queue";
+// import PlayArrow from "@material-ui/icons/PlayArrow";
+// import Queue from "@material-ui/icons/Queue";
 
 import { Icons } from "material-table";
+import MusicPlayerContext from "../../context/MusicPlayerContext";
 
 const tableIcons: Icons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -62,7 +63,21 @@ function Content(props: any): JSX.Element {
 
     const axios = require("axios").default;
 
+    const {
+        status,
+        setStatus,
+        nowPlayingURL,
+        setNowPlayingURL,
+        progress,
+        setProgress,
+        volume,
+        setVolume,
+        queue,
+        setQueue,
+    } = React.useContext(MusicPlayerContext);
+
     const song_columns = [
+        { title: "file_id", field: "file_id", hidden: true },
         { title: "Title", field: "title" },
         { title: "Length", field: "length", editable: "never" as const },
         { title: "Artist", field: "artist" },
@@ -99,7 +114,9 @@ function Content(props: any): JSX.Element {
                     } else {
                         let dataValues: any = [];
                         for (let i = 0; i < dataKeys.length; i++) {
-                            dataValues.push(data[dataKeys[i]]);
+                            let insert_this_data = data[dataKeys[i]];
+                            insert_this_data.file_id = dataKeys[i];
+                            dataValues.push(insert_this_data);
                         }
                         setSongsTableData(dataValues);
                         console.log(dataValues);
@@ -116,7 +133,7 @@ function Content(props: any): JSX.Element {
 
     return (
         <div
-            className="container-fluid mainapp-content-container"
+            className="container-fluid mainapp-content-container
             style={{ color: "#ffffff" }}
         >
             <div className="row content-top-bar col-12">
@@ -192,14 +209,27 @@ function Content(props: any): JSX.Element {
                             {
                                 icon: MoreVert,
                                 tooltip: "More Options",
-                                onClick: (event, rowData) => {
-                                    console.log(rowData);
-                                    window.alert(
-                                        "You clicked on " +
-                                            (rowData as any).title +
-                                            " Action: " +
-                                            event.currentTarget.id
+                                onClick: (event, rowData: any) => {
+                                    const possibleAction = [
+                                        "addToQ",
+                                        "playNext",
+                                        "addToPlaylist",
+                                        "play",
+                                    ];
+
+                                    setProgress(0);
+                                    setNowPlayingURL(
+                                        `/api/driveapi/files/download?token=${localStorage.token}&fileid=${rowData.file_id}`
                                     );
+                                    setStatus("PLAYING");
+
+                                    // console.log(rowData);
+                                    // window.alert(
+                                    //     "You clicked on " +
+                                    //         (rowData as any).title +
+                                    //         " Action: " +
+                                    //         event.currentTarget.id
+                                    // );
                                 },
                             },
                         ]}
