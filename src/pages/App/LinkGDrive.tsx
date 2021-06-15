@@ -58,6 +58,7 @@ const song_columns = [{ title: "Name", field: "file_metadata.song_title" }];
 
 const LinkGDrive = () => {
     const [tableData, setTableData] = useState<any>([]);
+
     const { data, loading } = useAxiosPOST(
         "/api/driveapi/authurl",
         {},
@@ -111,15 +112,11 @@ const LinkGDrive = () => {
         formattedData = {
             files: { ...formattedData },
         };
-        axios.post(
-            "/api/indexes/files",
-            { data },
-            {
-                headers: {
-                    Authorization: `Bearer ${localStorage.token}`,
-                },
-            }
-        );
+        axios.post("/api/indexes/files", formattedData, {
+            headers: {
+                Authorization: `Bearer ${localStorage.token}`,
+            },
+        });
     }
 
     useEffect(() => {
