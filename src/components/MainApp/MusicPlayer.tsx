@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlayCircle, faPauseCircle, faStepBackward, faStepForward, faForward, faBackward, faBars, faVolumeUp } from '@fortawesome/free-solid-svg-icons'
+import { faPlayCircle, faPauseCircle, faStepBackward, faStepForward, faForward, faBackward, faBars, faVolumeUp, faRandom, faSync} from '@fortawesome/free-solid-svg-icons'
 import { useWindowSize } from "../../global-imports";
 import MusicPlayerContext from "../../context/MusicPlayerContext";
 import Sound from "react-sound";
@@ -15,6 +15,8 @@ const playCircle = <FontAwesomeIcon icon={faPlayCircle} />
 const pauseCircle = <FontAwesomeIcon icon={faPauseCircle} />
 const bars = <FontAwesomeIcon icon={faBars} />
 const volumeUp = <FontAwesomeIcon icon={faVolumeUp} />
+const ShuffleIcon = <FontAwesomeIcon icon={faRandom} />
+const LoopIcon = <FontAwesomeIcon icon={faSync} />
 
 //Music Player Component.
 function MusicPlayer(props: any): JSX.Element {
@@ -162,13 +164,37 @@ function MusicPlayer(props: any): JSX.Element {
         return ret;
     }
 
+    const Shuffle = () => {
+        var music = ['song 1','song 2','song 3','song 4','song 5']
+        var random = Math.floor(Math.random() * music.length);
+        var string = music[0]
+        if (music[random] != music[0]) {
+            music[0] = music[random];
+            music[random] = string
+            window.alert(music)
+        }
+        else {
+            window.alert('try it again!');
+        }  
+    }
+
+    const Loop = () => {
+        var music = ['Hello','enjoy','the','music','thanks']
+        var string = ''
+        for (let i=0; i < music.length; i++) {
+            string += music[i]+' ';
+        window.alert(string)
+        };
+    }
+
     const parent_controls = {
         play_song,
         seek_back,
         seek_forward,
         prev_song,
         next_song,
-        change_song_in_queue,stop_song};
+        change_song_in_queue,
+        stop_song}
 
     return (
         <div>
@@ -204,12 +230,14 @@ function MusicPlayer(props: any): JSX.Element {
                     </div>
                     <div className="player-controls col-md-6 col-5">
                         <div className="player-controls-buttons">
+                            <button className="player-controls-button-misc d-md-inline-block d-none" onClick={Shuffle}>{ShuffleIcon}</button>
                             <button className="player-controls-button-misc d-md-inline-block d-none" onClick={prev_song}>{stepBackward}</button>
                             <button className="player-controls-button-misc d-md-inline-block d-none" onClick={seek_back}>{backward}</button>
                             <button className="player-controls-button-play" onClick={play_song}>{status === "PLAYING" ? pauseCircle : playCircle}</button>
                             <button className="player-controls-button-misc d-md-inline-block d-none" onClick={seek_forward}>{forward}</button>
                             <button className="player-controls-button-misc" onClick={next_song}>{stepForward}</button>
                             <button className="player-controls-button-misc d-md-none d-inline-block" onClick={() => setshowNowPlayingQueuePopup(true)}>{bars}</button>
+                            <button className="player-controls-button-misc d-md-inline-block d-none" onClick={Loop}>{LoopIcon}</button>
                         </div>
                         <div className="player-controls-progress-bar d-md-flex d-none">
                             <p className="player-progress">{format(progress)}</p>
