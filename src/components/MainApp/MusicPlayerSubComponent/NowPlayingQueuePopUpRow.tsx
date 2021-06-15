@@ -99,10 +99,10 @@ const NowPlayingQueuePopUpRow = (props: NowPlayingQueuePopUpRowProps) => {
                         onClick={change_song}
                     >
                         <div className="now-playing-queue-item-content-title">
-                            {props.song_title}
+                            {props.song_title === undefined || props.song_title === "" ? "Unknown Title" : props.song_title}
                         </div>
                         <div className="now-playing-queue-item-content-artist">
-                            {props.song_artist}
+                            {props.song_artist === undefined || props.song_artist === "" ? "Unknown Artist" : props.song_artist}
                         </div>
                     </div>
                     <div
