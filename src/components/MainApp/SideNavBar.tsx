@@ -8,35 +8,71 @@ function SideNavBar(props: any): JSX.Element {
     return (
         <div
             className="sidebar-container"
-            style={{ 
-                marginLeft: props.navBar && props.isMobile ? "250px" : "", 
-                position: props.isMobile ? "fixed" : "static", 
-                height: "85vh",
-                zIndex: props.isMobile ? 1000 : 1
+            style={{
+                // marginLeft: props.navBar && props.isMobile ? "250px" : "",
+                position: "fixed",
+                height: "calc(100vh - 100px)",
+                // height: "85vh",
+                zIndex: props.isMobile ? 1000 : 1,
             }}
         >
             <nav
                 id="mainapp-sidebar"
                 className=""
-                style={{ overflowY: "auto" }}
+                style={{
+                    overflowY: "auto",
+                    marginLeft: props.navBar && props.isMobile ? "0px" : "",
+                }}
             >
                 <div className="sidebar-header">
                     <div className="row">
                         <div className="col-md-12 col-8">
                             <div className="flex">
                                 <div>
-                                    <h3 style={{textAlign:"center"}}>Pinkfredor</h3><br/>
-                                    <img src={Profile} alt="Avatar" className="center" style={{borderRadius:"50%"}}></img>
-                                    <h3 style={{fontSize:"20px",textAlign:"center"}}>Looz</h3>
+                                    <h3 style={{ textAlign: "center" }}>
+                                        Pinkfredor
+                                    </h3>
+                                    <br />
+                                    <img
+                                        src={Profile}
+                                        alt="Avatar"
+                                        className="center"
+                                        style={{ borderRadius: "50%" }}
+                                    ></img>
+                                    <h3
+                                        style={{
+                                            fontSize: "20px",
+                                            textAlign: "center",
+                                        }}
+                                    >
+                                        Looz
+                                    </h3>
                                 </div>
                             </div>
                             <nav className="flex">
-                                <a href="http://localhost:3000/UserAccont" className="Nav-Items-Container" style={{margin:"10px"}}>Settings</a>
-                                <div className="Nav-Items-Container" style={{margin:"10px"}}>Log Out</div>
+                                <a
+                                    href="http://localhost:3000/UserAccont"
+                                    className="Nav-Items-Container"
+                                    style={{ margin: "10px" }}
+                                >
+                                    Settings
+                                </a>
+                                <div
+                                    className="Nav-Items-Container"
+                                    style={{ margin: "10px" }}
+                                >
+                                    Log Out
+                                </div>
                             </nav>
                         </div>
-                        <div className="col-4 d-md-none d-block" style={{textAlign: "right", cursor: "pointer"}} onClick={() => { props.setNavBarDisplay(false); }}>
-                            <FontAwesomeIcon icon="times"/>
+                        <div
+                            className="col-4 d-md-none d-block"
+                            style={{ textAlign: "right", cursor: "pointer" }}
+                            onClick={() => {
+                                props.setNavBarDisplay(false);
+                            }}
+                        >
+                            <FontAwesomeIcon icon="times" />
                         </div>
                     </div>
                 </div>
@@ -63,13 +99,16 @@ function SideNavBar(props: any): JSX.Element {
                     <li>
                         <Link
                             to="/app/user"
-                            style={{textDecoration: "none",color: "inherit"}}>
+                            style={{ textDecoration: "none", color: "inherit" }}
+                        >
                             <div
                                 className={
                                     current_path.startsWith("/app/user")
                                         ? "item-container selected"
-                                        : "item-container"}>
-                                <FontAwesomeIcon icon="user"/>
+                                        : "item-container"
+                                }
+                            >
+                                <FontAwesomeIcon icon="user" />
                                 <span className="item-container-text fs-lg">
                                     User Page
                                 </span>

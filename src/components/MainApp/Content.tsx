@@ -1,5 +1,6 @@
 // import ReactDOM from 'react-dom'
-import { forwardRef, useState, useEffect } from "react";
+import React, { forwardRef, useState, useEffect } from "react";
+import useAxios from "axios-hooks";
 import "./Content.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MaterialTable from "material-table";
@@ -22,10 +23,11 @@ import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import MoreVert from "@material-ui/icons/MoreVert";
 
-import PlayArrow from "@material-ui/icons/PlayArrow";
-import Queue from "@material-ui/icons/Queue";
+// import PlayArrow from "@material-ui/icons/PlayArrow";
+// import Queue from "@material-ui/icons/Queue";
 
 import { Icons } from "material-table";
+import MusicPlayerContext from "../../context/MusicPlayerContext";
 
 const tableIcons: Icons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -56,63 +58,51 @@ const tableIcons: Icons = {
 interface Element {}
 
 function Content(props: any): JSX.Element {
-    useEffect(() => {
-        getUserIndex(false);
-    }, []);
-
-    const axios = require("axios").default;
+    const {
+        status,
+        setStatus,
+        nowPlayingURL,
+        setNowPlayingURL,
+        progress,
+        setProgress,
+        volume,
+        setVolume,
+        queue,
+        setQueue,
+    } = React.useContext(MusicPlayerContext);
 
     const song_columns = [
-        { title: "Title", field: "title" },
+        { title: "file_id", field: "id", hidden: true },
+        { title: "Title", field: "file_metadata.song_title" },
         { title: "Length", field: "length", editable: "never" as const },
-        { title: "Artist", field: "artist" },
-        { title: "Album", field: "album" },
+        { title: "Artist", field: "file_metadata.song_artist" },
+        { title: "Album", field: "file_metadata.song_album" },
     ];
 
-    function getUserIndex(shouldReturn: boolean) {
-        return new Promise((resolve) => {
-            axios({
-                url: "/api/indexes/files",
-                method: "GET",
-                headers: {
-                    Authorization: `Bearer ${localStorage.token}`,
-                },
-            })
-                .then(async (response: any) => {
-                    let data: any = response.data.files;
-                    let dataKeys = Object.keys(data);
-                    for (let i = 0; i < dataKeys.length; i++) {
-                        let titleSplit = data[dataKeys[i]].filename.split(".");
-                        data[dataKeys[i]] = {
-                            ...data[dataKeys[i]],
-                            title: titleSplit[0],
-                            mbSize:
-                                (data[dataKeys[i]].size / 1024 / 1024).toFixed(
-                                    2
-                                ) + " MB",
-                            format: titleSplit[1],
-                        };
-                    }
-
-                    if (shouldReturn) {
-                        resolve(data);
-                    } else {
-                        let dataValues: any = [];
-                        for (let i = 0; i < dataKeys.length; i++) {
-                            dataValues.push(data[dataKeys[i]]);
-                        }
-                        setSongsTableData(dataValues);
-                        console.log(dataValues);
-                    }
-                })
-                .catch((error: any) => {
-                    console.log(error);
-                });
-        });
-    }
-
     const [topBarSelection, setTopBar] = useState(0);
-    const [songsTableData, setSongsTableData] = useState([]);
+    const [tableData, setTableData] = useState<any>([]);
+
+    const [
+        {
+            data: indexFilesData,
+            loading: indexFilesLoading,
+            error: indexFilesError,
+        },
+        indexFilesRefetch,
+    ] = useAxios({
+        url: "/api/indexes/files",
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${localStorage.token}`,
+        },
+    });
+
+    useEffect(() => {
+        if (indexFilesLoading || indexFilesError) return;
+
+        let indexFiles = Object.values(indexFilesData.files);
+        setTableData(indexFiles);
+    }, [indexFilesData, indexFilesRefetch]);
 
     return (
         <div
@@ -186,20 +176,32 @@ function Content(props: any): JSX.Element {
                     <MaterialTable
                         icons={tableIcons}
                         columns={song_columns}
-                        data={songsTableData}
+                        data={tableData}
                         title="Songs"
                         actions={[
                             {
                                 icon: MoreVert,
                                 tooltip: "More Options",
-                                onClick: (event, rowData) => {
-                                    console.log(rowData);
-                                    window.alert(
-                                        "You clicked on " +
-                                            (rowData as any).title +
-                                            " Action: " +
-                                            event.currentTarget.id
+                                onClick: (event, rowData: any) => {
+                                    const possibleAction = [
+                                        "addToQ",
+                                        "playNext",
+                                        "addToPlaylist",
+                                        "play",
+                                    ];
+                                    setProgress(0);
+                                    setNowPlayingURL(
+                                        `/api/driveapi/files/download?token=${localStorage.token}&fileid=${rowData.id}`
                                     );
+                                    setStatus("PLAYING");
+
+                                    // console.log(rowData);
+                                    // window.alert(
+                                    //     "You clicked on " +
+                                    //         (rowData as any).title +
+                                    //         " Action: " +
+                                    //         event.currentTarget.id
+                                    // );
                                 },
                             },
                         ]}

@@ -23,7 +23,7 @@ function UserAccount() {
     ];
     return (
         <div className="mainapp-content-container">
-            <div style={{height: "calc(85vh - 64px)", overflowY: "auto"}}>
+            <div style={{height: "85vh", overflowY: "auto"}}>
                 <h1 className="Text" style={{ margin: "10px" }}>
                     Account Settings
                 </h1>
