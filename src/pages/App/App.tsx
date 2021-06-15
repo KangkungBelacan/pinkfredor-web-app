@@ -50,11 +50,8 @@ function App() {
                             <Route
                                 path="/app"
                                 exact
-                                component={() => (
-                                    <MainAppComponent.Content
-                                        navBarState={showNavBar}
-                                        setNavBar={setNavBarDisplay}
-                                    />
+                                render={() => (
+                                    <MainAppComponent.Content />
                                 )}
                             />
                             <Route

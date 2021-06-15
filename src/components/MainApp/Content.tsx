@@ -82,6 +82,7 @@ function Content(props: any): JSX.Element {
 
     const [topBarSelection, setTopBar] = useState(0);
     const [tableData, setTableData] = useState<any>([]);
+    const [pageLoading, setPageLoading] = useState(true)
 
     const [
         {
@@ -99,11 +100,12 @@ function Content(props: any): JSX.Element {
     });
 
     useEffect(() => {
-        if (indexFilesLoading || indexFilesError) return;
+        if (indexFilesLoading || indexFilesError || !pageLoading) return;
 
         let indexFiles = Object.values(indexFilesData.files);
+        setPageLoading(false);
         setTableData(indexFiles);
-    }, [indexFilesData, indexFilesRefetch]);
+    }, [indexFilesData, indexFilesLoading, indexFilesError, pageLoading]);
 
     const matTableActionOnClick = (event:any, rowData: any) => {
         const possibleAction = [
@@ -147,14 +149,14 @@ function Content(props: any): JSX.Element {
         >
             <div className="row content-top-bar col-12">
                 {/* Only show when screen size is small */}
-                <div className="d-sm-block d-md-none col-sm-2 col-12">
+                {/* <div className="d-sm-block d-md-none col-sm-2 col-12">
                     <div
                         style={{ padding: "10px", cursor: "pointer" }}
                         onClick={() => props.setNavBar(!props.navBarState)}
                     >
                         <FontAwesomeIcon icon="align-justify" />
                     </div>
-                </div>
+                </div> */}
                 <div className="col-sm-8 col-md-10 col-12">
                     <div
                         className={
@@ -290,4 +292,4 @@ function Content(props: any): JSX.Element {
         </div>
     );
 }
-export default Content;
+export default React.memo(Content);
