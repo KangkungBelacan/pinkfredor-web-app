@@ -1,5 +1,4 @@
 import { Redirect } from "react-router-dom";
-import axios from "axios";
 import useAxios from "axios-hooks";
 import { useAxiosPOST } from "./../../global-imports";
 import { forwardRef, useState, useEffect } from "react";
@@ -54,7 +53,12 @@ const tableIcons: Icons = {
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-const song_columns = [{ title: "Name", field: "file_metadata.song_title" }];
+const song_columns = [
+    { title: "Name", field: "title" },
+    { title: "File size", field: "size" },
+    { title: "Parent directory", field: "parentDirectory" },
+    { title: "Format", field: "format" },
+];
 
 const LinkGDrive = () => {
     const [tableData, setTableData] = useState<any>([]);
@@ -97,31 +101,6 @@ const LinkGDrive = () => {
         },
     });
 
-    function updateUserIndex(data: any) {
-        if (data.length === 0) return;
-
-        let formattedData = {};
-        for (let i = 0; i < data.length; i++) {
-            let currentID = data[i].id;
-            formattedData = {
-                ...formattedData,
-                [currentID]: data[i],
-            };
-        }
-        formattedData = {
-            files: { ...formattedData },
-        };
-        axios.post(
-            "/api/indexes/files",
-            { data },
-            {
-                headers: {
-                    Authorization: `Bearer ${localStorage.token}`,
-                },
-            }
-        );
-    }
-
     useEffect(() => {
         if (
             driveFilesLoading ||
@@ -130,17 +109,15 @@ const LinkGDrive = () => {
             indexFilesError
         )
             return;
+        console.log(driveFilesData);
+        console.log(indexFilesData);
         let driveFiles = driveFilesData.files;
         let indexFiles = indexFilesData.files;
         let newTableData = []; //Reformat data so it can be put into table and updated to user index.
         let driveFilesKeys = Object.keys(driveFiles);
         let indexFilesKeys = Object.keys(indexFiles);
-        let onlyNewFiles = true;
         for (let i = 0; i < driveFilesKeys.length; i++) {
-            if (
-                indexFilesKeys.includes(driveFiles[driveFilesKeys[i]].id) &&
-                onlyNewFiles
-            ) {
+            if (indexFilesKeys.includes(driveFiles[driveFilesKeys[i]].id)) {
                 continue;
             }
             let currentItem = driveFiles[driveFilesKeys[i]];
@@ -148,16 +125,14 @@ const LinkGDrive = () => {
                 ...currentItem,
                 file_metadata: {
                     album_track_no: 0,
-                    song_title: currentItem.filename.split(".")[0],
+                    song_title: currentItem.fileName,
                     song_artistid: "",
                     song_albumid: "",
                     song_genreid: "",
                     song_comment: "",
                 },
             };
-            newTableData.push(formattedItem);
         }
-        setTableData(newTableData);
     }, [driveFilesData, driveFilesLoading, indexFilesData, indexFilesLoading]);
 
     if (loading) {
@@ -176,13 +151,7 @@ const LinkGDrive = () => {
             <button onClick={() => driveFilesRefetch()}>
                 Update GDrive data
             </button>
-            <button
-                onClick={() => {
-                    updateUserIndex(tableData);
-                }}
-            >
-                Update user index with new GDdrive data
-            </button>
+            <button>Update user index with new GDdrive data</button>
             <div
                 className="add-songs"
                 style={{ display: "flex", flexDirection: "column" }}

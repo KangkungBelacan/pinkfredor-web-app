@@ -37,8 +37,10 @@ const OSBGenres = (props: any) => {
                 genre_name: genresData.genres[genreIds[i]].genre_name,
             });
         }
-        set_t_data(inner_t_data);
-    }, [genresData, genresLoading]);
+        if (t_data.length === 0) {
+            set_t_data(inner_t_data);
+        }
+    }, [t_data, genresData, genresLoading]);
 
     return genresLoading ? (
         <div>Loading...</div>

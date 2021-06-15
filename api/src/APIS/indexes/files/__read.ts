@@ -20,11 +20,8 @@ const __read = async (req:any, res:any) => {
 
     let doc = await db.collection("index-files").doc(req.app_user.id).get();
     if(!doc.exists) {
-        // res.status(404);
-        // res.json({message: "Not Found"});
-        res.json({
-            files: {}
-        });
+        res.status(404);
+        res.json({message: "Not Found"});
         return;
     }
 

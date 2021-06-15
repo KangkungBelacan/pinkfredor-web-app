@@ -2,7 +2,6 @@
     display: flex;
     align-items: stretch;
     transition: margin-left .3s;
-    overflow-y: auto;
 }
 
 .fs-sm {

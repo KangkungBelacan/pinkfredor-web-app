@@ -144,6 +144,7 @@ const OSBTracks = (props: GenericProps) => {
         <div>Loading...</div>
     ) : (
         <div
+            style={{ maxWidth: "100%" }}
             className={props.className === undefined ? "" : props.className}
         >
             <div>

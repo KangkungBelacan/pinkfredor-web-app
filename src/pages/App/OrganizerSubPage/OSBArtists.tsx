@@ -42,9 +42,10 @@ const OSBArtists = (props: any) => {
                 ),
             });
         }
-        
-        set_t_data(inner_t_data);
-    }, [artistsData, artistsLoading]);
+        if (t_data.length === 0) {
+            set_t_data(inner_t_data);
+        }
+    }, [t_data, artistsData, artistsLoading]);
 
     return artistsLoading ? (
         <div>Loading...</div>

@@ -1,15 +1,10 @@
 .organizer-body {
     color:white;
+    height: 85vh;
 }
 
 .organizer-subpage-content-container {
     overflow-y: auto;
-    height: calc(100vh - 64px - 100px);
+    height: calc(100% - 64px);
     padding-top: 12px;
-}
-
-@media only screen and (max-width: 768px) {
-    .organizer-subpage-content-container {
-        height: calc(100vh - 84px - 100px)
-    }
 }

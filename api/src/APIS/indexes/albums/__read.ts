@@ -7,6 +7,8 @@ const __schema_read:RequestSchema = {
     content: {}
 }
 
+
+
 const __read = async (req:any, res:any) => {
     if(!verify_request_body(req, res, __schema_read)) {
         return;
@@ -15,9 +17,8 @@ const __read = async (req:any, res:any) => {
     let doc = db.collection("index-album").doc(req.app_user.id);
     let doc_get =await doc.get();
     if(!doc_get.exists) {
-        res.json({
-            albums: {}
-        });
+        res.status(404);
+        res.json({message: "User not found"})
         return;
     }
 
