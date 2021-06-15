@@ -1,19 +1,6 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlayCircle, faPauseCircle, faStepBackward, faStepForward, faForward, faBackward, faBars, faVolumeUp, faRandom, faSync} from '@fortawesome/free-solid-svg-icons'
-import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faPlayCircle,
-    faPauseCircle,
-    faStepBackward,
-    faStepForward,
-    faForward,
-    faBackward,
-    faBars,
-    faVolumeUp,
-} from "@fortawesome/free-solid-svg-icons";
->>>>>>> 182d8a9a65197822b5e54d0e4d5884b3d7ad2daa
 import { useWindowSize } from "../../global-imports";
 import MusicPlayerContext from "../../context/MusicPlayerContext";
 import Sound from "react-sound";
