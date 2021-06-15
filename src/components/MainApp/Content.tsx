@@ -27,7 +27,7 @@ import MoreVert from "@material-ui/icons/MoreVert";
 // import Queue from "@material-ui/icons/Queue";
 
 import { Icons } from "material-table";
-import MusicPlayerContext from "../../context/MusicPlayerContext";
+// import MusicPlayerContext from "../../context/MusicPlayerContext";
 import { MusicQueueItem } from "../../interface/context/MusicQueueItem";
 
 const tableIcons: Icons = {
@@ -59,18 +59,18 @@ const tableIcons: Icons = {
 interface Element {}
 
 function Content(props: any): JSX.Element {
-    const {
-        status,
-        setStatus,
-        nowPlayingURL,
-        setNowPlayingURL,
-        progress,
-        setProgress,
-        volume,
-        setVolume,
-        queue,
-        setQueue,
-    } = React.useContext(MusicPlayerContext);
+    // const {
+    //     status,
+    //     setStatus,
+    //     nowPlayingURL,
+    //     setNowPlayingURL,
+    //     progress,
+    //     setProgress,
+    //     volume,
+    //     setVolume,
+    //     queue,
+    //     setQueue,
+    // } = React.useContext(MusicPlayerContext);
 
     const song_columns = [
         { title: "file_id", field: "id", hidden: true },
@@ -126,12 +126,12 @@ function Content(props: any): JSX.Element {
                 song_artist: tableData[i].file_metadata.song_artist
             });
         }
-        setQueue(new_queue);
-        setProgress(0);
-        setNowPlayingURL(
+        props.setQueue(new_queue);
+        props.setProgress(0);
+        props.setNowPlayingURL(
             `/api/driveapi/files/download?token=${localStorage.token}&fileid=${rowData.id}`
         );
-        setStatus("PLAYING");
+        props.setStatus("PLAYING");
 
         // console.log(rowData);
         // window.alert(

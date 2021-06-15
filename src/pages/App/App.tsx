@@ -7,11 +7,40 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Route } from "react-router";
 import { useMediaQuery } from "react-responsive";
 import MusicPlayerContext from "../../context/MusicPlayerContext";
-import MusicPlayerContextDefaultValues from "../../context/MusicPlayerContextDefaultValues";
+// import MusicPlayerContextDefaultValues from "../../context/MusicPlayerContextDefaultValues";
+import { ReactSoundProps } from "react-sound";
+import { MusicQueueItem } from "../../interface/context/MusicQueueItem";
 function App() {
     const [showNavBar, setNavBarDisplay] = useState(false);
     const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-    const ContextValues = MusicPlayerContextDefaultValues();
+    // const ContextValues = MusicPlayerContextDefaultValues();
+    const [status, setStatus] = useState<ReactSoundProps["playStatus"]>("PAUSED");
+    const [nowPlayingURL, setNowPlayingURL] = useState("");
+    const [progress, setProgress] = useState(0);
+    const [volume, setVolume] = useState(100);
+    const [queue, setQueue] = useState(([
+        // {
+        //     item_id: "kanolove",
+        //     current: false,
+        //     playingURL: `/api/driveapi/files/download?token=${localStorage.token}&fileid=1fFEGOusvSIFTA141ytEkwzrY_B1MkYAu`,
+        //     song_title: "Santuary",
+        //     song_artist: "Kano"
+        // },
+        // {
+        //     item_id: "kanolove2",
+        //     current: false,
+        //     playingURL: `/api/driveapi/files/download?token=${localStorage.token}&fileid=1PlatVBCh_3yqHJAYt5BaEj_cgjnSiDMo`,
+        //     song_title: "decide",
+        //     song_artist: "Kano"
+        // },
+    ] as Array<MusicQueueItem>));
+    const ContextValues = {
+        status, setStatus, 
+        nowPlayingURL, setNowPlayingURL,
+        progress, setProgress,
+        volume, setVolume,
+        queue, setQueue
+    }; 
     return (
         <div className="mainapp-body">
             <MusicPlayerContext.Provider value={ContextValues}>
@@ -51,7 +80,12 @@ function App() {
                                 path="/app"
                                 exact
                                 render={() => (
-                                    <MainAppComponent.Content />
+                                    <MainAppComponent.Content 
+                                    setStatus={setStatus}
+                                    setNowPlayingURL={setNowPlayingURL}
+                                    setProgress={setProgress}
+                                    setQueue={setQueue}
+                                    />
                                 )}
                             />
                             <Route
