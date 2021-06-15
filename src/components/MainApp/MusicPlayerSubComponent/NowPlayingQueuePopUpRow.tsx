@@ -4,7 +4,8 @@ import { Dropdown } from "react-bootstrap";
 import NowPlayingQueuePopUpRowProps from "../../../interface/components/MainApp/NowPlayingQueuePopUpRowProps";
 import MusicPlayerContext from "../../../context/MusicPlayerContext";
 import { Draggable } from "react-beautiful-dnd";
-const NowPlayingQueuePopUpRow = (props: NowPlayingQueuePopUpRowProps) => {
+import composeRefs from '@seznam/compose-react-refs'
+const NowPlayingQueuePopUpRow = React.forwardRef((props: NowPlayingQueuePopUpRowProps, rowRef: any) => {
     const { queue, setQueue } = React.useContext(MusicPlayerContext);
     const CustomToggle = React.forwardRef(
         ({ children, onClick }: any, ref: any) => (
@@ -85,7 +86,7 @@ const NowPlayingQueuePopUpRow = (props: NowPlayingQueuePopUpRowProps) => {
                     }
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    ref={provided.innerRef}
+                    ref={composeRefs(rowRef, provided.innerRef)}
                 >
                     <div className="col-1 d-flex align-items-center now-playing-queue-grip">
                         <FontAwesomeIcon icon="grip-vertical" />
@@ -99,10 +100,16 @@ const NowPlayingQueuePopUpRow = (props: NowPlayingQueuePopUpRowProps) => {
                         onClick={change_song}
                     >
                         <div className="now-playing-queue-item-content-title">
-                            {props.song_title === undefined || props.song_title === "" ? "Unknown Title" : props.song_title}
+                            {props.song_title === undefined ||
+                            props.song_title === ""
+                                ? "Unknown Title"
+                                : props.song_title}
                         </div>
                         <div className="now-playing-queue-item-content-artist">
-                            {props.song_artist === undefined || props.song_artist === "" ? "Unknown Artist" : props.song_artist}
+                            {props.song_artist === undefined ||
+                            props.song_artist === ""
+                                ? "Unknown Artist"
+                                : props.song_artist}
                         </div>
                     </div>
                     <div
@@ -142,6 +149,6 @@ const NowPlayingQueuePopUpRow = (props: NowPlayingQueuePopUpRowProps) => {
             )}
         </Draggable>
     );
-};
+});
 
 export default NowPlayingQueuePopUpRow;

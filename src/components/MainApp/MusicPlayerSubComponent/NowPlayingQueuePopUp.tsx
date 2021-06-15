@@ -8,9 +8,27 @@ import MusicPlayerContext from "../../../context/MusicPlayerContext";
 import React, { useState } from "react";
 import NowPlayingQueuePopUpRow from "./NowPlayingQueuePopUpRow";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { useEffect } from "react";
+import composeRefs from "@seznam/compose-react-refs";
 const NowPlayingQueuePopUp = (props: any) => {
     const { queue, setQueue } = React.useContext(MusicPlayerContext);
     const [nowPlayingCounter, setNowPlayingCounter] = useState("");
+    const nowPlayingItemRef = React.useRef<HTMLDivElement>(null);
+    const nowPlayingQueueContainerRef = React.useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (
+            nowPlayingQueueContainerRef !== null &&
+            nowPlayingQueueContainerRef.current !== null &&
+            nowPlayingItemRef !== null &&
+            nowPlayingItemRef.current !== null
+        ) {
+            nowPlayingQueueContainerRef.current.scrollTo(
+                0,
+                nowPlayingItemRef.current.offsetTop - 43
+            );
+        }
+    }, [props.showNowPlayingQueuePopup]);
 
     let playcount = 1;
     if (queue.length === 0 && nowPlayingCounter !== "") {
@@ -73,20 +91,42 @@ const NowPlayingQueuePopUp = (props: any) => {
                             <div
                                 className="container-fluid now-playing-queue-container"
                                 style={{ overflow: "auto", height: "50vh" }}
-                                ref={provided.innerRef}
+                                ref={composeRefs(provided.innerRef, nowPlayingQueueContainerRef)}
                                 {...provided.droppableProps}
                             >
                                 {queue.map((cur: any, i: any, arr: any) => {
-                                    return <NowPlayingQueuePopUpRow
-                                        key={`queue-item-${cur.item_id}`}
-                                        item_id={cur.item_id}
-                                        parent_controls={props.parent_controls}
-                                        playingURL={cur.playingURL}
-                                        song_title={cur.song_title}
-                                        song_artist={cur.song_artist}
-                                        is_playing={cur.current}
-                                        index={i}
-                                    />;
+                                    if (cur.current) {
+                                        return (
+                                            <NowPlayingQueuePopUpRow
+                                                key={`queue-item-${cur.item_id}`}
+                                                ref={nowPlayingItemRef}
+                                                item_id={cur.item_id}
+                                                parent_controls={
+                                                    props.parent_controls
+                                                }
+                                                playingURL={cur.playingURL}
+                                                song_title={cur.song_title}
+                                                song_artist={cur.song_artist}
+                                                is_playing={cur.current}
+                                                index={i}
+                                            />
+                                        );
+                                    }
+                                    return (
+                                        <NowPlayingQueuePopUpRow
+                                            key={`queue-item-${cur.item_id}`}
+                                            ref={null}
+                                            item_id={cur.item_id}
+                                            parent_controls={
+                                                props.parent_controls
+                                            }
+                                            playingURL={cur.playingURL}
+                                            song_title={cur.song_title}
+                                            song_artist={cur.song_artist}
+                                            is_playing={cur.current}
+                                            index={i}
+                                        />
+                                    );
                                 })}
                                 {provided.placeholder}
                             </div>
