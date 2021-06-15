@@ -10,20 +10,20 @@ const MusicPlayerContextDefaultValues = () => {
     const [progress, setProgress] = useState(0);
     const [volume, setVolume] = useState(100);
     const [queue, setQueue] = useState(([
-        {
-            item_id: "kanolove",
-            current: false,
-            playingURL: `/api/driveapi/files/download?token=${localStorage.token}&fileid=1fFEGOusvSIFTA141ytEkwzrY_B1MkYAu`,
-            song_title: "Santuary",
-            song_artist: "Kano"
-        },
-        {
-            item_id: "kanolove2",
-            current: false,
-            playingURL: `/api/driveapi/files/download?token=${localStorage.token}&fileid=1PlatVBCh_3yqHJAYt5BaEj_cgjnSiDMo`,
-            song_title: "decide",
-            song_artist: "Kano"
-        },
+        // {
+        //     item_id: "kanolove",
+        //     current: false,
+        //     playingURL: `/api/driveapi/files/download?token=${localStorage.token}&fileid=1fFEGOusvSIFTA141ytEkwzrY_B1MkYAu`,
+        //     song_title: "Santuary",
+        //     song_artist: "Kano"
+        // },
+        // {
+        //     item_id: "kanolove2",
+        //     current: false,
+        //     playingURL: `/api/driveapi/files/download?token=${localStorage.token}&fileid=1PlatVBCh_3yqHJAYt5BaEj_cgjnSiDMo`,
+        //     song_title: "decide",
+        //     song_artist: "Kano"
+        // },
     ] as Array<MusicQueueItem>));
     const ContextValues = {
         status, setStatus, 

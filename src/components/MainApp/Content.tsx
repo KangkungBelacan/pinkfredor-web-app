@@ -28,6 +28,7 @@ import MoreVert from "@material-ui/icons/MoreVert";
 
 import { Icons } from "material-table";
 import MusicPlayerContext from "../../context/MusicPlayerContext";
+import { MusicQueueItem } from "../../interface/context/MusicQueueItem";
 
 const tableIcons: Icons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -103,6 +104,41 @@ function Content(props: any): JSX.Element {
         let indexFiles = Object.values(indexFilesData.files);
         setTableData(indexFiles);
     }, [indexFilesData, indexFilesRefetch]);
+
+    const matTableActionOnClick = (event:any, rowData: any) => {
+        const possibleAction = [
+            "addToQ",
+            "playNext",
+            "addToPlaylist",
+            "play",
+        ];
+
+        let new_queue:Array<MusicQueueItem> = [];
+        // Set queue to all songs in view
+        for(let i = 0; i < tableData.length; i++) {
+            new_queue.push({
+                item_id: "queue_item_" + tableData[i].tableData.id,
+                current: tableData[i].tableData.id === rowData.tableData.id ? true : false,
+                playingURL: `/api/driveapi/files/download?token=${localStorage.token}&fileid=${tableData[i].id}`,
+                song_title: tableData[i].file_metadata.song_title,
+                song_artist: tableData[i].file_metadata.song_artist
+            });
+        }
+        setQueue(new_queue);
+        setProgress(0);
+        setNowPlayingURL(
+            `/api/driveapi/files/download?token=${localStorage.token}&fileid=${rowData.id}`
+        );
+        setStatus("PLAYING");
+
+        // console.log(rowData);
+        // window.alert(
+        //     "You clicked on " +
+        //         (rowData as any).title +
+        //         " Action: " +
+        //         event.currentTarget.id
+        // );
+    };
 
     return (
         <div
@@ -182,27 +218,7 @@ function Content(props: any): JSX.Element {
                             {
                                 icon: MoreVert,
                                 tooltip: "More Options",
-                                onClick: (event, rowData: any) => {
-                                    const possibleAction = [
-                                        "addToQ",
-                                        "playNext",
-                                        "addToPlaylist",
-                                        "play",
-                                    ];
-                                    setProgress(0);
-                                    setNowPlayingURL(
-                                        `/api/driveapi/files/download?token=${localStorage.token}&fileid=${rowData.id}`
-                                    );
-                                    setStatus("PLAYING");
-
-                                    // console.log(rowData);
-                                    // window.alert(
-                                    //     "You clicked on " +
-                                    //         (rowData as any).title +
-                                    //         " Action: " +
-                                    //         event.currentTarget.id
-                                    // );
-                                },
+                                onClick: matTableActionOnClick
                             },
                         ]}
                         components={{
