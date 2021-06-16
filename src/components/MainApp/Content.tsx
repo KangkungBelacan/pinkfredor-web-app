@@ -131,6 +131,9 @@ function Content(props: any): JSX.Element {
         props.setNowPlayingURL(
             `/api/driveapi/files/download?token=${localStorage.token}&fileid=${rowData.id}`
         );
+        props.setSongTitleLabel(rowData.file_metadata.song_title);
+        props.setSongArtistLabel(rowData.file_metadata.song_artist);
+        // setSongAlbumArtURL("");
         props.setStatus("PLAYING");
 
         // console.log(rowData);
