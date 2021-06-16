@@ -32,8 +32,6 @@ const LoopIcon = <FontAwesomeIcon icon={faSync} />;
 //Music Player Component.
 function MusicPlayer(props: any): JSX.Element {
     const [width] = useWindowSize();
-    const [playingTitle, setPlayingTitle] = useState("Song Title");
-    const [playingArtist, setPlayingArtist] = useState("Song Artist");
     // const [currentPos, setCurrentPos] = useState("0:00");
     const [maxDuration, setMaxDuration] = useState("0:00");
     const [curPos, setCurPos] = useState(undefined as any);
@@ -53,6 +51,12 @@ function MusicPlayer(props: any): JSX.Element {
         setVolume,
         queue,
         setQueue,
+        songTitleLabel,
+        setSongTitleLabel,
+        songArtistLabel,
+        setSongArtistLabel,
+        songAlbumArtURL,
+        setSongAlbumArtURL,
     } = React.useContext(MusicPlayerContext);
 
     const play_song = () => {
@@ -62,8 +66,8 @@ function MusicPlayer(props: any): JSX.Element {
                     return;
                 }
                 setNowPlayingURL(queue[0].playingURL);
-                setPlayingTitle(queue[0].song_title);
-                setPlayingArtist(queue[0].song_artist);
+                setSongTitleLabel(queue[0].song_title);
+                setSongArtistLabel(queue[0].song_artist);
                 queue[0].current = true;
                 setQueue(queue);
             }
@@ -108,8 +112,8 @@ function MusicPlayer(props: any): JSX.Element {
             queue[i].current = false;
         }
         setNowPlayingURL(queue[next_idx].playingURL);
-        setPlayingTitle(queue[next_idx].song_title);
-        setPlayingArtist(queue[next_idx].song_artist);
+        setSongTitleLabel(queue[next_idx].song_title);
+        setSongArtistLabel(queue[next_idx].song_artist);
         queue[next_idx].current = true;
         setQueue(queue);
         if (status !== "PLAYING") {
@@ -132,8 +136,8 @@ function MusicPlayer(props: any): JSX.Element {
             queue[i].current = false;
         }
         setNowPlayingURL(queue[next_idx].playingURL);
-        setPlayingTitle(queue[next_idx].song_title);
-        setPlayingArtist(queue[next_idx].song_artist);
+        setSongTitleLabel(queue[next_idx].song_title);
+        setSongArtistLabel(queue[next_idx].song_artist);
         queue[next_idx].current = true;
         setQueue(queue);
         if (status !== "PLAYING") {
@@ -148,8 +152,8 @@ function MusicPlayer(props: any): JSX.Element {
         for (let i = 0; i < queue.length; i++) {
             if (queue[i].item_id === item_id) {
                 setNowPlayingURL(queue[i].playingURL);
-                setPlayingTitle(queue[i].song_title);
-                setPlayingArtist(queue[i].song_artist);
+                setSongTitleLabel(queue[i].song_title);
+                setSongArtistLabel(queue[i].song_artist);
                 queue[i].current = true;
                 if (status !== "PLAYING") {
                     setStatus("PLAYING");
@@ -258,15 +262,15 @@ function MusicPlayer(props: any): JSX.Element {
                 <div className="player-song-info col-md-3 col-7">
                     <img
                         className="player-song-info-cover"
-                        src={props.song_cover}
+                        src={songAlbumArtURL}
                         alt="Example_Song_Cover"
                     ></img>
                     <div
                         style={{ display: "inline-block", paddingLeft: "10px" }}
                     >
-                        <p className="player-song-info-title">{playingTitle}</p>
+                        <p className="player-song-info-title">{songTitleLabel}</p>
                         <p className="player-song-info-artist">
-                            {playingArtist}
+                            {songArtistLabel}
                         </p>
                     </div>
                 </div>

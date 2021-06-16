@@ -10,5 +10,5 @@ export interface MusicQueueItem {
     playingURL: string;
     song_title: string;
     song_artist: string;
-    album_art_b64?: string;
+    album_art_url?: string;
 }

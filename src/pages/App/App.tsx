@@ -14,11 +14,12 @@ function App() {
     const [showNavBar, setNavBarDisplay] = useState(false);
     const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
     // const ContextValues = MusicPlayerContextDefaultValues();
-    const [status, setStatus] = useState<ReactSoundProps["playStatus"]>("PAUSED");
+    const [status, setStatus] =
+        useState<ReactSoundProps["playStatus"]>("PAUSED");
     const [nowPlayingURL, setNowPlayingURL] = useState("");
     const [progress, setProgress] = useState(0);
     const [volume, setVolume] = useState(100);
-    const [queue, setQueue] = useState(([
+    const [queue, setQueue] = useState([
         // {
         //     item_id: "kanolove",
         //     current: false,
@@ -33,14 +34,29 @@ function App() {
         //     song_title: "decide",
         //     song_artist: "Kano"
         // },
-    ] as Array<MusicQueueItem>));
+    ] as Array<MusicQueueItem>);
+    const [songTitleLabel, setSongTitleLabel] = useState("-");
+    const [songArtistLabel, setSongArtistLabel] = useState("-");
+    const [songAlbumArtURL, setSongAlbumArtURL] =
+        useState<any>(example_song_cover);
     const ContextValues = {
-        status, setStatus, 
-        nowPlayingURL, setNowPlayingURL,
-        progress, setProgress,
-        volume, setVolume,
-        queue, setQueue
-    }; 
+        status,
+        setStatus,
+        nowPlayingURL,
+        setNowPlayingURL,
+        progress,
+        setProgress,
+        volume,
+        setVolume,
+        queue,
+        setQueue,
+        songTitleLabel,
+        setSongTitleLabel,
+        songArtistLabel,
+        setSongArtistLabel,
+        songAlbumArtURL,
+        setSongAlbumArtURL,
+    };
     return (
         <div className="mainapp-body">
             <MusicPlayerContext.Provider value={ContextValues}>
@@ -80,11 +96,11 @@ function App() {
                                 path="/app"
                                 exact
                                 render={() => (
-                                    <MainAppComponent.Content 
-                                    setStatus={setStatus}
-                                    setNowPlayingURL={setNowPlayingURL}
-                                    setProgress={setProgress}
-                                    setQueue={setQueue}
+                                    <MainAppComponent.Content
+                                        setStatus={setStatus}
+                                        setNowPlayingURL={setNowPlayingURL}
+                                        setProgress={setProgress}
+                                        setQueue={setQueue}
                                     />
                                 )}
                             />
