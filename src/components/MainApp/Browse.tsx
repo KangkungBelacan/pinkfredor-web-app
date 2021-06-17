@@ -321,38 +321,7 @@ function Browse(props: any): JSX.Element {
                             actionsColumnIndex: -1,
                         }}
                         onRowClick={(e, rowData) => {
-                            let new_queue: Array<MusicQueueItem> = [];
-                            // Set queue to all songs in view
-                            for (let i = 0; i < tableData.length; i++) {
-                                new_queue.push({
-                                    item_id:
-                                        "queue_item_" +
-                                        tableData[i].tableData.id,
-                                    current:
-                                        tableData[i].tableData.id ===
-                                        rowData.tableData.id
-                                            ? true
-                                            : false,
-                                    playingURL: `/api/driveapi/files/download?token=${localStorage.token}&fileid=${tableData[i].id}`,
-                                    song_title:
-                                        tableData[i].file_metadata.song_title,
-                                    song_artist:
-                                        tableData[i].file_metadata.song_artist,
-                                });
-                            }
-                            props.setQueue(new_queue);
-                            props.setProgress(0);
-                            props.setNowPlayingURL(
-                                `/api/driveapi/files/download?token=${localStorage.token}&fileid=${rowData.id}`
-                            );
-                            props.setSongTitleLabel(
-                                rowData.file_metadata.song_title
-                            );
-                            props.setSongArtistLabel(
-                                rowData.file_metadata.song_artist
-                            );
-                            // setSongAlbumArtURL("");
-                            props.setStatus("PLAYING");
+                            play(e, rowData)
                         }}
                     />
                 </div>
