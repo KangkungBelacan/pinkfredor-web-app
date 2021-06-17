@@ -30,12 +30,12 @@
 
 .now-playing-queue-item-content-artist,
 .now-playing-queue-item-content-title {
-    opacity: 60%;
+    opacity: 0.6;
 }
 
 .now-playing-queue-item-row.playing .now-playing-queue-item-content-artist,
 .now-playing-queue-item-row.playing .now-playing-queue-item-content-title {
-    opacity: 100%;
+    opacity: 1;
 }
 
 .bootstrap-drop-down-container {
