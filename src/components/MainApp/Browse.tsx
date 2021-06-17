@@ -75,7 +75,6 @@ function Browse(props: any): JSX.Element {
     const song_columns = [
         { title: "file_id", field: "id", hidden: true },
         { title: "Title", field: "file_metadata.song_title" },
-        { title: "Length", field: "length", editable: "never" as const },
         { title: "Artist", field: "file_metadata.song_artist" },
         { title: "Album", field: "file_metadata.song_album" },
     ];
