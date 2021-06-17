@@ -1,9 +1,9 @@
 // import ReactDOM from 'react-dom'
 import React, { forwardRef, useState, useEffect } from "react";
 import useAxios from "axios-hooks";
-import "./Content.css";
+import "./Browse.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import MaterialTable from "material-table";
+import MaterialTable, { MTableBodyRow } from "material-table";
 import { Button, ButtonGroup, Dropdown } from "react-bootstrap";
 
 import AddBox from "@material-ui/icons/AddBox";
@@ -58,7 +58,7 @@ const tableIcons: Icons = {
 
 interface Element {}
 
-function Content(props: any): JSX.Element {
+function Browse(props: any): JSX.Element {
     // const {
     //     status,
     //     setStatus,
@@ -82,7 +82,7 @@ function Content(props: any): JSX.Element {
 
     const [topBarSelection, setTopBar] = useState(0);
     const [tableData, setTableData] = useState<any>([]);
-    const [pageLoading, setPageLoading] = useState(true)
+    const [pageLoading, setPageLoading] = useState(true);
 
     const [
         {
@@ -107,23 +107,21 @@ function Content(props: any): JSX.Element {
         setTableData(indexFiles);
     }, [indexFilesData, indexFilesLoading, indexFilesError, pageLoading]);
 
-    const matTableActionOnClick = (event:any, rowData: any) => {
-        const possibleAction = [
-            "addToQ",
-            "playNext",
-            "addToPlaylist",
-            "play",
-        ];
+    const matTableActionOnClick = (event: any, rowData: any) => {
+        const possibleAction = ["addToQ", "playNext", "addToPlaylist", "play"];
 
-        let new_queue:Array<MusicQueueItem> = [];
+        let new_queue: Array<MusicQueueItem> = [];
         // Set queue to all songs in view
-        for(let i = 0; i < tableData.length; i++) {
+        for (let i = 0; i < tableData.length; i++) {
             new_queue.push({
                 item_id: "queue_item_" + tableData[i].tableData.id,
-                current: tableData[i].tableData.id === rowData.tableData.id ? true : false,
+                current:
+                    tableData[i].tableData.id === rowData.tableData.id
+                        ? true
+                        : false,
                 playingURL: `/api/driveapi/files/download?token=${localStorage.token}&fileid=${tableData[i].id}`,
                 song_title: tableData[i].file_metadata.song_title,
-                song_artist: tableData[i].file_metadata.song_artist
+                song_artist: tableData[i].file_metadata.song_artist,
             });
         }
         props.setQueue(new_queue);
@@ -223,7 +221,7 @@ function Content(props: any): JSX.Element {
                             {
                                 icon: MoreVert,
                                 tooltip: "More Options",
-                                onClick: matTableActionOnClick
+                                onClick: matTableActionOnClick,
                             },
                         ]}
                         components={{
@@ -285,6 +283,14 @@ function Content(props: any): JSX.Element {
                                     </Dropdown.Menu>
                                 </Dropdown>
                             ),
+                            Row: (props: any) => (
+                                <MTableBodyRow
+                                    {...props}
+                                    onClick={(e: any) => {
+                                        console.log(props.data);
+                                    }}
+                                />
+                            ),
                         }}
                         options={{
                             actionsColumnIndex: -1,
@@ -295,4 +301,4 @@ function Content(props: any): JSX.Element {
         </div>
     );
 }
-export default React.memo(Content);
+export default React.memo(Browse);

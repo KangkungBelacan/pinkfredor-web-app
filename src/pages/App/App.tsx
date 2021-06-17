@@ -10,6 +10,7 @@ import MusicPlayerContext from "../../context/MusicPlayerContext";
 // import MusicPlayerContextDefaultValues from "../../context/MusicPlayerContextDefaultValues";
 import { ReactSoundProps } from "react-sound";
 import { MusicQueueItem } from "../../interface/context/MusicQueueItem";
+
 function App() {
     const [showNavBar, setNavBarDisplay] = useState(false);
     const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
@@ -96,7 +97,7 @@ function App() {
                                 path="/app"
                                 exact
                                 render={() => (
-                                    <MainAppComponent.Content
+                                    <MainAppComponent.Browse
                                         setStatus={setStatus}
                                         setNowPlayingURL={setNowPlayingURL}
                                         setProgress={setProgress}
