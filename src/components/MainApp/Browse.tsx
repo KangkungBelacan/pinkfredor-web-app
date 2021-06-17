@@ -107,9 +107,7 @@ function Browse(props: any): JSX.Element {
         setTableData(indexFiles);
     }, [indexFilesData, indexFilesLoading, indexFilesError, pageLoading]);
 
-    const matTableActionOnClick = (event: any, rowData: any) => {
-        const possibleAction = ["addToQ", "playNext", "addToPlaylist", "play"];
-
+    const play = (event: any, rowData: any) => {
         let new_queue: Array<MusicQueueItem> = [];
         // Set queue to all songs in view
         for (let i = 0; i < tableData.length; i++) {
@@ -141,6 +139,35 @@ function Browse(props: any): JSX.Element {
         //         " Action: " +
         //         event.currentTarget.id
         // );
+    };
+    const addToPlaylist = (event: any, rowData: any) => {};
+    const playNext = (event: any, rowData: any) => {};
+    const addToQ = (event: any, rowData: any) => {
+        props.setQueue([...props.queue, {
+            item_id: "queue_item_" + rowData.tableData.id + Date.now().toString(),
+            current: false,
+            playingURL: `/api/driveapi/files/download?token=${localStorage.token}&fileid=${rowData.id}`,
+            song_title: rowData.file_metadata.song_title,
+            song_artist: rowData.file_metadata.song_artist,
+        }]);
+    };
+
+    const matTableActionOnClick = (event: any, rowData: any) => {
+        // const possibleAction = ["addToQ", "playNext", "addToPlaylist", "play"];
+        switch (event.currentTarget.id) {
+            case "addToQ":
+                addToQ(event, rowData);
+                break;
+            case "playNext":
+                playNext(event, rowData);
+                break;
+            case "addToPlaylist":
+                addToPlaylist(event, rowData);
+                break;
+            case "play":
+                play(event, rowData);
+                break;
+        }
     };
 
     return (

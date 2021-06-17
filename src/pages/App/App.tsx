@@ -101,6 +101,7 @@ function App() {
                                         setStatus={setStatus}
                                         setNowPlayingURL={setNowPlayingURL}
                                         setProgress={setProgress}
+                                        queue={queue}
                                         setQueue={setQueue}
                                         setSongTitleLabel={setSongTitleLabel}
                                         setSongArtistLabel={setSongArtistLabel}
