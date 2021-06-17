@@ -259,7 +259,12 @@ function Browse(props: any): JSX.Element {
                         ]}
                         components={{
                             Action: (props) => (
-                                <Dropdown as={ButtonGroup}>
+                                <Dropdown
+                                    as={ButtonGroup}
+                                    onClick={(evt: any) => {
+                                        evt.stopPropagation();
+                                    }}
+                                >
                                     <Button
                                         id="play"
                                         onClick={(event) =>
@@ -321,7 +326,7 @@ function Browse(props: any): JSX.Element {
                             actionsColumnIndex: -1,
                         }}
                         onRowClick={(e, rowData) => {
-                            play(e, rowData)
+                            play(e, rowData);
                         }}
                     />
                 </div>
