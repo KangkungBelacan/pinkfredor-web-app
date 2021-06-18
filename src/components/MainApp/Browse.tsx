@@ -1,7 +1,12 @@
 // import ReactDOM from 'react-dom'
 import React, { forwardRef, useState, useEffect } from "react";
+import { GenericProps } from "../../interface/GenericProps";
+import { Route } from "react-router";
+import CategoriesTopBar from "../../components/MainApp/CategoriesTopBar";
+import { CategoriesTopBarItemProps } from "../../interface/components/MainApp/CategoriesTopBarItemProps";
 import useAxios from "axios-hooks";
 import "./Browse.css";
+import * as BrowseSubPage from "./BrowseSubPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MaterialTable, { MTableBodyRow } from "material-table";
 import { Button, ButtonGroup, Dropdown } from "react-bootstrap";
@@ -98,6 +103,29 @@ function Browse(props: any): JSX.Element {
         },
     });
 
+    let items: Array<CategoriesTopBarItemProps> = [
+        {
+            display_text: "All songs",
+            faIconClass: "music",
+            link: "/app/AllSongs",
+        },
+        {
+            display_text: "Artists",
+            faIconClass: "users",
+            link: "/app/Artists",
+        },
+        {
+            display_text: "Genres",
+            faIconClass: "guitar",
+            link: "/app/Genres",
+        },
+        {
+            display_text: "Albums",
+            faIconClass: "compact-disc",
+            link: "/app/Albums",
+        },
+    ];
+
     useEffect(() => {
         if (indexFilesLoading || indexFilesError || !pageLoading) return;
 
@@ -190,57 +218,37 @@ function Browse(props: any): JSX.Element {
                         <FontAwesomeIcon icon="align-justify" />
                     </div>
                 </div> */}
-                <div className="col-sm-8 col-md-10 col-12">
-                    <div
-                        className={
-                            topBarSelection === 1
-                                ? "content-top-bar-items-container selected"
-                                : "content-top-bar-items-container"
-                        }
-                        onClick={() => {
-                            setTopBar(1);
-                        }}
-                    >
-                        All songs
-                    </div>
-                    <div
-                        className={
-                            topBarSelection === 2
-                                ? "content-top-bar-items-container selected"
-                                : "content-top-bar-items-container"
-                        }
-                        onClick={() => {
-                            setTopBar(2);
-                        }}
-                    >
-                        Artists
-                    </div>
-                    <div
-                        className={
-                            topBarSelection === 3
-                                ? "content-top-bar-items-container selected"
-                                : "content-top-bar-items-container"
-                        }
-                        onClick={() => {
-                            setTopBar(3);
-                        }}
-                    >
-                        Albums
-                    </div>
-                    <div
-                        className={
-                            topBarSelection === 4
-                                ? "content-top-bar-items-container selected"
-                                : "content-top-bar-items-container"
-                        }
-                        onClick={() => {
-                            setTopBar(4);
-                        }}
-                    >
-                        Genres
-                    </div>
+                <div className="organizer-body">
+                    <CategoriesTopBar items={items} />
+                    <Route
+                        path="/app"
+                        exact
+                        component={() => (
+                            <div>Select one of the categories</div>
+                        )}
+                    />
+                    <Route
+                        path="/app/AllSongs"
+                        component={() => (
+                            <BrowseSubPage.BrowseAllSongs className="row organizer-subpage-content-container" />
+                        )}
+                    />
+                    <Route
+                        path="/app/Artists"
+                        component={() => (
+                            <BrowseSubPage.BrowseArtists className="row organizer-subpage-content-container" />
+                        )}
+                    />
+                    <Route
+                        path="/app/Genres"
+                        component={BrowseSubPage.BrowseGenres}
+                    />
+                    <Route
+                        path="/app/Albums"
+                        component={BrowseSubPage.BrowseAlbums}
+                    />
                 </div>
-                <div
+                {/* <div
                     className="songs-section"
                     style={{ display: "flex", flexDirection: "column" }}
                 >
@@ -328,7 +336,7 @@ function Browse(props: any): JSX.Element {
                             play(e, rowData);
                         }}
                     />
-                </div>
+                </div> */}
             </div>
         </div>
     );

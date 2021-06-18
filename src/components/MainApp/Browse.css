@@ -10,7 +10,7 @@
     font-weight: bold;
     padding: 5px;
     border-radius: 7px;
-    border-bottom: 3px solid rgba(0,0,0,0);
+    border-bottom: 3px solid rgba(0, 0, 0, 0);
     transition: border-bottom-color 0.3s;
 }
 
@@ -21,22 +21,32 @@
 .content-top-bar-items-container:hover {
     cursor: pointer;
     border-bottom-color: red;
-    background-color: rgb(30,30,30);
+    background-color: rgb(30, 30, 30);
 }
 
-.songs-search-bar{
+.songs-search-bar {
     background-color: white;
     border-radius: 40px;
     width: 10px;
     height: 45px;
-    background-image: url('../../images/search-icon.png');
+    background-image: url("../../images/search-icon.png");
     background-position: 12px 9px;
     background-repeat: no-repeat;
     padding-left: 45px;
-    transition: width 0.5s ease-in-out
-    }
+    transition: width 0.5s ease-in-out;
+}
 
 .songs-search-bar:focus {
-     outline: none;
-     width: 100%
+    outline: none;
+    width: 100%;
+}
+
+.organizer-body {
+    color: white;
+}
+
+.organizer-subpage-content-container {
+    overflow-y: auto;
+    height: calc(100vh - 64px - 100px);
+    padding-top: 12px;
 }
