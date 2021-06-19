@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import { CategoriesTopBarItemProps } from "../../interface/components/MainApp/CategoriesTopBarItemProps";
 const CategoriesTopBarItem = (props: CategoriesTopBarItemProps) => {
     const CONT_CLASS = "top-bar-item-container";
-    const CONT_STYLE = {};
+    const CONT_STYLE = {whiteSpace: "nowrap"};
     const location = useLocation();
 
     let active = false;
