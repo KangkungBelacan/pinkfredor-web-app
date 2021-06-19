@@ -95,7 +95,6 @@ function App() {
                         <div className="row">
                             <Route
                                 path="/app"
-                                exact
                                 render={() => (
                                     <MainAppComponent.Browse
                                         setStatus={setStatus}
