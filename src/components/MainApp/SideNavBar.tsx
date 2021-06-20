@@ -50,13 +50,11 @@ function SideNavBar(props: any): JSX.Element {
                                 </div>
                             </div>
                             <nav className="flex">
-                                <a
-                                    href="http://localhost:3000/UserAccont"
+                                <Link
+                                    to="/app/user"
                                     className="Nav-Items-Container"
                                     style={{ margin: "10px" }}
-                                >
-                                    Settings
-                                </a>
+                                >Settings</Link>
                                 <div
                                     className="Nav-Items-Container"
                                     style={{ margin: "10px" }}
