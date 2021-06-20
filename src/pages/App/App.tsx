@@ -10,6 +10,7 @@ import MusicPlayerContext from "../../context/MusicPlayerContext";
 // import MusicPlayerContextDefaultValues from "../../context/MusicPlayerContextDefaultValues";
 import { ReactSoundProps } from "react-sound";
 import { MusicQueueItem } from "../../interface/context/MusicQueueItem";
+import { Redirect } from "react-router-dom";
 
 function App() {
     const [showNavBar, setNavBarDisplay] = useState(false);
@@ -93,6 +94,12 @@ function App() {
                             </div>
                         </div>
                         <div className="row">
+                            {/* Redirect to /app/browse by default */}
+                            <Route
+                                path="/app"
+                                exact
+                                render={() => <Redirect to="/app/browse" />}
+                            />
                             <Route
                                 path="/app/browse"
                                 render={() => (
