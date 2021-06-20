@@ -235,7 +235,7 @@ function Browse(props: any): JSX.Element {
                         component={() => (
                             <div>
                                 <CategoriesTopBar items={items} />
-                                <div>All songs</div>
+                                <BrowseSubPage.BrowseAllSongs className="row organizer-subpage-content-container" />
                             </div>
                         )}
                     />
@@ -244,7 +244,7 @@ function Browse(props: any): JSX.Element {
                         component={() => (
                             <div>
                                 <CategoriesTopBar items={items} />
-                                <div>Artists</div>
+                                <BrowseSubPage.BrowseArtists className="row organizer-subpage-content-container" />
                             </div>
                         )}
                     />
@@ -253,7 +253,7 @@ function Browse(props: any): JSX.Element {
                         component={() => (
                             <div>
                                 <CategoriesTopBar items={items} />
-                                <div>Genres</div>
+                                <BrowseSubPage.BrowseGenres className="row organizer-subpage-content-container" />
                             </div>
                         )}
                     />
@@ -262,7 +262,7 @@ function Browse(props: any): JSX.Element {
                         component={() => (
                             <div>
                                 <CategoriesTopBar items={items} />
-                                <div>Albums</div>
+                                <BrowseSubPage.BrowseAlbums className="row organizer-subpage-content-container" />
                             </div>
                         )}
                     />
