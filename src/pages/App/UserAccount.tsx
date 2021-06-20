@@ -109,8 +109,8 @@ function UserAccount() {
                         ></input>
                     </div>
                 </div>
-                <div>
-                    Need help?Please visit our <a href="">Contact Us</a> page!
+                <div className="Text">
+                    Need help?Please visit our <a href="/help">Contact Us</a> page!
                 </div>
                 <div style={{ margin: "10px" }}>
                     <button className="Button">UPDATE</button>
