@@ -219,33 +219,52 @@ function Browse(props: any): JSX.Element {
                     </div>
                 </div> */}
                 <div className="organizer-body">
-                    <CategoriesTopBar items={items} />
+                    {/* <CategoriesTopBar items={items} /> */}
                     <Route
                         path="/app"
                         exact
                         component={() => (
-                            <div>Select one of the categories</div>
+                            <div>
+                                <CategoriesTopBar items={items} />
+                                <div>Select one of the categories</div>
+                            </div>
                         )}
                     />
                     <Route
                         path="/app/AllSongs"
                         component={() => (
-                            <BrowseSubPage.BrowseAllSongs className="row organizer-subpage-content-container" />
+                            <div>
+                                <CategoriesTopBar items={items} />
+                                <div>All songs</div>
+                            </div>
                         )}
                     />
                     <Route
                         path="/app/Artists"
                         component={() => (
-                            <BrowseSubPage.BrowseArtists className="row organizer-subpage-content-container" />
+                            <div>
+                                <CategoriesTopBar items={items} />
+                                <div>Artists</div>
+                            </div>
                         )}
                     />
                     <Route
                         path="/app/Genres"
-                        component={BrowseSubPage.BrowseGenres}
+                        component={() => (
+                            <div>
+                                <CategoriesTopBar items={items} />
+                                <div>Genres</div>
+                            </div>
+                        )}
                     />
                     <Route
                         path="/app/Albums"
-                        component={BrowseSubPage.BrowseAlbums}
+                        component={() => (
+                            <div>
+                                <CategoriesTopBar items={items} />
+                                <div>Albums</div>
+                            </div>
+                        )}
                     />
                 </div>
                 {/* <div
