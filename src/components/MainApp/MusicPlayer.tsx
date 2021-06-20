@@ -136,7 +136,12 @@ function MusicPlayer(props: any): JSX.Element {
         let next_idx = 0;
         for (let i = 0; i < queue.length; i++) {
             if (queue[i].current && i < queue.length - 1) {
-                next_idx = i + 1;
+                if (isShuffle == false) {
+                    next_idx = i + 1;
+                }
+                else if (isShuffle == true) {
+                    next_idx = i + Math.floor(Math.random() * queue.length);
+                }      
             }
             queue[i].current = false;
         }
