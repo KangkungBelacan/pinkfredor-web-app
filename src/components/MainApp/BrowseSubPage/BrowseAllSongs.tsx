@@ -239,4 +239,4 @@ const BrowseAllSongs = (props: any) => {
     );
 };
 
-export default BrowseAllSongs;
+export default React.memo(BrowseAllSongs);
