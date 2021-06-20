@@ -96,25 +96,6 @@ function SideNavBar(props: any): JSX.Element {
                     </li>
                     <li>
                         <Link
-                            to="/app/user"
-                            style={{ textDecoration: "none", color: "inherit" }}
-                        >
-                            <div
-                                className={
-                                    current_path.startsWith("/app/user")
-                                        ? "item-container selected"
-                                        : "item-container"
-                                }
-                            >
-                                <FontAwesomeIcon icon="user" />
-                                <span className="item-container-text fs-lg">
-                                    User Page
-                                </span>
-                            </div>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
                             to="/app/linkdrive"
                             style={{ textDecoration: "none", color: "inherit" }}
                         >
