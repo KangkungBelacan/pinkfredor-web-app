@@ -141,7 +141,7 @@ function MusicPlayer(props: any): JSX.Element {
                 }
                 else if (isShuffle == true) {
                     next_idx = i + Math.floor(Math.random() * queue.length);
-                }      
+                }
             }
             queue[i].current = false;
         }
