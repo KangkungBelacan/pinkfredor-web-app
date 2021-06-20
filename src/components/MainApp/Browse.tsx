@@ -1,7 +1,12 @@
 // import ReactDOM from 'react-dom'
 import React, { forwardRef, useState, useEffect } from "react";
+import { GenericProps } from "../../interface/GenericProps";
+import { Route } from "react-router";
+import CategoriesTopBar from "../../components/MainApp/CategoriesTopBar";
+import { CategoriesTopBarItemProps } from "../../interface/components/MainApp/CategoriesTopBarItemProps";
 import useAxios from "axios-hooks";
 import "./Browse.css";
+import * as BrowseSubPage from "./BrowseSubPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MaterialTable, { MTableBodyRow } from "material-table";
 import { Button, ButtonGroup, Dropdown } from "react-bootstrap";
@@ -75,7 +80,6 @@ function Browse(props: any): JSX.Element {
     const song_columns = [
         { title: "file_id", field: "id", hidden: true },
         { title: "Title", field: "file_metadata.song_title" },
-        { title: "Length", field: "length", editable: "never" as const },
         { title: "Artist", field: "file_metadata.song_artist" },
         { title: "Album", field: "file_metadata.song_album" },
     ];
@@ -99,6 +103,29 @@ function Browse(props: any): JSX.Element {
         },
     });
 
+    let items: Array<CategoriesTopBarItemProps> = [
+        {
+            display_text: "All songs",
+            faIconClass: "music",
+            link: "/app/browse",
+        },
+        {
+            display_text: "Artists",
+            faIconClass: "users",
+            link: "/app/browse/Artists",
+        },
+        {
+            display_text: "Genres",
+            faIconClass: "guitar",
+            link: "/app/browse/Genres",
+        },
+        {
+            display_text: "Albums",
+            faIconClass: "compact-disc",
+            link: "/app/browse/Albums",
+        },
+    ];
+
     useEffect(() => {
         if (indexFilesLoading || indexFilesError || !pageLoading) return;
 
@@ -106,42 +133,6 @@ function Browse(props: any): JSX.Element {
         setPageLoading(false);
         setTableData(indexFiles);
     }, [indexFilesData, indexFilesLoading, indexFilesError, pageLoading]);
-
-    const matTableActionOnClick = (event: any, rowData: any) => {
-        const possibleAction = ["addToQ", "playNext", "addToPlaylist", "play"];
-
-        let new_queue: Array<MusicQueueItem> = [];
-        // Set queue to all songs in view
-        for (let i = 0; i < tableData.length; i++) {
-            new_queue.push({
-                item_id: "queue_item_" + tableData[i].tableData.id,
-                current:
-                    tableData[i].tableData.id === rowData.tableData.id
-                        ? true
-                        : false,
-                playingURL: `/api/driveapi/files/download?token=${localStorage.token}&fileid=${tableData[i].id}`,
-                song_title: tableData[i].file_metadata.song_title,
-                song_artist: tableData[i].file_metadata.song_artist,
-            });
-        }
-        props.setQueue(new_queue);
-        props.setProgress(0);
-        props.setNowPlayingURL(
-            `/api/driveapi/files/download?token=${localStorage.token}&fileid=${rowData.id}`
-        );
-        props.setSongTitleLabel(rowData.file_metadata.song_title);
-        props.setSongArtistLabel(rowData.file_metadata.song_artist);
-        // setSongAlbumArtURL("");
-        props.setStatus("PLAYING");
-
-        // console.log(rowData);
-        // window.alert(
-        //     "You clicked on " +
-        //         (rowData as any).title +
-        //         " Action: " +
-        //         event.currentTarget.id
-        // );
-    };
 
     return (
         <div
@@ -158,57 +149,57 @@ function Browse(props: any): JSX.Element {
                         <FontAwesomeIcon icon="align-justify" />
                     </div>
                 </div> */}
-                <div className="col-sm-8 col-md-10 col-12">
-                    <div
-                        className={
-                            topBarSelection === 1
-                                ? "content-top-bar-items-container selected"
-                                : "content-top-bar-items-container"
-                        }
-                        onClick={() => {
-                            setTopBar(1);
-                        }}
-                    >
-                        All songs
-                    </div>
-                    <div
-                        className={
-                            topBarSelection === 2
-                                ? "content-top-bar-items-container selected"
-                                : "content-top-bar-items-container"
-                        }
-                        onClick={() => {
-                            setTopBar(2);
-                        }}
-                    >
-                        Artists
-                    </div>
-                    <div
-                        className={
-                            topBarSelection === 3
-                                ? "content-top-bar-items-container selected"
-                                : "content-top-bar-items-container"
-                        }
-                        onClick={() => {
-                            setTopBar(3);
-                        }}
-                    >
-                        Albums
-                    </div>
-                    <div
-                        className={
-                            topBarSelection === 4
-                                ? "content-top-bar-items-container selected"
-                                : "content-top-bar-items-container"
-                        }
-                        onClick={() => {
-                            setTopBar(4);
-                        }}
-                    >
-                        Genres
-                    </div>
+                <div className="organizer-body">
+                    <CategoriesTopBar items={items} />
+                    <Route
+                        path="/app/browse"
+                        exact
+                        component={() => (
+                            <div>
+                                <BrowseSubPage.BrowseAllSongs
+                                    className="row organizer-subpage-content-container"
+                                    setStatus={props.setStatus}
+                                    setNowPlayingURL={props.setNowPlayingURL}
+                                    setProgress={props.setProgress}
+                                    queue={props.queue}
+                                    setQueue={props.setQueue}
+                                    setSongTitleLabel={props.setSongTitleLabel}
+                                    setSongArtistLabel={
+                                        props.setSongArtistLabel
+                                    }
+                                    setSongAlbumArtURL={
+                                        props.setSongAlbumArtURL
+                                    }
+                                />
+                            </div>
+                        )}
+                    />
+                    <Route
+                        path="/app/browse/Artists"
+                        component={() => (
+                            <div>
+                                <BrowseSubPage.BrowseArtists className="row organizer-subpage-content-container" />
+                            </div>
+                        )}
+                    />
+                    <Route
+                        path="/app/browse/Genres"
+                        component={() => (
+                            <div>
+                                <BrowseSubPage.BrowseGenres className="row organizer-subpage-content-container" />
+                            </div>
+                        )}
+                    />
+                    <Route
+                        path="/app/browse/Albums"
+                        component={() => (
+                            <div>
+                                <BrowseSubPage.BrowseAlbums className="row organizer-subpage-content-container" />
+                            </div>
+                        )}
+                    />
                 </div>
-                <div
+                {/* <div
                     className="songs-section"
                     style={{ display: "flex", flexDirection: "column" }}
                 >
@@ -226,7 +217,12 @@ function Browse(props: any): JSX.Element {
                         ]}
                         components={{
                             Action: (props) => (
-                                <Dropdown as={ButtonGroup}>
+                                <Dropdown
+                                    as={ButtonGroup}
+                                    onClick={(evt: any) => {
+                                        evt.stopPropagation();
+                                    }}
+                                >
                                     <Button
                                         id="play"
                                         onClick={(event) =>
@@ -283,20 +279,15 @@ function Browse(props: any): JSX.Element {
                                     </Dropdown.Menu>
                                 </Dropdown>
                             ),
-                            Row: (props: any) => (
-                                <MTableBodyRow
-                                    {...props}
-                                    onClick={(e: any) => {
-                                        console.log(props.data);
-                                    }}
-                                />
-                            ),
                         }}
                         options={{
                             actionsColumnIndex: -1,
                         }}
+                        onRowClick={(e, rowData) => {
+                            play(e, rowData);
+                        }}
                     />
-                </div>
+                </div> */}
             </div>
         </div>
     );

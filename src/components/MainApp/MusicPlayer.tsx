@@ -40,6 +40,10 @@ function MusicPlayer(props: any): JSX.Element {
     const [progressSlidermin] = useState(0);
     const [progressSlidermax, setProgressSlidermax] = useState(1);
     const [isDraggingProgressBar, setisDraggingProgressBar] = useState(false);
+    const [isShuffle, setisShuffle] = useState(false);
+    const [isLoop, setisLoop] = useState(false);
+    const [color1, setColor1] = useState("rgb(164, 164, 164)");
+    const [color2, setColor2] = useState("rgb(164, 164, 164)");
     const {
         status,
         setStatus,
@@ -121,6 +125,7 @@ function MusicPlayer(props: any): JSX.Element {
         }
     };
 
+    
     const next_song = () => {
         setCurPos(0);
         setProgress(0);
@@ -131,7 +136,12 @@ function MusicPlayer(props: any): JSX.Element {
         let next_idx = 0;
         for (let i = 0; i < queue.length; i++) {
             if (queue[i].current && i < queue.length - 1) {
-                next_idx = i + 1;
+                if (isShuffle == false) {
+                    next_idx = i + 1;
+                }
+                else if (isShuffle == true) {
+                    next_idx = i + Math.floor(Math.random() * queue.length);
+                }
             }
             queue[i].current = false;
         }
@@ -170,24 +180,24 @@ function MusicPlayer(props: any): JSX.Element {
     };
 
     const Shuffle = () => {
-        var music = ["song 1", "song 2", "song 3", "song 4", "song 5"];
-        var random = Math.floor(Math.random() * music.length);
-        var string = music[0];
-        if (music[random] != music[0]) {
-            music[0] = music[random];
-            music[random] = string;
-            window.alert(music);
-        } else {
-            window.alert("try it again!");
+        if (isShuffle == false) {
+            setColor1('white');
+            setisShuffle(true);
+        }
+        else {
+            setColor1('rgb(164, 164, 164)');
+            setisShuffle(false);
         }
     };
 
     const Loop = () => {
-        var music = ["Hello", "enjoy", "the", "music", "thanks"];
-        var string = "";
-        for (let i = 0; i < music.length; i++) {
-            string += music[i] + " ";
-            window.alert(string);
+        if (isLoop == false) {
+            setColor2('white');
+            setisLoop(true);
+        }
+        else {
+            setColor2('rgb(164, 164, 164)');
+            setisLoop(false);
         }
     };
 
@@ -277,7 +287,8 @@ function MusicPlayer(props: any): JSX.Element {
                 <div className="player-controls col-md-6 col-5">
                     <div className="player-controls-buttons">
                         <button
-                            className="player-controls-button-misc d-md-inline-block d-none"
+                            style={{color:color1}}
+                            className="player-controls-button-toggle d-md-inline-block d-none"
                             onClick={Shuffle}
                         >
                             {ShuffleIcon}
@@ -319,7 +330,8 @@ function MusicPlayer(props: any): JSX.Element {
                             {bars}
                         </button>
                         <button
-                            className="player-controls-button-misc d-md-inline-block d-none"
+                            style={{color:color2}}
+                            className="player-controls-button-toggle d-md-inline-block d-none"
                             onClick={Loop}
                         >
                             {LoopIcon}

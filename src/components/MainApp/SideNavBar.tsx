@@ -50,13 +50,11 @@ function SideNavBar(props: any): JSX.Element {
                                 </div>
                             </div>
                             <nav className="flex">
-                                <a
-                                    href="http://localhost:3000/UserAccont"
+                                <Link
+                                    to="/app/user"
                                     className="Nav-Items-Container"
                                     style={{ margin: "10px" }}
-                                >
-                                    Settings
-                                </a>
+                                >Settings</Link>
                                 <div
                                     className="Nav-Items-Container"
                                     style={{ margin: "10px" }}
@@ -98,25 +96,6 @@ function SideNavBar(props: any): JSX.Element {
                     </li>
                     <li>
                         <Link
-                            to="/app/user"
-                            style={{ textDecoration: "none", color: "inherit" }}
-                        >
-                            <div
-                                className={
-                                    current_path.startsWith("/app/user")
-                                        ? "item-container selected"
-                                        : "item-container"
-                                }
-                            >
-                                <FontAwesomeIcon icon="user" />
-                                <span className="item-container-text fs-lg">
-                                    User Page
-                                </span>
-                            </div>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
                             to="/app/linkdrive"
                             style={{ textDecoration: "none", color: "inherit" }}
                         >
@@ -138,12 +117,12 @@ function SideNavBar(props: any): JSX.Element {
                     </li>
                     <li>
                         <Link
-                            to="/app"
+                            to="/app/browse"
                             style={{ textDecoration: "none", color: "inherit" }}
                         >
                             <div
                                 className={
-                                    current_path === "/app"
+                                    current_path.startsWith("/app/browse")
                                         ? "item-container selected"
                                         : "item-container"
                                 }
