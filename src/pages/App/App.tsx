@@ -94,7 +94,7 @@ function App() {
                         </div>
                         <div className="row">
                             <Route
-                                path="/app"
+                                path="/app/browse"
                                 render={() => (
                                     <MainAppComponent.Browse
                                         setStatus={setStatus}

@@ -107,22 +107,22 @@ function Browse(props: any): JSX.Element {
         {
             display_text: "All songs",
             faIconClass: "music",
-            link: "/app/AllSongs",
+            link: "/app/browse",
         },
         {
             display_text: "Artists",
             faIconClass: "users",
-            link: "/app/Artists",
+            link: "/app/browse/Artists",
         },
         {
             display_text: "Genres",
             faIconClass: "guitar",
-            link: "/app/Genres",
+            link: "/app/browse/Genres",
         },
         {
             display_text: "Albums",
             faIconClass: "compact-disc",
-            link: "/app/Albums",
+            link: "/app/browse/Albums",
         },
     ];
 
@@ -150,22 +150,12 @@ function Browse(props: any): JSX.Element {
                     </div>
                 </div> */}
                 <div className="organizer-body">
-                    {/* <CategoriesTopBar items={items} /> */}
+                    <CategoriesTopBar items={items} />
                     <Route
-                        path="/app"
+                        path="/app/browse"
                         exact
                         component={() => (
                             <div>
-                                <CategoriesTopBar items={items} />
-                                <div>Select one of the categories</div>
-                            </div>
-                        )}
-                    />
-                    <Route
-                        path="/app/AllSongs"
-                        component={() => (
-                            <div>
-                                <CategoriesTopBar items={items} />
                                 <BrowseSubPage.BrowseAllSongs
                                     className="row organizer-subpage-content-container"
                                     setStatus={props.setStatus}
@@ -185,28 +175,25 @@ function Browse(props: any): JSX.Element {
                         )}
                     />
                     <Route
-                        path="/app/Artists"
+                        path="/app/browse/Artists"
                         component={() => (
                             <div>
-                                <CategoriesTopBar items={items} />
                                 <BrowseSubPage.BrowseArtists className="row organizer-subpage-content-container" />
                             </div>
                         )}
                     />
                     <Route
-                        path="/app/Genres"
+                        path="/app/browse/Genres"
                         component={() => (
                             <div>
-                                <CategoriesTopBar items={items} />
                                 <BrowseSubPage.BrowseGenres className="row organizer-subpage-content-container" />
                             </div>
                         )}
                     />
                     <Route
-                        path="/app/Albums"
+                        path="/app/browse/Albums"
                         component={() => (
                             <div>
-                                <CategoriesTopBar items={items} />
                                 <BrowseSubPage.BrowseAlbums className="row organizer-subpage-content-container" />
                             </div>
                         )}

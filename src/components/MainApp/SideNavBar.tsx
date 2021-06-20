@@ -117,12 +117,12 @@ function SideNavBar(props: any): JSX.Element {
                     </li>
                     <li>
                         <Link
-                            to="/app"
+                            to="/app/browse"
                             style={{ textDecoration: "none", color: "inherit" }}
                         >
                             <div
                                 className={
-                                    current_path === "/app"
+                                    current_path.startsWith("/app/browse")
                                         ? "item-container selected"
                                         : "item-container"
                                 }
