@@ -235,7 +235,21 @@ function Browse(props: any): JSX.Element {
                         component={() => (
                             <div>
                                 <CategoriesTopBar items={items} />
-                                <BrowseSubPage.BrowseAllSongs className="row organizer-subpage-content-container" />
+                                <BrowseSubPage.BrowseAllSongs
+                                    className="row organizer-subpage-content-container"
+                                    setStatus={props.setStatus}
+                                    setNowPlayingURL={props.setNowPlayingURL}
+                                    setProgress={props.setProgress}
+                                    queue={props.queue}
+                                    setQueue={props.setQueue}
+                                    setSongTitleLabel={props.setSongTitleLabel}
+                                    setSongArtistLabel={
+                                        props.setSongArtistLabel
+                                    }
+                                    setSongAlbumArtURL={
+                                        props.setSongAlbumArtURL
+                                    }
+                                />
                             </div>
                         )}
                     />
