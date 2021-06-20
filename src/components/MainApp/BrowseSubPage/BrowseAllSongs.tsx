@@ -167,7 +167,7 @@ const BrowseAllSongs = (props: any) => {
                 icons={tableIcons}
                 columns={song_columns}
                 data={tableData}
-                title="Songs"
+                title="All Songs"
                 actions={[
                     {
                         icon: MoreVert,
