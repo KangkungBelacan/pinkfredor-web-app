@@ -180,7 +180,7 @@ function MusicPlayer(props: any): JSX.Element {
     };
 
     const Shuffle = () => {
-        if (isShuffle == false) {
+        if (isShuffle === false) {
             setColor1('white');
             setisShuffle(true);
         }
@@ -191,10 +191,9 @@ function MusicPlayer(props: any): JSX.Element {
     };
 
     const Loop = () => {
-        if (isLoop == false) {
+        if (isLoop === false) {
             setColor2('white');
             setisLoop(true);
-            window.alert('Test git')
         }
         else {
             setColor2('rgb(164, 164, 164)');
