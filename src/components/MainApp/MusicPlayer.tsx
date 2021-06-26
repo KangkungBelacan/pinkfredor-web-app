@@ -194,6 +194,7 @@ function MusicPlayer(props: any): JSX.Element {
         if (isLoop == false) {
             setColor2('white');
             setisLoop(true);
+            window.alert('Test git')
         }
         else {
             setColor2('rgb(164, 164, 164)');
