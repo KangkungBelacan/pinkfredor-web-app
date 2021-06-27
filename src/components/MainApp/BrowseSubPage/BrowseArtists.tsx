@@ -1,6 +1,8 @@
 import React, { forwardRef, useState, useEffect } from "react";
+import { Link, Switch } from "react-router-dom";
 import { Route } from "react-router";
 import useAxios from "axios-hooks";
+import ArtistComponent from "./ArtistComponent";
 import "../Browse.css";
 
 interface elements {}
@@ -8,6 +10,7 @@ interface elements {}
 const BrowseAllSongs = (props: any) => {
     const [pageLoading, setPageLoading] = useState(true);
     const [artistsDisplay, setArtistsDisplay] = useState<elements[]>([]);
+    const [artistRoutes, setArtistRoutes] = useState<elements[]>([]);
 
     const [
         { data: artistData, loading: artistLoading, error: artistError },
@@ -32,29 +35,47 @@ const BrowseAllSongs = (props: any) => {
             let currentArtistData = artistValues[i];
             newArtistsDisplay.push(
                 <div key={(currentArtistData as any).artistid}>
-                    <a
-                        href={`/app/browse/Artists/${
+                    <Link
+                        to={`/app/browse/Artists/${
                             (currentArtistData as any).artistid
                         }`}
                     >
                         <button>
                             {(currentArtistData as any).artist_name}
                         </button>
-                    </a>
-                    <Route
-                        path={`/app/browse/Artists/${
-                            (currentArtistData as any).artistid
-                        }`}
-                        component={() => (
-                            <div>
-                                <div>{`Artist: ${
-                                    (currentArtistData as any).artist_name
-                                }`}</div>
-                            </div>
-                        )}
-                    />
+                    </Link>
                 </div>
             );
+            let newArtistRoutes = [
+                ...artistRoutes,
+                <Route
+                    key={(currentArtistData as any).artistid}
+                    exact
+                    path={`/app/browse/Artists/${
+                        (currentArtistData as any).artistid
+                    }`}
+                    component={() => (
+                        <div>
+                            <ArtistComponent
+                                artist_name={
+                                    (currentArtistData as any).artist_name
+                                }
+                                artistid={(currentArtistData as any).artistid}
+                                className="row organizer-subpage-content-container"
+                                setStatus={props.setStatus}
+                                setNowPlayingURL={props.setNowPlayingURL}
+                                setProgress={props.setProgress}
+                                queue={props.queue}
+                                setQueue={props.setQueue}
+                                setSongTitleLabel={props.setSongTitleLabel}
+                                setSongArtistLabel={props.setSongArtistLabel}
+                                setSongAlbumArtURL={props.setSongAlbumArtURL}
+                            />
+                        </div>
+                    )}
+                />,
+            ];
+            setArtistRoutes(newArtistRoutes);
         }
         setArtistsDisplay(newArtistsDisplay);
     }, [artistData, artistLoading, artistError, pageLoading]);
@@ -66,8 +87,13 @@ const BrowseAllSongs = (props: any) => {
     return (
         <div>
             <div>Artists</div>
-            {artistsDisplay}
-            <Route path="/app/browse/Artists" exact />
+            <div style={{ display: "flex", flexDirection: "row" }}>
+                {artistsDisplay}
+            </div>
+            <Switch>
+                <Route exact path="/app/browse/Artists" />
+                {artistRoutes}
+            </Switch>
         </div>
     );
 };

@@ -1,8 +1,8 @@
-import React, { forwardRef, useState, useEffect } from "react";
 import useAxios from "axios-hooks";
-import "../Browse.css";
+import React, { forwardRef, useState, useEffect } from "react";
 import MaterialTable from "material-table";
 import { Button, ButtonGroup, Dropdown } from "react-bootstrap";
+import "../Browse.css";
 
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
@@ -54,42 +54,16 @@ const tableIcons: Icons = {
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-interface Element {}
+const ArtistComponent = (props: any) => {
+    const [tableData, setTableData] = useState<any>([]);
+    const [pageLoading, setPageLoading] = useState(true);
 
-const BrowseAllSongs = (props: any) => {
     const song_columns = [
         { title: "file_id", field: "id", hidden: true },
         { title: "Title", field: "file_metadata.song_title" },
         { title: "Artist", field: "file_metadata.song_artist" },
         { title: "Album", field: "file_metadata.song_album" },
     ];
-
-    const [topBarSelection, setTopBar] = useState(0);
-    const [tableData, setTableData] = useState<any>([]);
-    const [pageLoading, setPageLoading] = useState(true);
-
-    const [
-        {
-            data: indexFilesData,
-            loading: indexFilesLoading,
-            error: indexFilesError,
-        },
-        indexFilesRefetch,
-    ] = useAxios({
-        url: "/api/indexes/files",
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${localStorage.token}`,
-        },
-    });
-
-    useEffect(() => {
-        if (indexFilesLoading || indexFilesError || !pageLoading) return;
-
-        let indexFiles = Object.values(indexFilesData.files);
-        setPageLoading(false);
-        setTableData(indexFiles);
-    }, [indexFilesData, indexFilesLoading, indexFilesError, pageLoading]);
 
     const play = (event: any, rowData: any) => {
         let new_queue: Array<MusicQueueItem> = [];
@@ -160,82 +134,109 @@ const BrowseAllSongs = (props: any) => {
         }
     };
 
+    const [
+        {
+            data: indexFilesData,
+            loading: indexFilesLoading,
+            error: indexFilesError,
+        },
+        indexFilesRefetch,
+    ] = useAxios({
+        url: "/api/indexes/files",
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${localStorage.token}`,
+        },
+    });
+
+    useEffect(() => {
+        if (indexFilesLoading || indexFilesError || !pageLoading) return;
+
+        let indexFiles: any = Object.values(indexFilesData.files);
+        let newTableData = [];
+        for (let i = 0; i < indexFiles.length; i++) {
+            if (indexFiles[i].file_metadata.song_artistid === props.artistid) {
+                newTableData.push(indexFiles[i]);
+            }
+        }
+        setPageLoading(false);
+        setTableData(newTableData);
+    }, [indexFilesData, indexFilesLoading, indexFilesError, pageLoading]);
+
     return (
-        <div>
-            <MaterialTable
-                icons={tableIcons}
-                columns={song_columns}
-                data={tableData}
-                title="All Songs"
-                actions={[
-                    {
-                        icon: MoreVert,
-                        tooltip: "More Options",
-                        onClick: matTableActionOnClick,
-                    },
-                ]}
-                components={{
-                    Action: (props) => (
-                        <Dropdown
-                            as={ButtonGroup}
-                            onClick={(evt: any) => {
-                                evt.stopPropagation();
-                            }}
+        <MaterialTable
+            icons={tableIcons}
+            columns={song_columns}
+            data={tableData}
+            title={props.artist_name}
+            actions={[
+                {
+                    icon: MoreVert,
+                    tooltip: "More Options",
+                    onClick: matTableActionOnClick,
+                },
+            ]}
+            components={{
+                Action: (props) => (
+                    <Dropdown
+                        as={ButtonGroup}
+                        onClick={(evt: any) => {
+                            evt.stopPropagation();
+                        }}
+                    >
+                        <Button
+                            id="play"
+                            onClick={(event) =>
+                                props.action.onClick(event, props.data)
+                            }
+                            variant="success"
                         >
-                            <Button
-                                id="play"
+                            Play
+                        </Button>
+
+                        <Dropdown.Toggle
+                            split
+                            variant="success"
+                            id="dropdown-split-basic"
+                        />
+
+                        <Dropdown.Menu>
+                            <Dropdown.Item
+                                id="addToQ"
                                 onClick={(event) =>
                                     props.action.onClick(event, props.data)
                                 }
-                                variant="success"
                             >
-                                Play
-                            </Button>
-
-                            <Dropdown.Toggle
-                                split
-                                variant="success"
-                                id="dropdown-split-basic"
-                            />
-
-                            <Dropdown.Menu>
-                                <Dropdown.Item
-                                    id="addToQ"
-                                    onClick={(event) =>
-                                        props.action.onClick(event, props.data)
-                                    }
-                                >
-                                    Add to queue
-                                </Dropdown.Item>
-                                <Dropdown.Item
-                                    id="playNext"
-                                    onClick={(event) =>
-                                        props.action.onClick(event, props.data)
-                                    }
-                                >
-                                    Play next
-                                </Dropdown.Item>
-                                <Dropdown.Item
-                                    id="addToPlaylist"
-                                    onClick={(event) =>
-                                        props.action.onClick(event, props.data)
-                                    }
-                                >
-                                    Add to playlist
-                                </Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    ),
-                }}
-                options={{
-                    actionsColumnIndex: -1,
-                }}
-                onRowClick={(e, rowData) => {
-                    play(e, rowData);
-                }}
-            />
-        </div>
+                                Add to queue
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                                id="playNext"
+                                onClick={(event) =>
+                                    props.action.onClick(event, props.data)
+                                }
+                            >
+                                Play next
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                                id="addToPlaylist"
+                                onClick={(event) =>
+                                    props.action.onClick(event, props.data)
+                                }
+                            >
+                                Add to playlist
+                            </Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                ),
+            }}
+            options={{
+                actionsColumnIndex: -1,
+            }}
+            onRowClick={(e, rowData) => {
+                play(e, rowData);
+            }}
+        />
     );
 };
 
-export default React.memo(BrowseAllSongs);
+export default ArtistComponent;

@@ -178,7 +178,21 @@ function Browse(props: any): JSX.Element {
                         path="/app/browse/Artists"
                         component={() => (
                             <div>
-                                <BrowseSubPage.BrowseArtists className="row organizer-subpage-content-container" />
+                                <BrowseSubPage.BrowseArtists
+                                    className="row organizer-subpage-content-container"
+                                    setStatus={props.setStatus}
+                                    setNowPlayingURL={props.setNowPlayingURL}
+                                    setProgress={props.setProgress}
+                                    queue={props.queue}
+                                    setQueue={props.setQueue}
+                                    setSongTitleLabel={props.setSongTitleLabel}
+                                    setSongArtistLabel={
+                                        props.setSongArtistLabel
+                                    }
+                                    setSongAlbumArtURL={
+                                        props.setSongAlbumArtURL
+                                    }
+                                />
                             </div>
                         )}
                     />
