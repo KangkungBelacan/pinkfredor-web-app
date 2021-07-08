@@ -8,7 +8,10 @@ const CategoriesTopBar = (props: CategoriesTopBarProps) => {
     if (props.items !== undefined) {
         for (let i = 0; i < props.items.length; i++) {
             content_components.push(
-                <CategoriesTopBarItem key={`CategoriesTopBarItem-${i}`} {...props.items[i]} />
+                <CategoriesTopBarItem
+                    key={`CategoriesTopBarItem-${i}`}
+                    {...props.items[i]}
+                />
             );
         }
     }
@@ -17,8 +20,10 @@ const CategoriesTopBar = (props: CategoriesTopBarProps) => {
             className={
                 props.className ? props.className + CONT_CLASS : CONT_CLASS
             }
-            style={props.style ? {...CONT_STYLE, ...props.style} : CONT_STYLE}
-        >{content_components}</div>
+            style={props.style ? { ...CONT_STYLE, ...props.style } : CONT_STYLE}
+        >
+            {content_components}
+        </div>
     );
 };
 
