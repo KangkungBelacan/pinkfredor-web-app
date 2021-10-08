@@ -11,8 +11,6 @@ import MusicPlayerContext from "../../context/MusicPlayerContext";
 import { ReactSoundProps } from "react-sound";
 import { MusicQueueItem } from "../../interface/context/MusicQueueItem";
 import { Redirect, useHistory } from "react-router-dom";
-import { axios } from "../../global-imports";
-import { response } from "express";
 function App() {
     const history = useHistory();
     const [showNavBar, setNavBarDisplay] = useState(false);
@@ -67,14 +65,15 @@ function App() {
                 headers: {
                     Authorization: `Bearer ${localStorage.token}`,
                 },
-                method: "POST"
+                method: "POST",
             };
 
             fetch("/api/auth/check", config)
-                .then((response: any) => response.json())
-                .then((response: any) => {
-                    localStorage.token = response.data.new_token;
-                })
+                .then((response: any) =>
+                    response.json().then((response: any) => {
+                        localStorage.token = response.data.new_token;
+                    })
+                )
                 .catch((err: any) => console.log);
         });
     }, []);
