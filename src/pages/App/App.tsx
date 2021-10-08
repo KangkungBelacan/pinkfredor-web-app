@@ -1,7 +1,7 @@
 import * as MainAppComponent from "./../../components/MainApp";
 import "./App.css";
 import example_song_cover from "./../../images/example-song-cover.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as AppSubPage from "./index";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Route } from "react-router";
@@ -10,9 +10,11 @@ import MusicPlayerContext from "../../context/MusicPlayerContext";
 // import MusicPlayerContextDefaultValues from "../../context/MusicPlayerContextDefaultValues";
 import { ReactSoundProps } from "react-sound";
 import { MusicQueueItem } from "../../interface/context/MusicQueueItem";
-import { Redirect } from "react-router-dom";
-
+import { Redirect, useHistory } from "react-router-dom";
+import { axios } from "../../global-imports";
+import { response } from "express";
 function App() {
+    const history = useHistory();
     const [showNavBar, setNavBarDisplay] = useState(false);
     const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
     // const ContextValues = MusicPlayerContextDefaultValues();
@@ -59,6 +61,23 @@ function App() {
         songAlbumArtURL,
         setSongAlbumArtURL,
     };
+    useEffect(() => {
+        history.listen((location: any) => {
+            let config: any = {
+                headers: {
+                    Authorization: `Bearer ${localStorage.token}`,
+                },
+                method: "POST"
+            };
+
+            fetch("/api/auth/check", config)
+                .then((response: any) => response.json())
+                .then((response: any) => {
+                    localStorage.token = response.data.new_token;
+                })
+                .catch((err: any) => console.log);
+        });
+    }, []);
     return (
         <div className="mainapp-body">
             <MusicPlayerContext.Provider value={ContextValues}>
