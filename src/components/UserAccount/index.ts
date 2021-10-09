@@ -1,1 +1,1 @@
-export {}
+export { default as UserSettingsMenuItem } from "./UserSettingsMenuItem";
