@@ -1,42 +1,42 @@
 .core {
     background-color: rgb(255, 255, 255);
-  }
-  
-  .text {
+}
+
+.text {
     font-size: 20px;
     padding-left: 20px;
-  }
-  
-  .Input,
-  .PassVisibility {
+}
+
+.Input,
+.PassVisibility {
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 4px;
     resize: vertical;
-  }
-  
-  .Label {
+}
+
+.Label {
     color: rgb(255, 255, 255);
     padding: 12px 12px 12px 0;
     display: inline-block;
     font-size: 14px;
     font-weight: 800;
-  }
-  
-  .LinkText {
+}
+
+.LinkText {
     color: rgb(255, 255, 255);
     padding: 12px 12px 12px 0;
     display: inline-block;
     font-size: 14px;
     font-weight: 570;
     text-decoration: none;
-  }
-  
-  .LinkText:hover {
+}
+
+.LinkText:hover {
     color: rgb(255, 255, 255);
-  }
-  
-  .Button {
+}
+
+.Button {
     font-size: 15px;
     font-weight: 600;
     text-decoration: none;
@@ -47,14 +47,14 @@
     border-radius: 5px;
     box-shadow: 0 1px rgb(122, 122, 122);
     padding: 10px 40px;
-  }
-  
-  .Button:hover {
+}
+
+.Button:hover {
     background-color: rgb(230, 230, 230);
     color: rgb(155, 155, 155);
-  }
-  
-  .PassButton {
+}
+
+.PassButton {
     font-size: 15px;
     font-weight: 500;
     text-decoration: none;
@@ -66,45 +66,61 @@
     padding: 10px 10px;
     position: absolute;
     transform: translate(246%, 5%);
-  }
-  
-  .flex {
+}
+
+.flex {
     display: flex;
-  }
-  
-  .Nav-Items-Container {
+}
+
+.Nav-Items-Container {
     border-bottom: 3px #34363d solid;
     color: #ffffff;
     padding: 2px 10px 2px 10px;
     text-decoration: none;
-  }
-  
-  .Nav-Items-Container:hover {
+}
+
+.Nav-Items-Container:hover {
     border-bottom: 3px #ffffff solid;
     color: #ffffff;
     cursor: pointer;
     text-decoration: none;
-  }
-  
-  .Nav-items {
+}
+
+.Nav-items {
     padding: 10px;
-  }
-  
-  .center {
+}
+
+.center {
     display: block;
     margin-left: auto;
     margin-right: auto;
     width: 50%;
-  }
-  
-  .Text {
-    color: rgb(255, 255, 255);
-  }
+}
 
-  .user-content-container {
-    /* display: flex; */
-    overflow-y: auto;
-    align-items: stretch;
-    flex-direction: row;
+.Text {
+    color: rgb(255, 255, 255);
+}
+
+.user-settings-container {
     width: 100%;
+    color: white;
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    background-color: #34363d;
+    border-radius: 0.5rem;
+    box-shadow: 0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45);
+    min-height: 400px;
+}
+
+.user-settings-menu-item-container {
+    height: 48px;
+    display: grid;
+    grid-template-columns: 2px 4px 1fr;
+}
+
+.user-settings-menu-item {
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
