@@ -8,13 +8,16 @@ const OSBAlbums = () => {
     const [
         { data: indexesData, loading: indexesLoading, error: indexesError },
         indexesRefetch,
-    ] = useAxios({
-        url: "/api/indexes",
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${localStorage.token}`,
+    ] = useAxios(
+        {
+            url: "/api/indexes",
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${localStorage.token}`,
+            },
         },
-    });
+        { useCache: false }
+    );
     const [t_data, set_t_data] = useState<any>([]);
     const [lookupObject, setLookupObject] = useState<any>({
         artists: {},

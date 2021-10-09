@@ -24,7 +24,8 @@ const OSBGenres = (props: any) => {
         headers: {
             Authorization: `Bearer ${localStorage.token}`,
         },
-    });
+    },
+    { useCache: false });
     useEffect(() => {
         if (genresLoading) {
             return;
