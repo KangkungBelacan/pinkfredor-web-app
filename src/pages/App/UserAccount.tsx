@@ -1,8 +1,9 @@
 import { useState } from "react";
 import * as UserAccountComponent from "../../components/MainApp/UserAccount";
 import "./UserAccount.css";
+import { Button } from "react-bootstrap";
 function UserAccount() {
-    const [activeItem, setActiveItem] = useState(-1);
+    const [activeItem, setActiveItem] = useState(0);
     return (
         <div className="mainapp-content-container">
             <div
@@ -12,6 +13,7 @@ function UserAccount() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
+                    flexWrap: "wrap",
                 }}
             >
                 <div className="user-settings-container">
@@ -28,9 +30,25 @@ function UserAccount() {
                             active={activeItem == 0 ? true : false}
                             faIconClass="cog"
                         />
+                        <UserAccountComponent.UserSettingsMenuItem
+                            onClick={() => {
+                                setActiveItem(1);
+                            }}
+                            active={activeItem == 1 ? true : false}
+                            faIconClass="address-card"
+                        />
                     </div>
                     <div style={{ margin: "10px" }}>
-                        <UserAccountComponent.UserGeneralSettings style={{display: activeItem == 0 ? "block" : "none"}}/>
+                        <UserAccountComponent.UserGeneralSettings
+                            style={{
+                                display: activeItem == 0 ? "block" : "none",
+                            }}
+                        />
+                        <UserAccountComponent.UserProfileSettings
+                            style={{
+                                display: activeItem == 1 ? "block" : "none",
+                            }}
+                        />
                     </div>
                 </div>
             </div>
