@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { UserSettingsMenuItemProps } from "../../interface/components/UserAccount/UserSettingsMenuItemProps";
+import { UserSettingsMenuItemProps } from "../../../interface/components/UserAccount/UserSettingsMenuItemProps";
 const UserSettingsMenuItem = (props: UserSettingsMenuItemProps) => {
     const [hover, setHover] = useState(false);
     return (
