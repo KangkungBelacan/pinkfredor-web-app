@@ -1,5 +1,5 @@
 import React from "react";
-import "./LinkGDrive.css"
+import "./LinkGDrive.css";
 import MaterialTable from "material-table";
 import TABLE_ICONS from "../../components/generic/MaterialTableIcons";
 import { Button } from "react-bootstrap";
@@ -94,13 +94,43 @@ const LinkGDrive = () => {
                     <MaterialTable
                         icons={TABLE_ICONS}
                         columns={[
+                            // { title: "Name", field: "name" },
+                            // { title: "Surname", field: "surname" },
+                            // {
+                            //     title: "Birth Year",
+                            //     field: "birthYear",
+                            //     type: "numeric",
+                            // },
+                            // {
+                            //     title: "Birth Place",
+                            //     field: "birthCity",
+                            //     lookup: { 34: "İstanbul", 63: "Şanlıurfa" },
+                            // },
                             {
-                                title: "file_id",
-                                field: "file_id",
-                                hidden: true,
+                                title: "Filename",
+                                field: "filename",
+                            },
+                            {
+                                title: "Path",
+                                field: "path",
                             },
                         ]}
-                        data={[]}
+                        data={[
+                            {
+                                filename: "Song A.mp3",
+                                path: "/music/",
+                            },
+                            {
+                                filename: "Song B.mp3",
+                                path: "/music/",
+                            },
+                        ]}
+                        options={{
+                            selection: true,
+                            selectionProps: (rowData: any) => ({
+                                color: "primary",
+                            })
+                        }}
                         title="Detected Music Files"
                     />
                 </div>
