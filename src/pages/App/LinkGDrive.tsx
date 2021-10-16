@@ -1,10 +1,30 @@
-import React from "react";
+import React, { useRef } from "react";
 import "./LinkGDrive.css";
 import MaterialTable from "material-table";
 import TABLE_ICONS from "../../components/generic/MaterialTableIcons";
 import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const LinkGDrive = () => {
+    const tableRef = useRef<any>();
+    /**
+     * 
+     * @param getAll (Optional) set to true to get all row's data ignoring if its checked or not
+     * @returns 
+     */
+    const getSelectedRowsData = (getAll = false) => {
+        let selected_row_data = [];
+        let row_data = tableRef.current.props.data;
+        if(getAll) {
+            return tableRef.current.dataManager.data;
+        }
+        for(let i = 0; i < row_data.length; i++) {
+            let item = row_data[i];
+            if(item.tableData.checked !== undefined && item.tableData.checked) {
+                selected_row_data.push(tableRef.current.dataManager.data[item.tableData.id]);
+            }
+        }
+        return selected_row_data;
+    }
     return (
         <div className="mainapp-content-container">
             <div
@@ -71,14 +91,14 @@ const LinkGDrive = () => {
                 </div>
                 <div></div>
                 <div style={{ textAlign: "right", whiteSpace: "nowrap" }}>
-                    <Button variant="success">
+                    <Button variant="success" onClick={()=>{getSelectedRowsData(true)}}>
                         <FontAwesomeIcon
                             icon="angle-double-down"
                             style={{ marginRight: "5px" }}
                         />
                         Load All
                     </Button>
-                    <Button variant="success" style={{ marginLeft: "10px" }}>
+                    <Button variant="success" style={{ marginLeft: "10px" }} onClick={()=>{getSelectedRowsData()}}>
                         <FontAwesomeIcon
                             icon="download"
                             style={{ marginRight: "5px" }}
@@ -92,20 +112,9 @@ const LinkGDrive = () => {
                     }}
                 >
                     <MaterialTable
+                        tableRef={tableRef}
                         icons={TABLE_ICONS}
                         columns={[
-                            // { title: "Name", field: "name" },
-                            // { title: "Surname", field: "surname" },
-                            // {
-                            //     title: "Birth Year",
-                            //     field: "birthYear",
-                            //     type: "numeric",
-                            // },
-                            // {
-                            //     title: "Birth Place",
-                            //     field: "birthCity",
-                            //     lookup: { 34: "İstanbul", 63: "Şanlıurfa" },
-                            // },
                             {
                                 title: "Filename",
                                 field: "filename",
@@ -114,22 +123,34 @@ const LinkGDrive = () => {
                                 title: "Path",
                                 field: "path",
                             },
+                            {
+                                title: "Date uploaded",
+                                field: "date_uploaded",
+                                type: "date",
+                            },
                         ]}
                         data={[
                             {
                                 filename: "Song A.mp3",
                                 path: "/music/",
+                                date_uploaded: "1/1/2021",
                             },
                             {
                                 filename: "Song B.mp3",
                                 path: "/music/",
+                                date_uploaded: "1/1/2021",
+                                very_complicated_data: {
+                                    so_complicated: {
+                                        omg: "pogger"
+                                    }
+                                }
                             },
                         ]}
                         options={{
                             selection: true,
                             selectionProps: (rowData: any) => ({
                                 color: "primary",
-                            })
+                            }),
                         }}
                         title="Detected Music Files"
                     />
