@@ -5,7 +5,6 @@ import TABLE_ICONS from "../../components/generic/MaterialTableIcons";
 import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAxiosPOST } from "../../global-imports";
-import PlayPreviewButton from "../../components/generic/PlayPreviewButton";
 const LinkGDrive = () => {
     const tableRef = useRef<any>();
     /**
@@ -185,16 +184,14 @@ const LinkGDrive = () => {
                         }}
                         title="Detected Music Files"
                         actions={[
-                            (rowData: any) => ({
+                            {
                                 icon: () => (
                                     <FontAwesomeIcon size="xs" icon="play" />
                                 ),
                                 tooltip: "Preview",
                                 position: "row",
-                                onClick: (event, rowData) => {
-                                    
-                                },
-                            }),
+                                onClick: (event, rowData) => {},
+                            },
                         ]}
                     />
                 </div>
