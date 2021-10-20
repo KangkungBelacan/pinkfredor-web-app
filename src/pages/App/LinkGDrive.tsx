@@ -5,6 +5,7 @@ import TABLE_ICONS from "../../components/generic/MaterialTableIcons";
 import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAxiosPOST } from "../../global-imports";
+import PlayPreviewButton from "../../components/generic/PlayPreviewButton";
 const LinkGDrive = () => {
     const tableRef = useRef<any>();
     /**
@@ -85,7 +86,7 @@ const LinkGDrive = () => {
                         size="sm"
                     >
                         <FontAwesomeIcon
-                            icon="link"
+                            icon="unlink"
                             style={{ marginRight: "5px" }}
                         />
                         Unlink
@@ -145,6 +146,23 @@ const LinkGDrive = () => {
                         icons={TABLE_ICONS}
                         columns={[
                             {
+                                title: "Preview",
+                                field: "preview",
+                                render: (rowData: any) => {
+                                    return (
+                                        <PlayPreviewButton
+                                            state="default"
+                                            onClick={() => {
+                                                console.log("clicked !")
+                                            }}
+                                        />
+                                    );
+                                },
+                                cellStyle: {
+                                    width: 20,
+                                },
+                            },
+                            {
                                 title: "Filename",
                                 field: "filename",
                             },
@@ -180,6 +198,7 @@ const LinkGDrive = () => {
                             selectionProps: (rowData: any) => ({
                                 color: "primary",
                             }),
+                            paging: false,
                         }}
                         title="Detected Music Files"
                     />
