@@ -4,27 +4,39 @@ import MaterialTable from "material-table";
 import TABLE_ICONS from "../../components/generic/MaterialTableIcons";
 import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useAxiosPOST } from "../../global-imports";
 const LinkGDrive = () => {
     const tableRef = useRef<any>();
     /**
-     * 
+     *
      * @param getAll (Optional) set to true to get all row's data ignoring if its checked or not
-     * @returns 
+     * @returns
      */
     const getSelectedRowsData = (getAll = false) => {
         let selected_row_data = [];
         let row_data = tableRef.current.props.data;
-        if(getAll) {
+        if (getAll) {
             return tableRef.current.dataManager.data;
         }
-        for(let i = 0; i < row_data.length; i++) {
+        for (let i = 0; i < row_data.length; i++) {
             let item = row_data[i];
-            if(item.tableData.checked !== undefined && item.tableData.checked) {
-                selected_row_data.push(tableRef.current.dataManager.data[item.tableData.id]);
+            if (
+                item.tableData.checked !== undefined &&
+                item.tableData.checked
+            ) {
+                selected_row_data.push(
+                    tableRef.current.dataManager.data[item.tableData.id]
+                );
             }
         }
         return selected_row_data;
-    }
+    };
+
+    const { data: driveApiUrl, loading: driveApiUrlLoading } = useAxiosPOST(
+        "/api/driveapi/authurl",
+        {},
+        localStorage.token
+    );
     return (
         <div className="mainapp-content-container">
             <div
@@ -50,17 +62,23 @@ const LinkGDrive = () => {
                     >
                         Status: Unknown
                     </div>
-                    <Button
-                        variant="success"
-                        style={{ marginLeft: "10px" }}
-                        size="sm"
-                    >
-                        <FontAwesomeIcon
-                            icon="link"
-                            style={{ marginRight: "5px" }}
-                        />
-                        Link
-                    </Button>
+                    {driveApiUrlLoading || !driveApiUrl ? (
+                        ""
+                    ) : (
+                        <Button
+                            variant="success"
+                            style={{ marginLeft: "10px" }}
+                            size="sm"
+                            href={(driveApiUrl as any).url}
+                            target="_blank"
+                        >
+                            <FontAwesomeIcon
+                                icon="link"
+                                style={{ marginRight: "5px" }}
+                            />
+                            Link
+                        </Button>
+                    )}
                     <Button
                         variant="danger"
                         style={{ marginLeft: "10px" }}
@@ -91,14 +109,25 @@ const LinkGDrive = () => {
                 </div>
                 <div></div>
                 <div style={{ textAlign: "right", whiteSpace: "nowrap" }}>
-                    <Button variant="success" onClick={()=>{getSelectedRowsData(true)}}>
+                    <Button
+                        variant="success"
+                        onClick={() => {
+                            getSelectedRowsData(true);
+                        }}
+                    >
                         <FontAwesomeIcon
                             icon="angle-double-down"
                             style={{ marginRight: "5px" }}
                         />
                         Load All
                     </Button>
-                    <Button variant="success" style={{ marginLeft: "10px" }} onClick={()=>{getSelectedRowsData()}}>
+                    <Button
+                        variant="success"
+                        style={{ marginLeft: "10px" }}
+                        onClick={() => {
+                            getSelectedRowsData();
+                        }}
+                    >
                         <FontAwesomeIcon
                             icon="download"
                             style={{ marginRight: "5px" }}
@@ -141,9 +170,9 @@ const LinkGDrive = () => {
                                 date_uploaded: "1/1/2021",
                                 very_complicated_data: {
                                     so_complicated: {
-                                        omg: "pogger"
-                                    }
-                                }
+                                        omg: "pogger",
+                                    },
+                                },
                             },
                         ]}
                         options={{
