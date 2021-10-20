@@ -145,23 +145,23 @@ const LinkGDrive = () => {
                         tableRef={tableRef}
                         icons={TABLE_ICONS}
                         columns={[
-                            {
-                                title: "Preview",
-                                field: "preview",
-                                render: (rowData: any) => {
-                                    return (
-                                        <PlayPreviewButton
-                                            state="default"
-                                            onClick={() => {
-                                                console.log("clicked !")
-                                            }}
-                                        />
-                                    );
-                                },
-                                cellStyle: {
-                                    width: 20,
-                                },
-                            },
+                            // {
+                            //     title: "Preview",
+                            //     field: "preview",
+                            //     render: (rowData: any) => {
+                            //         return (
+                            //             <PlayPreviewButton
+                            //                 state="default"
+                            //                 onClick={() => {
+                            //                     console.log("clicked !")
+                            //                 }}
+                            //             />
+                            //         );
+                            //     },
+                            //     cellStyle: {
+                            //         width: 20,
+                            //     },
+                            // },
                             {
                                 title: "Filename",
                                 field: "filename",
@@ -201,6 +201,14 @@ const LinkGDrive = () => {
                             paging: false,
                         }}
                         title="Detected Music Files"
+                        actions={[
+                            {
+                                icon: () => <FontAwesomeIcon size="xs" icon="play" />,
+                                tooltip: "Preview",
+                                position: "row",
+                                onClick: (event, rowData) => {},
+                            },
+                        ]}
                     />
                 </div>
             </div>

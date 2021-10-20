@@ -21,13 +21,6 @@ const DARK_THEME = createTheme({
                 },
             },
         },
-        // Force table cell to have width 0 at start
-        // Remove if it causes issue
-        MuiTableCell: {
-            head: {
-                width: "0 !important",
-            },
-        },
     },
 });
 
