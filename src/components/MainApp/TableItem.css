@@ -1,0 +1,42 @@
+.table-item-container {
+    display: grid;
+    grid-template-columns: 5% 10% 60% 20%;
+    padding: 10px;
+}
+
+.table-item-container-number {
+    color: white;
+}
+
+.table-item-container-image {
+    background-color: antiquewhite;
+    width: 50px;
+    height: 50px;
+}
+
+.table-item-container-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    color: white;
+}
+
+.table-item-container-title {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    color: white;
+}
+
+.table-item-container-details {
+    font-size: 13px;
+    color: gray;
+}
+
+.table-item-container-actions {
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

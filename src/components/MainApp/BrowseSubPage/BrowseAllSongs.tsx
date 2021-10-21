@@ -27,6 +27,7 @@ import MoreVert from "@material-ui/icons/MoreVert";
 import { Icons } from "material-table";
 // import MusicPlayerContext from "../../context/MusicPlayerContext";
 import { MusicQueueItem } from "../../../interface/context/MusicQueueItem";
+import CustomTable from "../CustomTable";
 
 const tableIcons: Icons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -91,14 +92,14 @@ const BrowseAllSongs = (props: any) => {
         setTableData(indexFiles);
     }, [indexFilesData, indexFilesLoading, indexFilesError, pageLoading]);
 
-    const play = (event: any, rowData: any) => {
+    const Play = (songData: any) => {
         let new_queue: Array<MusicQueueItem> = [];
         // Set queue to all songs in view
         for (let i = 0; i < tableData.length; i++) {
             new_queue.push({
                 item_id: "queue_item_" + tableData[i].tableData.id,
                 current:
-                    tableData[i].tableData.id === rowData.tableData.id
+                    tableData[i].tableData.id === songData.id
                         ? true
                         : false,
                 playingURL: `/api/driveapi/files/download?token=${localStorage.token}&fileid=${tableData[i].id}`,
@@ -109,10 +110,10 @@ const BrowseAllSongs = (props: any) => {
         props.setQueue(new_queue);
         props.setProgress(0);
         props.setNowPlayingURL(
-            `/api/driveapi/files/download?token=${localStorage.token}&fileid=${rowData.id}`
+            `/api/driveapi/files/download?token=${localStorage.token}&fileid=${songData.id}`
         );
-        props.setSongTitleLabel(rowData.file_metadata.song_title);
-        props.setSongArtistLabel(rowData.file_metadata.song_artist);
+        props.setSongTitleLabel(songData.file_metadata.song_title);
+        props.setSongArtistLabel(songData.file_metadata.song_artist);
         // setSongAlbumArtURL("");
         props.setStatus("PLAYING");
 
@@ -124,116 +125,117 @@ const BrowseAllSongs = (props: any) => {
         //         event.currentTarget.id
         // );
     };
-    const addToPlaylist = (event: any, rowData: any) => {};
-    const playNext = (event: any, rowData: any) => {};
-    const addToQ = (event: any, rowData: any) => {
+    const AddToPlaylist = (songData: any) => {};
+    const PlayNext = (songData: any) => {};
+    const AddToQ = (songData: any) => {
         props.setQueue([
             ...props.queue,
             {
                 item_id:
                     "queue_item_" +
-                    rowData.tableData.id +
+                    songData.id +
                     Date.now().toString(),
                 current: false,
-                playingURL: `/api/driveapi/files/download?token=${localStorage.token}&fileid=${rowData.id}`,
-                song_title: rowData.file_metadata.song_title,
-                song_artist: rowData.file_metadata.song_artist,
+                playingURL: `/api/driveapi/files/download?token=${localStorage.token}&fileid=${songData.id}`,
+                song_title: songData.file_metadata.song_title,
+                song_artist: songData.file_metadata.song_artist,
             },
         ]);
     };
 
-    const matTableActionOnClick = (event: any, rowData: any) => {
-        // const possibleAction = ["addToQ", "playNext", "addToPlaylist", "play"];
-        switch (event.currentTarget.id) {
-            case "addToQ":
-                addToQ(event, rowData);
+    const SongItemOnClick = (songData: any, action: string) => {
+        // const possibleAction = ["AddToQ", "PlayNext", "AddToPlaylist", "Play"];
+        switch (action) {
+            case "AddToQ":
+                AddToQ(songData);
                 break;
-            case "playNext":
-                playNext(event, rowData);
+            case "PlayNext":
+                PlayNext(songData);
                 break;
-            case "addToPlaylist":
-                addToPlaylist(event, rowData);
+            case "AddToPlaylist":
+                AddToPlaylist(songData);
                 break;
-            case "play":
-                play(event, rowData);
+            case "Play":
+                Play(songData);
                 break;
         }
     };
 
     return (
         <div>
-            <MaterialTable
-                icons={tableIcons}
-                columns={song_columns}
-                data={tableData}
-                title="All Songs"
-                actions={[
-                    {
-                        icon: MoreVert,
-                        tooltip: "More Options",
-                        onClick: matTableActionOnClick,
-                    },
-                ]}
-                components={{
-                    Action: (props) => (
-                        <Dropdown
-                            as={ButtonGroup}
-                            onClick={(evt: any) => {
-                                evt.stopPropagation();
-                            }}
-                        >
-                            <Button
-                                id="play"
-                                onClick={(event) =>
-                                    props.action.onClick(event, props.data)
-                                }
-                                variant="success"
-                            >
-                                Play
-                            </Button>
+            {tableData.length !== 0 ? <CustomTable tableData={tableData} songItemOnClick={SongItemOnClick}/> : <div style={{color: "white"}}>Loading... (change this shit later)</div>}
+            {/*<MaterialTable*/}
+            {/*    icons={tableIcons}*/}
+            {/*    columns={song_columns}*/}
+            {/*    data={tableData}*/}
+            {/*    title="All Songs"*/}
+            {/*    actions={[*/}
+            {/*        {*/}
+            {/*            icon: MoreVert,*/}
+            {/*            tooltip: "More Options",*/}
+            {/*            onClick: matTableActionOnClick,*/}
+            {/*        },*/}
+            {/*    ]}*/}
+            {/*    components={{*/}
+            {/*        Action: (props) => (*/}
+            {/*            <Dropdown*/}
+            {/*                as={ButtonGroup}*/}
+            {/*                onClick={(evt: any) => {*/}
+            {/*                    evt.stopPropagation();*/}
+            {/*                }}*/}
+            {/*            >*/}
+            {/*                <Button*/}
+            {/*                    id="Play"*/}
+            {/*                    onClick={(event) =>*/}
+            {/*                        props.action.onClick(event, props.data)*/}
+            {/*                    }*/}
+            {/*                    variant="success"*/}
+            {/*                >*/}
+            {/*                    Play*/}
+            {/*                </Button>*/}
 
-                            <Dropdown.Toggle
-                                split
-                                variant="success"
-                                id="dropdown-split-basic"
-                            />
+            {/*                <Dropdown.Toggle*/}
+            {/*                    split*/}
+            {/*                    variant="success"*/}
+            {/*                    id="dropdown-split-basic"*/}
+            {/*                />*/}
 
-                            <Dropdown.Menu>
-                                <Dropdown.Item
-                                    id="addToQ"
-                                    onClick={(event) =>
-                                        props.action.onClick(event, props.data)
-                                    }
-                                >
-                                    Add to queue
-                                </Dropdown.Item>
-                                <Dropdown.Item
-                                    id="playNext"
-                                    onClick={(event) =>
-                                        props.action.onClick(event, props.data)
-                                    }
-                                >
-                                    Play next
-                                </Dropdown.Item>
-                                <Dropdown.Item
-                                    id="addToPlaylist"
-                                    onClick={(event) =>
-                                        props.action.onClick(event, props.data)
-                                    }
-                                >
-                                    Add to playlist
-                                </Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    ),
-                }}
-                options={{
-                    actionsColumnIndex: -1,
-                }}
-                onRowClick={(e, rowData) => {
-                    play(e, rowData);
-                }}
-            />
+            {/*                <Dropdown.Menu>*/}
+            {/*                    <Dropdown.Item*/}
+            {/*                        id="AddToQ"*/}
+            {/*                        onClick={(event) =>*/}
+            {/*                            props.action.onClick(event, props.data)*/}
+            {/*                        }*/}
+            {/*                    >*/}
+            {/*                        Add to queue*/}
+            {/*                    </Dropdown.Item>*/}
+            {/*                    <Dropdown.Item*/}
+            {/*                        id="PlayNext"*/}
+            {/*                        onClick={(event) =>*/}
+            {/*                            props.action.onClick(event, props.data)*/}
+            {/*                        }*/}
+            {/*                    >*/}
+            {/*                        Play next*/}
+            {/*                    </Dropdown.Item>*/}
+            {/*                    <Dropdown.Item*/}
+            {/*                        id="AddToPlaylist"*/}
+            {/*                        onClick={(event) =>*/}
+            {/*                            props.action.onClick(event, props.data)*/}
+            {/*                        }*/}
+            {/*                    >*/}
+            {/*                        Add to playlist*/}
+            {/*                    </Dropdown.Item>*/}
+            {/*                </Dropdown.Menu>*/}
+            {/*            </Dropdown>*/}
+            {/*        ),*/}
+            {/*    }}*/}
+            {/*    options={{*/}
+            {/*        actionsColumnIndex: -1,*/}
+            {/*    }}*/}
+            {/*    onRowClick={(e, rowData) => {*/}
+            {/*        Play(e, rowData);*/}
+            {/*    }}*/}
+            {/*/>*/}
         </div>
     );
 };
