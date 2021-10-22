@@ -6,5 +6,6 @@ export interface FileItem extends Item {
     filename: string;
     parents: any[];
     size: number;
-    file_metadata: FileMetadata
+    file_metadata: FileMetadata,
+    createdTime: number
 }
