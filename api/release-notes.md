@@ -1,6 +1,8 @@
 ## v1.0.1
-- Add: `/api/driveapi/user_credentials` for getting google drive basic information
-- login endpoint now accepts more user information
+- `/api/auth/login` endpoint now accepts more user information
+- Add: `/api/driveapi/user_info` for getting google drive user basic information
+- Add: `/api/driveapi/deauth` for unlinking user's google drive
+- JWT payload now contains user basic information
 
 ## v1.0.0
 Initial Release
