@@ -47,26 +47,33 @@ const login = async (req: any, res: any) => {
 
     // If the token is valid, checks whether if DB have this user_id
     let doc = db.collection("app-users").doc(userid);
-    let doc_data = await doc.get();
     let user: AppUser;
-    if (!doc_data.exists) {
-        // User do not exists, create
-        user = {
-            id: userid,
-            name: req.body.name === undefined ? "" : req.body.name,
-            email: req.body.email === undefined ? "" : req.body.email,
-            imageUrl: req.body.imageUrl === undefined ? "" : req.body.imageUrl,
-        };
-        doc.set(user);
-    } else {
-        let doc_actual_data = doc_data.data();
-        user = {
-            id: doc_actual_data.id,
-            name: doc_actual_data.name,
-            email: doc_actual_data.email,
-            imageUrl: doc_actual_data.imageUrl,
-        };
-    }
+    // if (!doc_data.exists) {
+    //     // User do not exists, create
+    //     user = {
+    //         id: userid,
+    //         name: req.body.name === undefined ? "" : req.body.name,
+    //         email: req.body.email === undefined ? "" : req.body.email,
+    //         imageUrl: req.body.imageUrl === undefined ? "" : req.body.imageUrl,
+    //     };
+    //     doc.set(user);
+    // } else {
+    //     let doc_actual_data = doc_data.data();
+    //     user = {
+    //         id: doc_actual_data.id,
+    //         name: doc_actual_data.name,
+    //         email: doc_actual_data.email,
+    //         imageUrl: doc_actual_data.imageUrl,
+    //     };
+    // }
+    // Always override user data with newly provided fields
+    user = {
+        id: userid,
+        name: req.body.name === undefined ? "" : req.body.name,
+        email: req.body.email === undefined ? "" : req.body.email,
+        imageUrl: req.body.imageUrl === undefined ? "" : req.body.imageUrl,
+    };
+    doc.set(user);
 
     response.status = true;
     response.token = generateAccessToken(user);
