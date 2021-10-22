@@ -4,7 +4,7 @@ import { db } from "./../../firebase";
 const oauth2Client = new google.auth.OAuth2(
     (drive_cred as any).client_id,
     (drive_cred as any).client_secret,
-    (drive_cred as any).redirect_uris[0]
+    (drive_cred as any).redirect_uri
 );
 
 const oauth_callback = async (req: any, res: any) => {
@@ -27,7 +27,6 @@ const oauth_callback = async (req: any, res: any) => {
         }
         res.redirect("http://localhost:3000");
     } catch (err: any) {
-        console.error(err)
         res.json({message: "Wtf are you doing"});
     }
 };
