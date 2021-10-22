@@ -4,21 +4,28 @@ import { AppUser } from "../interface/firebase/AppUser";
 import { db } from "../../firebase";
 import { env } from "../../env";
 import { OAuth2Client } from "google-auth-library";
-import { RequestSchema, RequestType, RequestBodyDataType } from "../../util/interface/RequestSchema";
+import {
+    RequestSchema,
+    RequestType,
+    RequestBodyDataType,
+} from "../../util/interface/RequestSchema";
 import { verify_request_body } from "../../util/verify_request_body";
 
-const __schema_login:RequestSchema = {
+const __schema_login: RequestSchema = {
     type: RequestType.POST,
     content: {
-        "tokenId": RequestBodyDataType.STRING
-    }
-}
+        tokenId: RequestBodyDataType.STRING,
+        name: RequestBodyDataType.OPTIONAL,
+        email: RequestBodyDataType.OPTIONAL,
+        imageUrl: RequestBodyDataType.OPTIONAL,
+    },
+};
 
 const login = async (req: any, res: any) => {
     let response: LoginResponse = {
         status: false,
     };
-    if(!verify_request_body(req, res, __schema_login)) {
+    if (!verify_request_body(req, res, __schema_login)) {
         return;
     }
 
@@ -46,14 +53,18 @@ const login = async (req: any, res: any) => {
         // User do not exists, create
         user = {
             id: userid,
-            username: "User ##",
+            name: req.body.name === undefined ? "" : req.body.name,
+            email: req.body.email === undefined ? "" : req.body.email,
+            imageUrl: req.body.imageUrl === undefined ? "" : req.body.imageUrl,
         };
         doc.set(user);
     } else {
         let doc_actual_data = doc_data.data();
         user = {
             id: doc_actual_data.id,
-            username: doc_actual_data.username,
+            name: doc_actual_data.name,
+            email: doc_actual_data.email,
+            imageUrl: doc_actual_data.imageUrl,
         };
     }
 

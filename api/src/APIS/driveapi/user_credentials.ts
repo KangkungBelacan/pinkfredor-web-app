@@ -2,10 +2,7 @@ import { google } from "googleapis";
 import { db } from "../../firebase";
 import { env } from "../../env";
 const user_credentials = async (req: any, res: any) => {
-    // Dev
-    let user_id = "103069084556170819796";
-    // Prod
-    // let user_id = req.app_user.id;
+    let user_id = req.app_user.id;
     const drive_token = await db
         .collection("drive-api-tokens")
         .doc(user_id)
