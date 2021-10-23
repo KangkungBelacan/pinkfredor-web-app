@@ -1,8 +1,9 @@
-import React, { forwardRef, useState, useEffect } from "react";
+import React, {forwardRef, useEffect, useState} from "react";
 import useAxios from "axios-hooks";
 import "../Browse.css";
-import MaterialTable from "material-table";
-import { Button, ButtonGroup, Dropdown } from "react-bootstrap";
+// import PlayArrow from "@material-ui/icons/PlayArrow";
+// import Queue from "@material-ui/icons/Queue";
+import {Icons} from "material-table";
 
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
@@ -19,50 +20,45 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
-import MoreVert from "@material-ui/icons/MoreVert";
-
-// import PlayArrow from "@material-ui/icons/PlayArrow";
-// import Queue from "@material-ui/icons/Queue";
-
-import { Icons } from "material-table";
 // import MusicPlayerContext from "../../context/MusicPlayerContext";
-import { MusicQueueItem } from "../../../interface/context/MusicQueueItem";
+import {MusicQueueItem} from "../../../interface/context/MusicQueueItem";
 import CustomTable from "../CustomTable";
 
 const tableIcons: Icons = {
-    Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-    Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-    Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+    Add: forwardRef((props, ref) => <AddBox {...props} ref={ref}/>),
+    Check: forwardRef((props, ref) => <Check {...props} ref={ref}/>),
+    Clear: forwardRef((props, ref) => <Clear {...props} ref={ref}/>),
+    Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref}/>),
     DetailPanel: forwardRef((props, ref) => (
-        <ChevronRight {...props} ref={ref} />
+        <ChevronRight {...props} ref={ref}/>
     )),
-    Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
-    Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
-    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+    Edit: forwardRef((props, ref) => <Edit {...props} ref={ref}/>),
+    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref}/>),
+    Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref}/>),
+    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref}/>),
+    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref}/>),
+    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref}/>),
     PreviousPage: forwardRef((props, ref) => (
-        <ChevronLeft {...props} ref={ref} />
+        <ChevronLeft {...props} ref={ref}/>
     )),
-    ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
-    SortArrow: forwardRef((props, ref) => <ArrowUpward {...props} ref={ref} />),
+    ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref}/>),
+    Search: forwardRef((props, ref) => <Search {...props} ref={ref}/>),
+    SortArrow: forwardRef((props, ref) => <ArrowUpward {...props} ref={ref}/>),
     ThirdStateCheck: forwardRef((props, ref) => (
-        <Remove {...props} ref={ref} />
+        <Remove {...props} ref={ref}/>
     )),
-    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
+    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref}/>),
 };
 
-interface Element {}
+interface Element {
+}
 
 const BrowseAllSongs = (props: any) => {
     const song_columns = [
-        { title: "file_id", field: "id", hidden: true },
-        { title: "Title", field: "file_metadata.song_title" },
-        { title: "Artist", field: "file_metadata.song_artist" },
-        { title: "Album", field: "file_metadata.song_album" },
+        {title: "file_id", field: "id", hidden: true},
+        {title: "Title", field: "file_metadata.song_title"},
+        {title: "Artist", field: "file_metadata.song_artist"},
+        {title: "Album", field: "file_metadata.song_album"},
     ];
 
     const [topBarSelection, setTopBar] = useState(0);
@@ -125,8 +121,10 @@ const BrowseAllSongs = (props: any) => {
         //         event.currentTarget.id
         // );
     };
-    const AddToPlaylist = (songData: any) => {};
-    const PlayNext = (songData: any) => {};
+    const AddToPlaylist = (songData: any) => {
+    };
+    const PlayNext = (songData: any) => {
+    };
     const AddToQ = (songData: any) => {
         props.setQueue([
             ...props.queue,
@@ -163,7 +161,8 @@ const BrowseAllSongs = (props: any) => {
 
     return (
         <div>
-            {tableData.length !== 0 ? <CustomTable tableData={tableData} songItemOnClick={SongItemOnClick}/> : <div style={{color: "white"}}>Loading... (change this shit later)</div>}
+            {tableData.length !== 0 ? <CustomTable tableData={tableData} songItemOnClick={SongItemOnClick}/> :
+                <div style={{color: "white"}}>Loading... (change this shit later)</div>}
             {/*<MaterialTable*/}
             {/*    icons={tableIcons}*/}
             {/*    columns={song_columns}*/}
@@ -228,7 +227,7 @@ const BrowseAllSongs = (props: any) => {
             {/*                </Dropdown.Menu>*/}
             {/*            </Dropdown>*/}
             {/*        ),*/}
-            {/*    }}*/}
+            {/*    // }}*/}
             {/*    options={{*/}
             {/*        actionsColumnIndex: -1,*/}
             {/*    }}*/}
