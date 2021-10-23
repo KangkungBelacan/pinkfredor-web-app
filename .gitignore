@@ -51,6 +51,8 @@ package-lock.json
 **/*/package-lock.json
 .vscode
 **/*/.vscode
+.idea
+**/*/.idea
 **/*/.env
 api/src/drive_credentials.json
 .eslintcache
