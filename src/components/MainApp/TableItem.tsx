@@ -1,15 +1,39 @@
 import "./TableItem.css"
 import {Button, ButtonGroup, Dropdown} from "react-bootstrap";
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faEllipsisH,
+    faPlay
+} from "@fortawesome/free-solid-svg-icons";
+const ellipsisH = <FontAwesomeIcon icon={faEllipsisH}/>;
+const play = <FontAwesomeIcon className={"table-item-container-image-play"} icon={faPlay}/>;
 
 const TableItem = (props: any) => {
     let songData = props.songData;
     let containerDetails;
 
+    const toggle = React.forwardRef<HTMLButtonElement, React.PropsWithChildren<any>>((props, ref:any) => (
+        <a
+            className={"table-item-toggle"}
+            href=""
+            ref={ref}
+            onClick={(e) => {
+                e.preventDefault();
+                props.onClick(e);
+            }}
+        >
+            {props.children}
+            {ellipsisH}
+        </a>
+    ));
+
     return (
-        <div className={"table-item-container"}>
+        <div className={"table-item-container"} onClick={(event) => {props.songItemOnClick(songData, "Play")}}>
             <div className={"table-item-container-number"}>{props.position + "."}</div>
-            <div className={"table-item-container-image"} style={{backgroundColor: props.imageColor}}></div>
+            <div className={"table-item-container-image"} style={{backgroundColor: props.imageColor}}>
+                {play}
+            </div>
             <div className={"table-item-container-info"}>
                 <div className={"table-item-container-title"}>{songData.file_metadata.song_title}</div>
                 <div className={"table-item-container-details"}>{containerDetails}</div>
@@ -21,18 +45,18 @@ const TableItem = (props: any) => {
                         evt.stopPropagation();
                     }}
                 >
-                    <Button
-                        id="Play"
-                        onClick={(event) =>
-                            props.songItemOnClick(songData, "Play")
-                        }
-                        variant="success"
-                    >
-                        Play
-                    </Button>
+                    {/*<Button*/}
+                    {/*    id="Play"*/}
+                    {/*    onClick={(event) =>*/}
+                    {/*        props.songItemOnClick(songData, "Play")*/}
+                    {/*    }*/}
+                    {/*    variant="success"*/}
+                    {/*>*/}
+                    {/*    Play*/}
+                    {/*/Button>*/}
 
                     <Dropdown.Toggle
-                        split
+                        as={toggle}
                         variant="success"
                         id="dropdown-split-basic"
                     />

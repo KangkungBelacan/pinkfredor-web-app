@@ -4,7 +4,7 @@ import {useEffect} from "react";
 const CustomTable = (props: any) => {
     let tableItems: any = [];
     for (let i=0; i < props.tableData.length; i++){
-        tableItems.push(<TableItem key={i} position={i + 1} songData={props.tableData[i]} songItemOnClick={props.songItemOnClick}/>)
+        tableItems.push(<TableItem key={i} position={i + 1} songData={props.tableData[i]} songItemOnClick={props.songItemOnClick} imageColor={'#'+(Math.random()*0xFFFFFF<<0).toString(16)}/>)
     }
     return (
         <div className={"table-container"}>
