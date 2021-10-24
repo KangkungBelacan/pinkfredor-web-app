@@ -62,7 +62,9 @@ const BrowseAllSongs = (props: any) => {
     ];
 
     const [topBarSelection, setTopBar] = useState(0);
-    const [tableData, setTableData] = useState<any>([]);
+    const [indexFilesState, setIndexFilesState] = useState<any>([]);
+    const [artistsDataState, setArtistsDataState] = useState<any>([]);
+    const [albumDataState, setAlbumDataState] = useState<any>([]);
     const [pageLoading, setPageLoading] = useState(true);
 
     const [
@@ -80,27 +82,59 @@ const BrowseAllSongs = (props: any) => {
         },
     });
 
+    const [
+        {
+            data: artistsData,
+            loading: artistsLoading,
+            error: artistsError,
+        },
+        artistsRefetch,
+    ] = useAxios({
+        url: "/api/indexes/artists",
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${localStorage.token}`,
+        },
+    });
+
+    const [
+        {
+            data: albumData,
+            loading: albumLoading,
+            error: albumError,
+        },
+        albumRefetch,
+    ] = useAxios({
+        url: "/api/indexes/albums",
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${localStorage.token}`,
+        },
+    });
+
     useEffect(() => {
-        if (indexFilesLoading || indexFilesError || !pageLoading) return;
+        if (indexFilesLoading || indexFilesError || artistsLoading || artistsError || albumLoading || albumError || !pageLoading) return;
 
         let indexFiles = Object.values(indexFilesData.files);
+        setIndexFilesState(indexFiles);
+        setArtistsDataState(artistsData.artists);
+        setAlbumDataState(albumData.albums);
         setPageLoading(false);
-        setTableData(indexFiles);
-    }, [indexFilesData, indexFilesLoading, indexFilesError, pageLoading]);
+    }, [indexFilesData, indexFilesLoading, indexFilesError, artistsData, artistsLoading, artistsError, albumData, albumLoading, albumError, pageLoading]);
 
     const Play = (songData: any) => {
         let new_queue: Array<MusicQueueItem> = [];
         // Set queue to all songs in view
-        for (let i = 0; i < tableData.length; i++) {
+        for (let i = 0; i < indexFilesState.length; i++) {
             new_queue.push({
-                item_id: "queue_item_" + tableData[i].tableData.id,
+                item_id: "queue_item_" + indexFilesState[i].id,
                 current:
-                    tableData[i].tableData.id === songData.id
+                    indexFilesState[i].id === songData.id
                         ? true
                         : false,
-                playingURL: `/api/driveapi/files/download?token=${localStorage.token}&fileid=${tableData[i].id}`,
-                song_title: tableData[i].file_metadata.song_title,
-                song_artist: tableData[i].file_metadata.song_artist,
+                playingURL: `/api/driveapi/files/download?token=${localStorage.token}&fileid=${indexFilesState[i].id}`,
+                song_title: indexFilesState[i].file_metadata.song_title,
+                song_artist: indexFilesState[i].file_metadata.song_artist,
             });
         }
         props.setQueue(new_queue);
@@ -161,12 +195,12 @@ const BrowseAllSongs = (props: any) => {
 
     return (
         <div>
-            {tableData.length !== 0 ? <CustomTable tableData={tableData} songItemOnClick={SongItemOnClick}/> :
+            {indexFilesState.length !== 0 ? <CustomTable indexFilesState={indexFilesState} songItemOnClick={SongItemOnClick} artistsDataState={artistsDataState} albumDataState={albumDataState}/> :
                 <div style={{color: "white"}}>Loading... (change this shit later)</div>}
             {/*<MaterialTable*/}
             {/*    icons={tableIcons}*/}
             {/*    columns={song_columns}*/}
-            {/*    data={tableData}*/}
+            {/*    data={indexFilesState}*/}
             {/*    title="All Songs"*/}
             {/*    actions={[*/}
             {/*        {*/}

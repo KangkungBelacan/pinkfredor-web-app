@@ -12,6 +12,20 @@ const play = <FontAwesomeIcon className={"table-item-container-image-play"} icon
 const TableItem = (props: any) => {
     let songData = props.songData;
     let containerDetails;
+    console.log(songData.file_metadata.song_artistid)
+    if (songData.file_metadata.song_artistid != "" || songData.file_metadata.song_albumid != ""){
+        if (songData.file_metadata.song_artistid != ""){
+            containerDetails = props.artistsDataState[songData.file_metadata.song_artistid].artist_name;
+        }
+
+        if (songData.file_metadata.song_artistid != "" && songData.file_metadata.song_albumid != ""){
+            containerDetails += ", "
+        }
+
+        if (songData.file_metadata.song_albumid != ""){
+            containerDetails += props.albumDataState[songData.file_metadata.song_albumid].album_name;
+        }
+    }
 
     const toggle = React.forwardRef<HTMLButtonElement, React.PropsWithChildren<any>>((props, ref:any) => (
         <a
@@ -32,6 +46,7 @@ const TableItem = (props: any) => {
         <div className={"table-item-container"} onClick={(event) => {props.songItemOnClick(songData, "Play")}}>
             <div className={"table-item-container-number"}>{props.position + "."}</div>
             <div className={"table-item-container-image"} style={{backgroundColor: props.imageColor}}>
+                <div className={"table-item-container-image-overlay"}></div>
                 {play}
             </div>
             <div className={"table-item-container-info"}>

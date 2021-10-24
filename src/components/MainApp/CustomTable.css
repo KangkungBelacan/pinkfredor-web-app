@@ -16,7 +16,8 @@
     /*grid-auto-rows: minmax(60px, auto);*/
     display: flex;
     justify-content: space-between;
-    background-color: dimgray;
+    font-size: 25px;
+    /*background-color: dimgray;*/
 }
 
 .table-column-title-all-songs {
