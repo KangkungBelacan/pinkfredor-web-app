@@ -31,8 +31,10 @@ const user_info = async (req: any, res: any) => {
                 if (err) {
                     reject(err);
                 }
-                // console.log(res.data);
-                accept(res.data);
+                if(res === undefined) {
+                    reject(err);
+                }
+                accept(res.data)
             });
         });
         res.json(user_info);

@@ -27,6 +27,7 @@ const oauth_callback = async (req: any, res: any) => {
         }
         res.redirect("http://localhost:3000");
     } catch (err: any) {
+        console.error(err)
         res.json({message: "Wtf are you doing"});
     }
 };
