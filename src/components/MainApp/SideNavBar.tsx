@@ -2,9 +2,10 @@ import { Link, useLocation } from "react-router-dom";
 import "./SideNavBar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Profile from "./../../images/pfp.png";
-
+import jwt_decode from "jwt-decode";
 function SideNavBar(props: any): JSX.Element {
     const current_path = useLocation().pathname;
+    const jwt_payload = jwt_decode(localStorage.getItem("token") as string);
     return (
         <div
             className="sidebar-container"
@@ -27,14 +28,14 @@ function SideNavBar(props: any): JSX.Element {
                 <div className="sidebar-header">
                     <div className="row">
                         <div className="col-md-12 col-8">
-                            <div className="flex">
+                            <div className="flex" style={{justifyContent:"center"}}>
                                 <div>
                                     <h3 style={{ textAlign: "center" }}>
                                         Pinkfredor
                                     </h3>
                                     <br />
                                     <img
-                                        src={Profile}
+                                        src={(jwt_payload as any).imageUrl !== undefined ? (jwt_payload as any).imageUrl : Profile}
                                         alt="Avatar"
                                         className="center"
                                         style={{ borderRadius: "50%" }}
@@ -45,7 +46,9 @@ function SideNavBar(props: any): JSX.Element {
                                             textAlign: "center",
                                         }}
                                     >
-                                        Looz
+                                        {(jwt_payload as any).name !== undefined
+                                            ? (jwt_payload as any).name
+                                            : "Unknown User"}
                                     </h3>
                                 </div>
                             </div>
@@ -54,7 +57,9 @@ function SideNavBar(props: any): JSX.Element {
                                     to="/app/user"
                                     className="Nav-Items-Container"
                                     style={{ margin: "10px" }}
-                                >Settings</Link>
+                                >
+                                    Settings
+                                </Link>
                                 <div
                                     className="Nav-Items-Container"
                                     style={{ margin: "10px" }}
