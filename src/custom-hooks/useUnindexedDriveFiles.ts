@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 const useUnindexedDriveFiles = () => {
     const [loading, setLoading] = useState(true);
-    const [data, setData] = useState<any>(null);
+    const [filesData, setFilesData] = useState<any>(null);
     const [
         { data: scanData, loading: scanLoading, error: scanErr },
         scanRefetch,
@@ -16,6 +16,23 @@ const useUnindexedDriveFiles = () => {
             },
             data: {
                 folder_only: false,
+            },
+        },
+        { useCache: false }
+    );
+
+    const [
+        { data: folderData, loading: folderLoading, error: folderErr },
+        folderRefetch,
+    ] = useAxios(
+        {
+            url: "/api/driveapi/files/scan",
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${localStorage.token}`,
+            },
+            data: {
+                folder_only: true,
             },
         },
         { useCache: false }
@@ -36,14 +53,27 @@ const useUnindexedDriveFiles = () => {
     );
 
     useEffect(() => {
-        if(scanLoading || indexLoading) {
+        if (scanLoading || indexLoading || folderLoading || !loading) {
             return;
         }
-        setData(scanData);
-        setLoading(false);
-    }, [scanLoading, indexLoading]);
 
-    return [data, loading]
+        if (indexErr?.response?.status === 404) {
+            setFilesData(scanData);
+            setLoading(false);
+            return;
+        }
+
+        let files_data = JSON.parse(JSON.stringify(scanData));
+        let keys = Object.keys(indexData.files);
+        for (let i = 0; i < keys.length; i++) {
+            delete files_data.files[keys[i]];
+        }
+
+        setFilesData(files_data);
+        setLoading(false);
+    }, [scanLoading, indexLoading, folderLoading]);
+
+    return [filesData, folderData, loading];
 };
 
 export default useUnindexedDriveFiles;

@@ -74,25 +74,30 @@ const LinkGDrive = () => {
         { useCache: false }
     );
 
-    const [filesData, filesLoading] = useUnindexedDriveFiles();
-
+    const [filesData, folderData, filesLoading] = useUnindexedDriveFiles();
+    const [t_data, set_t_data] = useState<any>(null);
     useEffect(() => {
         if (driveUserInfoLoading) {
             return;
         }
 
-        if (driveUserInfoErr?.response?.status === 404) {
+        if (driveUserInfoErr?.response?.status === 404 || driveUserInfoErr?.response?.status === 401) {
             setStatusText("Status: Unlinked");
             setDriveLinkState("unlinked");
-            return;
+        } else {
+            setStatusText(`Status: Linked (Account: ${driveUserInfoData.email})`);
+            setDriveLinkState("linked");
         }
 
-        setStatusText(`Status: Linked (Account: ${driveUserInfoData.email})`);
-        setDriveLinkState("linked");
-    }, [driveUserInfoLoading]);
+        if(filesLoading) {
+            return;
+        }
+        set_t_data(getFilesDataTableDisplayData())
+
+    }, [driveUserInfoLoading, filesLoading]);
 
     const unlinkGDrive = () => {
-        setDriveLinkState("unlinking")
+        setDriveLinkState("unlinking");
         fetch("/api/driveapi/deauth", {
             method: "POST",
             headers: {
@@ -107,6 +112,37 @@ const LinkGDrive = () => {
             .catch((err: any) => {
                 alert("Something went wrong.");
             });
+    };
+
+    const getFilePathString = (fileid: string) => {
+        let file_item = filesData.files[fileid];
+        let parent_path = "/";
+        if (file_item.parents !== undefined) {
+            while (file_item.parents.length !== 0) {
+                let parent_id = file_item.parents.pop();
+                if (folderData[parent_id] !== undefined) {
+                    parent_path += folderData[parent_id].folder_name + "/";
+                }
+            }
+        }
+        return parent_path;
+    };
+
+    /**
+     * Get table data needed to be output into the table
+     */
+    const getFilesDataTableDisplayData = () => {
+        let t_data = [];
+        let keys = Object.keys(filesData.files);
+        for (let i = 0; i < keys.length; i++) {
+            let fileItem = filesData.files[keys[i]];
+            t_data.push({
+                filename: fileItem.filename,
+                path: getFilePathString(fileItem.id),
+                date_uploaded: fileItem.createdTime,
+            });
+        }
+        return t_data;
     };
 
     return (
@@ -159,6 +195,9 @@ const LinkGDrive = () => {
                             <FontAwesomeIcon
                                 icon="link"
                                 style={{ marginRight: "5px" }}
+                                onClick={() => {
+                                    setDriveLinkState("linking");
+                                }}
                             />
                             Link
                         </Button>
@@ -186,7 +225,8 @@ const LinkGDrive = () => {
                             style={{
                                 marginLeft: "10px",
                                 display:
-                                    driveLinkState === "linking" || driveLinkState === "unlinking"
+                                    driveLinkState === "linking" ||
+                                    driveLinkState === "unlinking"
                                         ? "inline-block"
                                         : "none",
                             }}
@@ -199,7 +239,9 @@ const LinkGDrive = () => {
                                     animation: "spin 1s linear infinite",
                                 }}
                             />
-                            {driveLinkState === "linking" ? "Linking" : "Unlinking"}
+                            {driveLinkState === "linking"
+                                ? "Linking"
+                                : "Unlinking"}
                         </Button>
                     </div>
                 )}
@@ -223,6 +265,7 @@ const LinkGDrive = () => {
                         style={{ marginLeft: "10px" }}
                         onClick={() => {
                             getSelectedRowsData();
+                            console.log(filesData);
                         }}
                     >
                         <FontAwesomeIcon
@@ -232,66 +275,63 @@ const LinkGDrive = () => {
                         Load
                     </Button>
                 </div>
-                <div
-                    style={{
-                        gridColumn: "span 2",
-                    }}
-                >
-                    <MaterialTable
-                        tableRef={tableRef}
-                        icons={TABLE_ICONS}
-                        columns={[
-                            {
-                                title: "Filename",
-                                field: "filename",
-                            },
-                            {
-                                title: "Path",
-                                field: "path",
-                            },
-                            {
-                                title: "Date uploaded",
-                                field: "date_uploaded",
-                                type: "date",
-                            },
-                        ]}
-                        data={[
-                            {
-                                filename: "Song A.mp3",
-                                path: "/music/",
-                                date_uploaded: "1/1/2021",
-                            },
-                            {
-                                filename: "Song B.mp3",
-                                path: "/music/",
-                                date_uploaded: "1/1/2021",
-                                very_complicated_data: {
-                                    so_complicated: {
-                                        omg: "pogger",
-                                    },
-                                },
-                            },
-                        ]}
-                        options={{
-                            selection: true,
-                            selectionProps: (rowData: any) => ({
-                                color: "primary",
-                            }),
-                            paging: false,
+                {t_data === null ? (
+                    <div
+                        style={{
+                            gridColumn: "span 2",
                         }}
-                        title="Detected Music Files"
-                        actions={[
-                            {
-                                icon: () => (
-                                    <FontAwesomeIcon size="xs" icon="play" />
-                                ),
-                                tooltip: "Preview",
-                                position: "row",
-                                onClick: (event, rowData) => {},
-                            },
-                        ]}
-                    />
-                </div>
+                    >
+                        Loading...
+                    </div>
+                ) : (
+                    <div
+                        style={{
+                            gridColumn: "span 2",
+                        }}
+                    >
+                        <MaterialTable
+                            tableRef={tableRef}
+                            icons={TABLE_ICONS}
+                            columns={[
+                                {
+                                    title: "Filename",
+                                    field: "filename",
+                                },
+                                {
+                                    title: "Path",
+                                    field: "path",
+                                },
+                                {
+                                    title: "Date uploaded",
+                                    field: "date_uploaded",
+                                    type: "date",
+                                },
+                            ]}
+                            data={t_data}
+                            options={{
+                                selection: true,
+                                selectionProps: (rowData: any) => ({
+                                    color: "primary",
+                                }),
+                                paging: false,
+                            }}
+                            title="Detected Music Files"
+                            actions={[
+                                {
+                                    icon: () => (
+                                        <FontAwesomeIcon
+                                            size="xs"
+                                            icon="play"
+                                        />
+                                    ),
+                                    tooltip: "Preview",
+                                    position: "row",
+                                    onClick: (event, rowData) => {},
+                                },
+                            ]}
+                        />
+                    </div>
+                )}
             </div>
         </div>
     );
