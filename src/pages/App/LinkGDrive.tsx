@@ -7,12 +7,22 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAxiosPOST } from "../../global-imports";
 import useAxios from "axios-hooks";
 import useUnindexedDriveFiles from "../../custom-hooks/useUnindexedDriveFiles";
+import MusicPlayerContext from "../../context/MusicPlayerContext";
 const LinkGDrive = () => {
     const tableRef = useRef<any>();
     const [statusText, setStatusText] = useState<string>("");
     const [driveLinkState, setDriveLinkState] = useState<
         "" | "linked" | "linking" | "unlinked" | "unlinking"
     >("");
+    const {
+        setStatus,
+        setNowPlayingURL,
+        setProgress,
+        queue,
+        setQueue,
+        setSongTitleLabel,
+        setSongArtistLabel,
+    } = React.useContext(MusicPlayerContext);
     /**
      *
      * @param getAll (Optional) set to true to get all row's data ignoring if its checked or not
@@ -81,19 +91,23 @@ const LinkGDrive = () => {
             return;
         }
 
-        if (driveUserInfoErr?.response?.status === 404 || driveUserInfoErr?.response?.status === 401) {
+        if (
+            driveUserInfoErr?.response?.status === 404 ||
+            driveUserInfoErr?.response?.status === 401
+        ) {
             setStatusText("Status: Unlinked");
             setDriveLinkState("unlinked");
         } else {
-            setStatusText(`Status: Linked (Account: ${driveUserInfoData.email})`);
+            setStatusText(
+                `Status: Linked (Account: ${driveUserInfoData.email})`
+            );
             setDriveLinkState("linked");
         }
 
-        if(filesLoading) {
+        if (filesLoading) {
             return;
         }
-        set_t_data(getFilesDataTableDisplayData())
-
+        set_t_data(getFilesDataTableDisplayData());
     }, [driveUserInfoLoading, filesLoading]);
 
     const unlinkGDrive = () => {
@@ -137,6 +151,7 @@ const LinkGDrive = () => {
         for (let i = 0; i < keys.length; i++) {
             let fileItem = filesData.files[keys[i]];
             t_data.push({
+                id: fileItem.id,
                 filename: fileItem.filename,
                 path: getFilePathString(fileItem.id),
                 date_uploaded: fileItem.createdTime,
@@ -293,6 +308,7 @@ const LinkGDrive = () => {
                             tableRef={tableRef}
                             icons={TABLE_ICONS}
                             columns={[
+                                { title: "id", field: "id", hidden: true },
                                 {
                                     title: "Filename",
                                     field: "filename",
@@ -313,7 +329,7 @@ const LinkGDrive = () => {
                                 selectionProps: (rowData: any) => ({
                                     color: "primary",
                                 }),
-                                paging: false,
+                                // paging: false,
                             }}
                             title="Detected Music Files"
                             actions={[
@@ -326,7 +342,16 @@ const LinkGDrive = () => {
                                     ),
                                     tooltip: "Preview",
                                     position: "row",
-                                    onClick: (event, rowData) => {},
+                                    onClick: (event, rowData) => {
+                                        // console.log((rowData as any).id);
+                                        console.log(`/api/driveapi/files/download?token=${localStorage.getItem("token")}&fileid=${(rowData as any).id}`);
+                                        setNowPlayingURL(`/api/driveapi/files/download?token=${localStorage.getItem("token")}&fileid=${(rowData as any).id}`);
+                                        setSongTitleLabel((rowData as any).filename);
+                                        setSongArtistLabel(
+                                            (rowData as any).path
+                                        );
+                                        setStatus("PLAYING")
+                                    },
                                 },
                             ]}
                         />

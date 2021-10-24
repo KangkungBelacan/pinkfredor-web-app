@@ -65,35 +65,52 @@ const download = async (req: any, res: any) => {
     let drive = google.drive({ version: "v3", auth: oAuth2Client });
     let test: any;
 
+    // Get file size of the file
+    let filesize = -1;
     // Read file metadata previously scanned
     doc = db.collection("index-files").doc(req.app_user.id);
     let doc_get = await doc.get();
-    if (!doc_get.exists) {
-        res.status(404);
-        res.json({
-            message:
-                "Please perform a scan, unable to locate file_id from existing index",
-        });
-        return;
+    if (doc_get.exists) {
+        let idx: any = doc_get.data().files;
+        let file_metadata = idx[file_id];
+        if (file_metadata) {
+            filesize = file_metadata.size;
+        }
     }
 
-    let idx:any = doc_get.data().files;
-    let file_metadata = idx[file_id];
-    if(!file_metadata) {
-        res.status(404);
-        res.json({
-            message:
-                "Please perform a scan, unable to locate file_id from existing index",
-        });
-        return;
+    // Manually query for filesize if file_id was not found in index
+    if (filesize === -1) {
+        try {
+            filesize = await new Promise((resolve, reject) => {
+                drive.files.get(
+                    {
+                        fileId: `${file_id}`,
+                        fields: "size",
+                    },
+                    function (err: any, res: any) {
+                        if (err) {
+                            reject(err);
+                            return;
+                        }
+                        if (res.data === undefined || res.data.size === undefined) {
+                            reject("");
+                        }
+                        resolve(res.data.size);
+                    }
+                );
+            });
+        } catch (err: any) {
+            console.error(err);
+            res.status(404);
+            res.json({ msg: "File not found" });
+            return;
+        }
     }
 
     // Read "range" from request header and response with correct bytes with status code (206)
-    let filesize = file_metadata.size;
     try {
         // If "range" is provided in header
         if (req.headers.range) {
-
             // Get the range numbers
             let range = req.headers.range;
             const parts = range.replace(/bytes=/, "").split("-");
@@ -125,7 +142,6 @@ const download = async (req: any, res: any) => {
             // Write drive filestream to user
             test.data.pipe(res);
         } else {
-
             // Serve the filestream normally
             test = await drive.files.get(
                 {
@@ -142,7 +158,6 @@ const download = async (req: any, res: any) => {
             test.data.pipe(res);
         }
     } catch (err: any) {
-
         // Happens when user gives file_id that is not found
         res.status(404);
         res.json({ message: "File not found." });
