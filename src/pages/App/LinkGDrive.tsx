@@ -147,6 +147,9 @@ const LinkGDrive = () => {
      */
     const getFilesDataTableDisplayData = () => {
         let t_data = [];
+        if(filesData === undefined || filesData.files === undefined ) {
+            return [];
+        }
         let keys = Object.keys(filesData.files);
         for (let i = 0; i < keys.length; i++) {
             let fileItem = filesData.files[keys[i]];
