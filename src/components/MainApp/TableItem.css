@@ -17,6 +17,7 @@
 }
 
 .table-item-container-image {
+    position: relative;
     background-color: antiquewhite;
     border-radius: 5%;
     width: 50px;
