@@ -11,7 +11,7 @@ const LinkGDrive = () => {
     const tableRef = useRef<any>();
     const [statusText, setStatusText] = useState<string>("");
     const [driveLinkState, setDriveLinkState] = useState<
-        "" | "linked" | "linking" | "unlinked"
+        "" | "linked" | "linking" | "unlinked" | "unlinking"
     >("");
     /**
      *
@@ -92,6 +92,7 @@ const LinkGDrive = () => {
     }, [driveUserInfoLoading]);
 
     const unlinkGDrive = () => {
+        setDriveLinkState("unlinking")
         fetch("/api/driveapi/deauth", {
             method: "POST",
             headers: {
@@ -185,7 +186,7 @@ const LinkGDrive = () => {
                             style={{
                                 marginLeft: "10px",
                                 display:
-                                    driveLinkState === "linking"
+                                    driveLinkState === "linking" || driveLinkState === "unlinking"
                                         ? "inline-block"
                                         : "none",
                             }}
@@ -198,7 +199,7 @@ const LinkGDrive = () => {
                                     animation: "spin 1s linear infinite",
                                 }}
                             />
-                            Linking
+                            {driveLinkState === "linking" ? "Linking" : "Unlinking"}
                         </Button>
                     </div>
                 )}
