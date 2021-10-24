@@ -122,6 +122,7 @@ const LinkGDrive = () => {
                 alert("Successfully unlinked");
                 setStatusText("Status: Unlinked");
                 setDriveLinkState("unlinked");
+                set_t_data([])
             })
             .catch((err: any) => {
                 alert("Something went wrong.");
