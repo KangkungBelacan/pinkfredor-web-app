@@ -27,6 +27,7 @@ const scan = async (req: any, res: any) => {
     let doc = db.collection("drive-api-tokens").doc(req.app_user.id);
     let doc_data = await doc.get();
     if (!doc_data.exists) {
+        res.status(404)
         res.json({ message: "Google drive is not linked" });
         return;
     }
