@@ -56,7 +56,7 @@ const useUnindexedDriveFiles = () => {
         if (scanLoading || indexLoading || folderLoading || !loading) {
             return;
         }
-        if (indexErr?.response?.status === 404 || scanErr?.response?.status !== 200) {
+        if (indexErr || scanErr) {
             setLoading(false);
             return;
         }

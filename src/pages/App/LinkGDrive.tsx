@@ -392,7 +392,7 @@ const LinkGDrive = () => {
                                 }),
                                 // paging: false,
                             }}
-                            title={`Detected ${t_data.length} Music Files`}
+                            title={`Detected ${t_data.length} new Music Files`}
                             actions={[
                                 {
                                     icon: () => (
