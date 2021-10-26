@@ -40,10 +40,12 @@ const TableItem = (props: any) => {
     ));
 
     return (
-        <div className={"table-item-container"} onClick={(event) => {
-            props.songItemOnClick(songData, "Play")
-        }}>
-            <div className={"table-item-container-number"}>{props.position + "."}</div>
+        <div
+            className={songData.id === props.nowPlayingURL.split("&fileid=")[1] ? "table-item-container-yellow" : "table-item-container"}
+            onClick={(event) => {
+                props.songItemOnClick(songData, "Play")
+            }}>
+            <div className={"table-item-container-number"}>{props.position}</div>
             <div className={"table-item-container-image"} style={{backgroundColor: props.imageColor}}>
                 <div className={"table-item-container-image-overlay"}></div>
                 {play}

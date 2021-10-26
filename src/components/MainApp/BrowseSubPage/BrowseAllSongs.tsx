@@ -156,6 +156,7 @@ const BrowseAllSongs = (props: any) => {
         // );
     };
     const AddToPlaylist = (songData: any) => {
+        // TODO: Add to playlist
     };
     const PlayNext = (songData: any) => {
         // Get current playing song ID from playing url
@@ -218,7 +219,8 @@ const BrowseAllSongs = (props: any) => {
         <div>
             {indexFilesState.length !== 0 ?
                 <CustomTable indexFilesState={indexFilesState} songItemOnClick={SongItemOnClick}
-                             artistsDataState={artistsDataState} albumDataState={albumDataState}/> :
+                             artistsDataState={artistsDataState} albumDataState={albumDataState}
+                             nowPlayingURL={props.nowPlayingURL}/> :
                 <div style={{color: "white"}}>Loading... (change this shit later)</div>}
             {/*<MaterialTable*/}
             {/*    icons={tableIcons}*/}

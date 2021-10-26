@@ -1,11 +1,14 @@
 import "./CustomTable.css"
 import TableItem from "./TableItem";
-import {useEffect} from "react";
-import useAxios from "axios-hooks";
+
 const CustomTable = (props: any) => {
     let tableItems: any = [];
-    for (let i=0; i < props.indexFilesState.length; i++){
-        tableItems.push(<TableItem key={i} position={i + 1} songData={props.indexFilesState[i]} artistsDataState={props.artistsDataState} albumDataState={props.albumDataState} songItemOnClick={props.songItemOnClick} imageColor={'#'+(Math.random()*0xFFFFFF<<0).toString(16)}/>)
+    for (let i = 0; i < props.indexFilesState.length; i++) {
+        tableItems.push(<TableItem key={i} position={i + 1} songData={props.indexFilesState[i]}
+                                   artistsDataState={props.artistsDataState} albumDataState={props.albumDataState}
+                                   songItemOnClick={props.songItemOnClick}
+                                   imageColor={'#' + (Math.random() * 0xFFFFFF << 0).toString(16)}
+                                   nowPlayingURL={props.nowPlayingURL}/>)
     }
 
     return (
