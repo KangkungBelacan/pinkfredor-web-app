@@ -14,6 +14,9 @@ const LinkGDrive = () => {
     const [driveLinkState, setDriveLinkState] = useState<
         "" | "linked" | "linking" | "unlinked" | "unlinking"
     >("");
+    const [isLoadingFiles, setIsLoadingFiles] = useState<boolean>(false);
+    const [loadText, setLoadText] = useState<string>("Load");
+    const [loadAllText, setLoadAllText] = useState<string>("Load All");
     const {
         setStatus,
         setNowPlayingURL,
@@ -122,7 +125,7 @@ const LinkGDrive = () => {
                 alert("Successfully unlinked");
                 setStatusText("Status: Unlinked");
                 setDriveLinkState("unlinked");
-                set_t_data([])
+                set_t_data([]);
             })
             .catch((err: any) => {
                 alert("Something went wrong.");
@@ -133,8 +136,9 @@ const LinkGDrive = () => {
         let file_item = filesData.files[fileid];
         let parent_path = "/";
         if (file_item.parents !== undefined) {
-            while (file_item.parents.length !== 0) {
-                let parent_id = file_item.parents.pop();
+            let _parents = [...file_item.parents];
+            while (_parents.length !== 0) {
+                let parent_id = _parents.pop();
                 if (folderData[parent_id] !== undefined) {
                     parent_path += folderData[parent_id].folder_name + "/";
                 }
@@ -148,7 +152,7 @@ const LinkGDrive = () => {
      */
     const getFilesDataTableDisplayData = () => {
         let t_data = [];
-        if(filesData === undefined || filesData.files === undefined ) {
+        if (filesData == undefined || filesData.files == undefined) {
             return [];
         }
         let keys = Object.keys(filesData.files);
@@ -162,6 +166,48 @@ const LinkGDrive = () => {
             });
         }
         return t_data;
+    };
+
+    const loadFilesOnClick = async (loadAll: boolean) => {
+        // Get file id of the selected rows
+        let selectedRows: any = [];
+        if (loadAll) {
+            selectedRows = getSelectedRowsData(true);
+        } else {
+            selectedRows = getSelectedRowsData();
+        }
+
+        if(selectedRows.length === 0) {
+            alert("There is no files to load")
+            return;
+        }
+
+        let files_payload: any = { files: {} };
+        for (let i = 0; i < selectedRows.length; i++) {
+            files_payload.files[selectedRows[i].id] =
+                filesData.files[selectedRows[i].id];
+        }
+
+        try {
+            await fetch("/api/indexes/files", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.token}`,
+                },
+                body: JSON.stringify(files_payload),
+            });
+        } catch (err: any) {
+            console.error(err);
+            return;
+        }
+
+        let fileid = selectedRows.map((e: any) => e.id);
+        // Remove data from display table
+        let _t_data = [...t_data];
+        _t_data = _t_data.filter((e: any) => !fileid.includes(e.id));
+        set_t_data(_t_data);
+        alert(`Successfully loaded ${selectedRows.length} file(s)`)
     };
 
     return (
@@ -268,30 +314,41 @@ const LinkGDrive = () => {
                 <div></div>
                 <div style={{ textAlign: "right", whiteSpace: "nowrap" }}>
                     <Button
-                        variant="success"
+                        variant={isLoadingFiles ? "secondary" : "success"}
                         onClick={() => {
-                            getSelectedRowsData(true);
+                            if (isLoadingFiles) return;
+                            setIsLoadingFiles(true)
+                            setLoadAllText("Loading");
+                            loadFilesOnClick(true).then((_) => {
+                                setLoadAllText("Load All");
+                                setIsLoadingFiles(false)
+                            });
                         }}
                     >
                         <FontAwesomeIcon
-                            icon="angle-double-down"
-                            style={{ marginRight: "5px" }}
+                            icon={loadAllText === "Loading" ? "spinner" : "angle-double-down"}
+                            style={{ marginRight: "5px", animation: loadAllText === "Loading" ? "spin 1s linear infinite" : "none" }}
                         />
-                        Load All
+                        {loadAllText}
                     </Button>
                     <Button
-                        variant="success"
+                        variant={isLoadingFiles ? "secondary" : "success"}
                         style={{ marginLeft: "10px" }}
                         onClick={() => {
-                            getSelectedRowsData();
-                            console.log(filesData);
+                            if (isLoadingFiles) return;
+                            setIsLoadingFiles(true)
+                            setLoadText("Loading");
+                            loadFilesOnClick(false).then((_) => {
+                                setLoadText("Load");
+                                setIsLoadingFiles(false)
+                            });
                         }}
                     >
                         <FontAwesomeIcon
-                            icon="download"
-                            style={{ marginRight: "5px" }}
+                            icon={loadText === "Loading" ? "spinner" : "download"}
+                            style={{ marginRight: "5px", animation: loadText === "Loading" ? "spin 1s linear infinite" : "none" }}
                         />
-                        Load
+                        {loadText}
                     </Button>
                 </div>
                 {t_data === null ? (
@@ -348,13 +405,23 @@ const LinkGDrive = () => {
                                     position: "row",
                                     onClick: (event, rowData) => {
                                         // console.log((rowData as any).id);
-                                        console.log(`/api/driveapi/files/download?token=${localStorage.getItem("token")}&fileid=${(rowData as any).id}`);
-                                        setNowPlayingURL(`/api/driveapi/files/download?token=${localStorage.getItem("token")}&fileid=${(rowData as any).id}`);
-                                        setSongTitleLabel((rowData as any).filename);
+                                        console.log(
+                                            `/api/driveapi/files/download?token=${localStorage.getItem(
+                                                "token"
+                                            )}&fileid=${(rowData as any).id}`
+                                        );
+                                        setNowPlayingURL(
+                                            `/api/driveapi/files/download?token=${localStorage.getItem(
+                                                "token"
+                                            )}&fileid=${(rowData as any).id}`
+                                        );
+                                        setSongTitleLabel(
+                                            (rowData as any).filename
+                                        );
                                         setSongArtistLabel(
                                             (rowData as any).path
                                         );
-                                        setStatus("PLAYING")
+                                        setStatus("PLAYING");
                                     },
                                 },
                             ]}
