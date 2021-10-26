@@ -105,7 +105,7 @@ const BrowseAllSongs = (props: any) => {
         },
         albumRefetch,
     ] = useAxios({
-        url: "/api/indexes/albums",
+        url: "/api/indexes/albums   ",
         method: "GET",
         headers: {
             Authorization: `Bearer ${localStorage.token}`,
@@ -158,6 +158,27 @@ const BrowseAllSongs = (props: any) => {
     const AddToPlaylist = (songData: any) => {
     };
     const PlayNext = (songData: any) => {
+        // Get current playing song ID from playing url
+        let currentPlayingSongID = props.nowPlayingURL.split("&fileid=")[1]
+        // Get index of currently playing song
+        let currentPlayingSongIndex = props.queue.findIndex((song: any) => song.playingURL.split("&fileid=")[1] === currentPlayingSongID)
+        if (currentPlayingSongIndex === -1) {
+            // TODO: Use notification toast to tell the user that there are currently no playing songs
+            return;
+        }
+        let newSongItem = {
+            item_id:
+                "queue_item_" +
+                songData.id +
+                Date.now().toString(),
+            current: false,
+            playingURL: `/api/driveapi/files/download?token=${localStorage.token}&fileid=${songData.id}`,
+            song_title: songData.file_metadata.song_title,
+            song_artist: songData.file_metadata.song_artist,
+        }
+        let newQueue = props.queue
+        newQueue.splice(currentPlayingSongIndex + 1, 0, newSongItem)
+        props.setQueue(newQueue);
     };
     const AddToQ = (songData: any) => {
         props.setQueue([
@@ -195,7 +216,9 @@ const BrowseAllSongs = (props: any) => {
 
     return (
         <div>
-            {indexFilesState.length !== 0 ? <CustomTable indexFilesState={indexFilesState} songItemOnClick={SongItemOnClick} artistsDataState={artistsDataState} albumDataState={albumDataState}/> :
+            {indexFilesState.length !== 0 ?
+                <CustomTable indexFilesState={indexFilesState} songItemOnClick={SongItemOnClick}
+                             artistsDataState={artistsDataState} albumDataState={albumDataState}/> :
                 <div style={{color: "white"}}>Loading... (change this shit later)</div>}
             {/*<MaterialTable*/}
             {/*    icons={tableIcons}*/}

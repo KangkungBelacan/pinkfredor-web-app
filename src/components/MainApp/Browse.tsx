@@ -1,5 +1,5 @@
 // import ReactDOM from 'react-dom'
-import React, { useEffect } from "react";
+import React, {useEffect} from "react";
 import useAxios from "axios-hooks";
 import "./Browse.css";
 import BrowseAllSongs from "./BrowseSubPage/BrowseAllSongs";
@@ -20,7 +20,8 @@ function Browse(props: any): JSX.Element {
         },
     });
 
-    useEffect(() => {}, []);
+    useEffect(() => {
+    }, []);
 
     return (
         <div>
@@ -28,6 +29,7 @@ function Browse(props: any): JSX.Element {
                 <BrowseAllSongs
                     setStatus={props.setStatus}
                     setNowPlayingURL={props.setNowPlayingURL}
+                    nowPlayingURL={props.nowPlayingURL}
                     setProgress={props.setProgress}
                     queue={props.queue}
                     setQueue={props.setQueue}
@@ -68,4 +70,5 @@ function Browse(props: any): JSX.Element {
         </div>
     );
 }
+
 export default React.memo(Browse);

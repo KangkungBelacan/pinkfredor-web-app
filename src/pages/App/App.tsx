@@ -1,20 +1,21 @@
 import * as MainAppComponent from "./../../components/MainApp";
 import "./App.css";
 import example_song_cover from "./../../images/example-song-cover.png";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import * as AppSubPage from "./index";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Route } from "react-router";
-import { useMediaQuery } from "react-responsive";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {Route} from "react-router";
+import {useMediaQuery} from "react-responsive";
 import MusicPlayerContext from "../../context/MusicPlayerContext";
 // import MusicPlayerContextDefaultValues from "../../context/MusicPlayerContextDefaultValues";
-import { ReactSoundProps } from "react-sound";
-import { MusicQueueItem } from "../../interface/context/MusicQueueItem";
-import { Redirect, useHistory } from "react-router-dom";
+import {ReactSoundProps} from "react-sound";
+import {MusicQueueItem} from "../../interface/context/MusicQueueItem";
+import {Redirect, useHistory} from "react-router-dom";
+
 function App() {
     const history = useHistory();
     const [showNavBar, setNavBarDisplay] = useState(false);
-    const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+    const isMobile = useMediaQuery({query: "(max-width: 768px)"});
     // const ContextValues = MusicPlayerContextDefaultValues();
     const [status, setStatus] =
         useState<ReactSoundProps["playStatus"]>("PAUSED");
@@ -116,7 +117,7 @@ function App() {
                             <Route
                                 path="/app"
                                 exact
-                                render={() => <Redirect to="/app/browse" />}
+                                render={() => <Redirect to="/app/browse"/>}
                             />
                             <Route
                                 path="/app/browse"
@@ -124,6 +125,7 @@ function App() {
                                     <MainAppComponent.Browse
                                         setStatus={setStatus}
                                         setNowPlayingURL={setNowPlayingURL}
+                                        nowPlayingURL={nowPlayingURL}
                                         setProgress={setProgress}
                                         queue={queue}
                                         setQueue={setQueue}
@@ -148,7 +150,7 @@ function App() {
                             <Route
                                 path="/app/organize"
                                 render={() => (
-                                    <AppSubPage.Organizer className="mainapp-content-container" />
+                                    <AppSubPage.Organizer className="mainapp-content-container"/>
                                 )}
                             />
                         </div>
