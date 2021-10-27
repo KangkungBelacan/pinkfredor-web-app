@@ -8,7 +8,7 @@
     "build": "tsc",
     "prestart": "npm run build",
     "start": "node .",
-    "dev": "nodemon src/index.ts"
+    "dev": "nodemon --inspect src/index.ts"
   },
   "keywords": [],
   "author": "",

@@ -256,13 +256,13 @@ const LinkGDrive = () => {
                             size="sm"
                             href={(driveApiUrl as any).url}
                             target="_blank"
+                            onClick={() => {
+                                setDriveLinkState("linking");
+                            }}
                         >
                             <FontAwesomeIcon
                                 icon="link"
                                 style={{ marginRight: "5px" }}
-                                onClick={() => {
-                                    setDriveLinkState("linking");
-                                }}
                             />
                             Link
                         </Button>
