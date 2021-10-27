@@ -48,7 +48,7 @@ const TableItem = (props: any) => {
 
     return (
         <div
-            className={isPlayingNow ? "table-item-container-yellow" : "table-item-container"}
+            className={isPlayingNow ? "table-item-container table-item-playing" : "table-item-container"}
             onClick={(event) => {
                 props.songItemOnClick(songData, "Play")
             }}>

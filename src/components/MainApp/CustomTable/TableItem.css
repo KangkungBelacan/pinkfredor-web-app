@@ -9,10 +9,7 @@
     padding: 10px;
 }
 
-.table-item-container-yellow {
-    display: grid;
-    grid-template-columns: 25px auto 1fr auto;
-    padding: 10px;
+.table-item-playing {
     background-color: rgb(42, 41, 32);
     border-radius: 15px;
 }
