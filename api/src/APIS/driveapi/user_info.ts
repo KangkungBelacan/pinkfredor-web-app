@@ -30,9 +30,11 @@ const user_info = async (req: any, res: any) => {
             oauth2.userinfo.v2.me.get(function (err, res) {
                 if (err) {
                     reject(err);
+                    return;
                 }
                 if(res === undefined) {
                     reject(err);
+                    return;
                 }
                 accept(res.data)
             });
