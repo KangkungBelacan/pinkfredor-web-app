@@ -7,7 +7,6 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {Route} from "react-router";
 import {useMediaQuery} from "react-responsive";
 import MusicPlayerContext from "../../context/MusicPlayerContext";
-// import MusicPlayerContextDefaultValues from "../../context/MusicPlayerContextDefaultValues";
 import {ReactSoundProps} from "react-sound";
 import {MusicQueueItem} from "../../interface/context/MusicQueueItem";
 import {Redirect, useHistory} from "react-router-dom";
@@ -16,7 +15,10 @@ function App() {
     const history = useHistory();
     const [showNavBar, setNavBarDisplay] = useState(false);
     const isMobile = useMediaQuery({query: "(max-width: 768px)"});
-    // const ContextValues = MusicPlayerContextDefaultValues();
+
+    // ======================================
+    // Default Music Player Context Values
+    // ======================================
     const [status, setStatus] =
         useState<ReactSoundProps["playStatus"]>("PAUSED");
     const [nowPlayingURL, setNowPlayingURL] = useState("");
@@ -60,6 +62,8 @@ function App() {
         songAlbumArtURL,
         setSongAlbumArtURL,
     };
+    // ======================================
+    // ======================================
     useEffect(() => {
         history.listen((location: any) => {
             let config: any = {
