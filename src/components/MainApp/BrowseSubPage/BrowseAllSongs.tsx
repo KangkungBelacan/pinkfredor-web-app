@@ -22,7 +22,7 @@ import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 // import MusicPlayerContext from "../../context/MusicPlayerContext";
 import {MusicQueueItem} from "../../../interface/context/MusicQueueItem";
-import CustomTable from "../CustomTable";
+import CustomTable from "../CustomTable/CustomTable";
 
 const tableIcons: Icons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref}/>),

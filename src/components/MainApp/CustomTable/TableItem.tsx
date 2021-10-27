@@ -10,6 +10,7 @@ const play = <FontAwesomeIcon className={"table-item-container-image-play"} icon
 const TableItem = (props: any) => {
     let songData = props.songData;
     let containerDetails;
+    let isPlayingNow: boolean = songData.id === props.nowPlayingURL.split("&fileid=")[1]
     if (songData.file_metadata.song_artistid != "" || songData.file_metadata.song_albumid != "") {
         if (songData.file_metadata.song_artistid != "") {
             containerDetails = props.artistsDataState[songData.file_metadata.song_artistid].artist_name;
@@ -41,7 +42,7 @@ const TableItem = (props: any) => {
 
     return (
         <div
-            className={songData.id === props.nowPlayingURL.split("&fileid=")[1] ? "table-item-container-yellow" : "table-item-container"}
+            className={isPlayingNow ? "table-item-container-yellow" : "table-item-container"}
             onClick={(event) => {
                 props.songItemOnClick(songData, "Play")
             }}>

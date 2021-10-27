@@ -1,5 +1,5 @@
-import { useState } from "react";
-import Sound, { ReactSoundProps } from "react-sound";
+import {useState} from "react";
+import {ReactSoundProps} from "react-sound";
 
 const TestPage = () => {
     const [removePls, rp] = useState<ReactSoundProps["playStatus"]>("PAUSED");
@@ -40,25 +40,8 @@ const TestPage = () => {
     // if (!loading) {
     return (
         <div>
-            <div>Ready to play?</div>
-            <Sound
-                url={url}
-                playStatus={removePls}
-                autoLoad={true}
-                onFinishedPlaying={() => {}}
-                onError={() => {}}
-            />
-            <button
-                onClick={() => {
-                    rp("PLAYING");
-                }}
-            >
-                Play
-            </button>
+            PEE
         </div>
     );
-    // } else {
-    //     return <div>Downloading...</div>;
-    // }
 };
 export default TestPage;
