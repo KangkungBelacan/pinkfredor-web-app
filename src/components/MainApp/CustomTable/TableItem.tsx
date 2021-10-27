@@ -11,17 +11,23 @@ const TableItem = (props: any) => {
     let songData = props.songData;
     let containerDetails;
     let isPlayingNow: boolean = songData.id === props.nowPlayingURL.split("&fileid=")[1]
-    if (songData.file_metadata.song_artistid != "" || songData.file_metadata.song_albumid != "") {
-        if (songData.file_metadata.song_artistid != "") {
-            containerDetails = props.artistsDataState[songData.file_metadata.song_artistid].artist_name;
+    if (songData.file_metadata.song_artistid != "" || songData.file_metadata.song_albumid != "" || "song_artistid" in songData.file_metadata || "song_albumid" in songData.file_metadata) {
+        if ("song_artistid" in songData.file_metadata) {
+            if (songData.file_metadata.song_artistid !== "") {
+                containerDetails = props.artistsDataState[songData.file_metadata.song_artistid].artist_name;
+            }
         }
 
-        if (songData.file_metadata.song_artistid != "" && songData.file_metadata.song_albumid != "") {
-            containerDetails += ", "
+        if ("song_artistid" in songData.file_metadata && "song_albumid" in songData.file_metadata) {
+            if (songData.file_metadata.song_artistid !== "" && songData.file_metadata.song_albumid !== "") {
+                containerDetails += ", "
+            }
         }
 
-        if (songData.file_metadata.song_albumid != "") {
-            containerDetails += props.albumDataState[songData.file_metadata.song_albumid].album_name;
+        if ("song_albumid" in songData.file_metadata) {
+            if (songData.file_metadata.song_albumid !== "") {
+                containerDetails += props.albumDataState[songData.file_metadata.song_albumid].album_name;
+            }
         }
     }
 
