@@ -78,6 +78,8 @@ app.delete("/api/indexes/artists/:artistid", api.indexes.artists.__delete);
 // Drive API use
 app.post("/api/driveapi/files/scan", api.driveapi.files.scan);
 app.post("/api/driveapi/authurl", api.driveapi.authurl);
+app.get("/api/driveapi/user_info", api.driveapi.user_info);
+app.post("/api/driveapi/deauth", api.driveapi.deauth);
 
 // ======================================
 // ======================================

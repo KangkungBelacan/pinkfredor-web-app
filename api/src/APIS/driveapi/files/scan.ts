@@ -27,6 +27,7 @@ const scan = async (req: any, res: any) => {
     let doc = db.collection("drive-api-tokens").doc(req.app_user.id);
     let doc_data = await doc.get();
     if (!doc_data.exists) {
+        res.status(404)
         res.json({ message: "Google drive is not linked" });
         return;
     }
@@ -95,7 +96,7 @@ const scan = async (req: any, res: any) => {
                     q: "mimeType = 'audio/mpeg' and trashed = false",
                     // q: "trashed = false",
                     // q: "name = 'Week 1.5 VC.mkv'",
-                    fields: "nextPageToken, files(id, name, parents, size)",
+                    fields: "nextPageToken, files(id, name, parents, size, createdTime)",
                     spaces: "drive",
                     pageToken: pt,
                 },
@@ -133,7 +134,8 @@ const scan = async (req: any, res: any) => {
                             id: file.id,
                             filename: file.name,
                             parents: file.parents,
-                            size: file.size
+                            size: file.size,
+                            createdTime: file.createdTime
                         } as IAPI.indexes.files.FileItem);
                     }
 

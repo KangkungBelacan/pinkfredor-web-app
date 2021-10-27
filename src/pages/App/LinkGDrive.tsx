@@ -1,248 +1,433 @@
-import { Redirect } from "react-router-dom";
-import axios from "axios";
-import useAxios from "axios-hooks";
-import { useAxiosPOST } from "./../../global-imports";
-import { forwardRef, useState, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import "./LinkGDrive.css";
 import MaterialTable from "material-table";
-import { Button, ButtonGroup, Dropdown } from "react-bootstrap";
-
-import AddBox from "@material-ui/icons/AddBox";
-import ArrowUpward from "@material-ui/icons/ArrowUpward";
-import Check from "@material-ui/icons/Check";
-import ChevronLeft from "@material-ui/icons/ChevronLeft";
-import ChevronRight from "@material-ui/icons/ChevronRight";
-import Clear from "@material-ui/icons/Clear";
-import DeleteOutline from "@material-ui/icons/DeleteOutline";
-import Edit from "@material-ui/icons/Edit";
-import FilterList from "@material-ui/icons/FilterList";
-import FirstPage from "@material-ui/icons/FirstPage";
-import LastPage from "@material-ui/icons/LastPage";
-import Remove from "@material-ui/icons/Remove";
-import SaveAlt from "@material-ui/icons/SaveAlt";
-import Search from "@material-ui/icons/Search";
-import ViewColumn from "@material-ui/icons/ViewColumn";
-import MoreVert from "@material-ui/icons/MoreVert";
-
-import PlayArrow from "@material-ui/icons/PlayArrow";
-import Queue from "@material-ui/icons/Queue";
-
-import { Icons } from "material-table";
-
-const tableIcons: Icons = {
-    Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-    Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-    Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-    DetailPanel: forwardRef((props, ref) => (
-        <ChevronRight {...props} ref={ref} />
-    )),
-    Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
-    Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
-    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-    PreviousPage: forwardRef((props, ref) => (
-        <ChevronLeft {...props} ref={ref} />
-    )),
-    ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
-    SortArrow: forwardRef((props, ref) => <ArrowUpward {...props} ref={ref} />),
-    ThirdStateCheck: forwardRef((props, ref) => (
-        <Remove {...props} ref={ref} />
-    )),
-    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
-};
-
-const song_columns = [{ title: "Name", field: "file_metadata.song_title" }];
-
+import TABLE_ICONS from "../../components/generic/MaterialTableIcons";
+import { Button } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useAxiosPOST } from "../../global-imports";
+import useAxios from "axios-hooks";
+import useUnindexedDriveFiles from "../../custom-hooks/useUnindexedDriveFiles";
+import MusicPlayerContext from "../../context/MusicPlayerContext";
 const LinkGDrive = () => {
-    const [tableData, setTableData] = useState<any>([]);
+    const tableRef = useRef<any>();
+    const [statusText, setStatusText] = useState<string>("");
+    const [driveLinkState, setDriveLinkState] = useState<
+        "" | "linked" | "linking" | "unlinked" | "unlinking"
+    >("");
+    const [isLoadingFiles, setIsLoadingFiles] = useState<boolean>(false);
+    const [loadText, setLoadText] = useState<string>("Load");
+    const [loadAllText, setLoadAllText] = useState<string>("Load All");
+    const {
+        setStatus,
+        setNowPlayingURL,
+        setProgress,
+        queue,
+        setQueue,
+        setSongTitleLabel,
+        setSongArtistLabel,
+    } = React.useContext(MusicPlayerContext);
+    /**
+     *
+     * @param getAll (Optional) set to true to get all row's data ignoring if its checked or not
+     * @returns
+     */
+    const getSelectedRowsData = (getAll = false) => {
+        let selected_row_data = [];
+        let row_data = tableRef.current.props.data;
+        if (getAll) {
+            return tableRef.current.dataManager.data;
+        }
+        for (let i = 0; i < row_data.length; i++) {
+            let item = row_data[i];
+            if (
+                item.tableData.checked !== undefined &&
+                item.tableData.checked
+            ) {
+                selected_row_data.push(
+                    tableRef.current.dataManager.data[item.tableData.id]
+                );
+            }
+        }
+        return selected_row_data;
+    };
 
-    const { data, loading } = useAxiosPOST(
-        "/api/driveapi/authurl",
-        {},
-        localStorage.token
+    const [
+        {
+            data: driveApiUrl,
+            loading: driveApiUrlLoading,
+            error: driveApiUrlErr,
+        },
+        _,
+    ] = useAxios(
+        {
+            url: "/api/driveapi/authurl",
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${localStorage.token}`,
+            },
+        },
+        { useCache: false }
     );
 
     const [
         {
-            data: driveFilesData,
-            loading: driveFilesLoading,
-            error: driveFilesError,
+            data: driveUserInfoData,
+            loading: driveUserInfoLoading,
+            error: driveUserInfoErr,
         },
-        driveFilesRefetch,
-    ] = useAxios({
-        url: "/api/driveapi/files/scan",
-        method: "POST",
-        data: {
-            folder_only: false,
-        },
-        headers: {
-            Authorization: `Bearer ${localStorage.token}`,
-        },
-    });
-
-    const [
+        driveUserInfoRefetch,
+    ] = useAxios(
         {
-            data: indexFilesData,
-            loading: indexFilesLoading,
-            error: indexFilesError,
-        },
-        indexFilesRefetch,
-    ] = useAxios({
-        url: "/api/indexes/files",
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${localStorage.token}`,
-        },
-    });
-
-    function updateUserIndex(data: any) {
-        if (data.length === 0) return;
-
-        let formattedData = {};
-        for (let i = 0; i < data.length; i++) {
-            let currentID = data[i].id;
-            formattedData = {
-                ...formattedData,
-                [currentID]: data[i],
-            };
-        }
-        formattedData = {
-            files: { ...formattedData },
-        };
-        axios.post("/api/indexes/files", formattedData, {
+            url: "/api/driveapi/user_info",
+            method: "GET",
             headers: {
                 Authorization: `Bearer ${localStorage.token}`,
             },
-        });
-    }
+        },
+        { useCache: false }
+    );
 
+    const [filesData, folderData, filesLoading] = useUnindexedDriveFiles();
+    const [t_data, set_t_data] = useState<any>(null);
     useEffect(() => {
-        if (
-            driveFilesLoading ||
-            driveFilesError ||
-            indexFilesLoading ||
-            indexFilesError
-        )
+        if (driveUserInfoLoading) {
             return;
-        let driveFiles = driveFilesData.files;
-        let indexFiles = indexFilesData.files;
-        let newTableData = []; //Reformat data so it can be put into table and updated to user index.
-        let driveFilesKeys = Object.keys(driveFiles);
-        let indexFilesKeys = Object.keys(indexFiles);
-        let onlyNewFiles = true;
-        for (let i = 0; i < driveFilesKeys.length; i++) {
-            if (
-                indexFilesKeys.includes(driveFiles[driveFilesKeys[i]].id) &&
-                onlyNewFiles
-            ) {
-                continue;
-            }
-            let currentItem = driveFiles[driveFilesKeys[i]];
-            let formattedItem = {
-                ...currentItem,
-                file_metadata: {
-                    album_track_no: 0,
-                    song_title: currentItem.filename.split(".")[0],
-                    song_artistid: "",
-                    song_albumid: "",
-                    song_genreid: "",
-                    song_comment: "",
-                },
-            };
-            newTableData.push(formattedItem);
         }
-        setTableData(newTableData);
-    }, [driveFilesData, driveFilesLoading, indexFilesData, indexFilesLoading]);
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+        if (
+            driveUserInfoErr?.response?.status === 404 ||
+            driveUserInfoErr?.response?.status === 401
+        ) {
+            setStatusText("Status: Unlinked");
+            setDriveLinkState("unlinked");
+        } else {
+            setStatusText(
+                `Status: Linked (Account: ${driveUserInfoData.email})`
+            );
+            setDriveLinkState("linked");
+        }
 
-    if (data == null || typeof (data as any).url === "undefined") {
-        return <Redirect to="/" />;
-    }
+        if (filesLoading) {
+            return;
+        }
+        set_t_data(getFilesDataTableDisplayData());
+    }, [driveUserInfoLoading, filesLoading]);
+
+    const unlinkGDrive = () => {
+        setDriveLinkState("unlinking");
+        fetch("/api/driveapi/deauth", {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${localStorage.token}`,
+            },
+        })
+            .then((response: any) => {
+                alert("Successfully unlinked");
+                setStatusText("Status: Unlinked");
+                setDriveLinkState("unlinked");
+                set_t_data([]);
+            })
+            .catch((err: any) => {
+                alert("Something went wrong.");
+            });
+    };
+
+    const getFilePathString = (fileid: string) => {
+        let file_item = filesData.files[fileid];
+        let parent_path = "/";
+        if (file_item.parents !== undefined) {
+            let _parents = [...file_item.parents];
+            while (_parents.length !== 0) {
+                let parent_id = _parents.pop();
+                if (folderData[parent_id] !== undefined) {
+                    parent_path += folderData[parent_id].folder_name + "/";
+                }
+            }
+        }
+        return parent_path;
+    };
+
+    /**
+     * Get table data needed to be output into the table
+     */
+    const getFilesDataTableDisplayData = () => {
+        let t_data = [];
+        if (filesData == undefined || filesData.files == undefined) {
+            return [];
+        }
+        let keys = Object.keys(filesData.files);
+        for (let i = 0; i < keys.length; i++) {
+            let fileItem = filesData.files[keys[i]];
+            t_data.push({
+                id: fileItem.id,
+                filename: fileItem.filename,
+                path: getFilePathString(fileItem.id),
+                date_uploaded: fileItem.createdTime,
+            });
+        }
+        return t_data;
+    };
+
+    const loadFilesOnClick = async (loadAll: boolean) => {
+        // Get file id of the selected rows
+        let selectedRows: any = [];
+        if (loadAll) {
+            selectedRows = getSelectedRowsData(true);
+        } else {
+            selectedRows = getSelectedRowsData();
+        }
+
+        if(selectedRows.length === 0) {
+            alert("There is no files to load")
+            return;
+        }
+
+        let files_payload: any = { files: {} };
+        for (let i = 0; i < selectedRows.length; i++) {
+            files_payload.files[selectedRows[i].id] =
+                filesData.files[selectedRows[i].id];
+        }
+
+        try {
+            await fetch("/api/indexes/files", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.token}`,
+                },
+                body: JSON.stringify(files_payload),
+            });
+        } catch (err: any) {
+            console.error(err);
+            return;
+        }
+
+        let fileid = selectedRows.map((e: any) => e.id);
+        // Remove data from display table
+        let _t_data = [...t_data];
+        _t_data = _t_data.filter((e: any) => !fileid.includes(e.id));
+        set_t_data(_t_data);
+        alert(`Successfully loaded ${selectedRows.length} file(s)`)
+    };
 
     return (
-        <div>
-            <a href={(data as any).url} target="_blank" rel="noreferrer">
-                <button>Click here to link GDrive</button>
-            </a>
-            <button onClick={() => driveFilesRefetch()}>
-                Update GDrive data
-            </button>
-            <button
-                onClick={() => {
-                    updateUserIndex(tableData);
+        <div className="mainapp-content-container">
+            <div
+                style={{
+                    display: "grid",
+                    gridTemplateColumns: "5fr 1fr",
+                    gridTemplateRows: "auto auto 1fr",
+                    rowGap: "10px",
+                    color: "white",
+                    paddingTop: "10px",
                 }}
             >
-                Update user index with new GDdrive data
-            </button>
-            <div
-                className="add-songs"
-                style={{ display: "flex", flexDirection: "column" }}
-            >
-                <MaterialTable
-                    icons={tableIcons}
-                    columns={song_columns}
-                    data={tableData}
-                    title="New Music files in your google drive that don't exist in your file index"
-                    actions={[
-                        {
-                            icon: MoreVert,
-                            tooltip: "More Options",
-                            onClick: (event, rowData) => {
-                                console.log(rowData);
-                                window.alert(
-                                    "You clicked on " +
-                                        (rowData as any).filename +
-                                        " Action: " +
-                                        event.currentTarget.id
-                                );
-                            },
-                        },
-                    ]}
-                    components={{
-                        Action: (props) => (
-                            <Dropdown as={ButtonGroup}>
-                                <Button
-                                    id="addtoindex"
-                                    onClick={(event) =>
-                                        props.action.onClick(event, props.data)
-                                    }
-                                    variant="success"
-                                >
-                                    Add
-                                </Button>
+                {driveUserInfoLoading || driveApiUrlLoading ? (
+                    <div
+                        style={{
+                            gridColumn: "span 2",
+                        }}
+                    >
+                        Loading...
+                    </div>
+                ) : (
+                    <div
+                        style={{
+                            gridColumn: "span 2",
+                        }}
+                    >
+                        <div
+                            style={{
+                                display: "inline",
+                                fontSize: "large",
+                            }}
+                        >
+                            {statusText}
+                        </div>
+                        <Button
+                            variant="success"
+                            style={{
+                                marginLeft: "10px",
+                                display:
+                                    driveLinkState === "unlinked"
+                                        ? "inline-block"
+                                        : "none",
+                            }}
+                            size="sm"
+                            href={(driveApiUrl as any).url}
+                            target="_blank"
+                            onClick={() => {
+                                setDriveLinkState("linking");
+                            }}
+                        >
+                            <FontAwesomeIcon
+                                icon="link"
+                                style={{ marginRight: "5px" }}
+                            />
+                            Link
+                        </Button>
 
-                                <Dropdown.Toggle
-                                    split
-                                    variant="success"
-                                    id="dropdown-split-basic"
-                                />
+                        <Button
+                            variant="danger"
+                            style={{
+                                marginLeft: "10px",
+                                display:
+                                    driveLinkState === "linked"
+                                        ? "inline-block"
+                                        : "none",
+                            }}
+                            size="sm"
+                            onClick={unlinkGDrive}
+                        >
+                            <FontAwesomeIcon
+                                icon="unlink"
+                                style={{ marginRight: "5px" }}
+                            />
+                            Unlink
+                        </Button>
+                        <Button
+                            variant="secondary"
+                            style={{
+                                marginLeft: "10px",
+                                display:
+                                    driveLinkState === "linking" ||
+                                    driveLinkState === "unlinking"
+                                        ? "inline-block"
+                                        : "none",
+                            }}
+                            size="sm"
+                        >
+                            <FontAwesomeIcon
+                                icon="spinner"
+                                style={{
+                                    marginRight: "5px",
+                                    animation: "spin 1s linear infinite",
+                                }}
+                            />
+                            {driveLinkState === "linking"
+                                ? "Linking"
+                                : "Unlinking"}
+                        </Button>
+                    </div>
+                )}
 
-                                <Dropdown.Menu>
-                                    <Dropdown.Item
-                                        id="hide"
-                                        onClick={(event) =>
-                                            props.action.onClick(
-                                                event,
-                                                props.data
-                                            )
-                                        }
-                                    >
-                                        Hide from view
-                                    </Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        ),
-                    }}
-                    options={{
-                        actionsColumnIndex: -1,
-                    }}
-                />
+                <div></div>
+                <div style={{ textAlign: "right", whiteSpace: "nowrap" }}>
+                    <Button
+                        variant={isLoadingFiles ? "secondary" : "success"}
+                        onClick={() => {
+                            if (isLoadingFiles) return;
+                            setIsLoadingFiles(true)
+                            setLoadAllText("Loading");
+                            loadFilesOnClick(true).then((_) => {
+                                setLoadAllText("Load All");
+                                setIsLoadingFiles(false)
+                            });
+                        }}
+                    >
+                        <FontAwesomeIcon
+                            icon={loadAllText === "Loading" ? "spinner" : "angle-double-down"}
+                            style={{ marginRight: "5px", animation: loadAllText === "Loading" ? "spin 1s linear infinite" : "none" }}
+                        />
+                        {loadAllText}
+                    </Button>
+                    <Button
+                        variant={isLoadingFiles ? "secondary" : "success"}
+                        style={{ marginLeft: "10px" }}
+                        onClick={() => {
+                            if (isLoadingFiles) return;
+                            setIsLoadingFiles(true)
+                            setLoadText("Loading");
+                            loadFilesOnClick(false).then((_) => {
+                                setLoadText("Load");
+                                setIsLoadingFiles(false)
+                            });
+                        }}
+                    >
+                        <FontAwesomeIcon
+                            icon={loadText === "Loading" ? "spinner" : "download"}
+                            style={{ marginRight: "5px", animation: loadText === "Loading" ? "spin 1s linear infinite" : "none" }}
+                        />
+                        {loadText}
+                    </Button>
+                </div>
+                {t_data === null ? (
+                    <div
+                        style={{
+                            gridColumn: "span 2",
+                        }}
+                    >
+                        Loading...
+                    </div>
+                ) : (
+                    <div
+                        style={{
+                            gridColumn: "span 2",
+                        }}
+                    >
+                        <MaterialTable
+                            tableRef={tableRef}
+                            icons={TABLE_ICONS}
+                            columns={[
+                                { title: "id", field: "id", hidden: true },
+                                {
+                                    title: "Filename",
+                                    field: "filename",
+                                },
+                                {
+                                    title: "Path",
+                                    field: "path",
+                                },
+                                {
+                                    title: "Date uploaded",
+                                    field: "date_uploaded",
+                                    type: "date",
+                                },
+                            ]}
+                            data={t_data}
+                            options={{
+                                selection: true,
+                                selectionProps: (rowData: any) => ({
+                                    color: "primary",
+                                }),
+                                // paging: false,
+                            }}
+                            title={`Detected ${t_data.length} new Music Files`}
+                            actions={[
+                                {
+                                    icon: () => (
+                                        <FontAwesomeIcon
+                                            size="xs"
+                                            icon="play"
+                                        />
+                                    ),
+                                    tooltip: "Preview",
+                                    position: "row",
+                                    onClick: (event, rowData) => {
+                                        // console.log((rowData as any).id);
+                                        console.log(
+                                            `/api/driveapi/files/download?token=${localStorage.getItem(
+                                                "token"
+                                            )}&fileid=${(rowData as any).id}`
+                                        );
+                                        setNowPlayingURL(
+                                            `/api/driveapi/files/download?token=${localStorage.getItem(
+                                                "token"
+                                            )}&fileid=${(rowData as any).id}`
+                                        );
+                                        setSongTitleLabel(
+                                            (rowData as any).filename
+                                        );
+                                        setSongArtistLabel(
+                                            (rowData as any).path
+                                        );
+                                        setStatus("PLAYING");
+                                    },
+                                },
+                            ]}
+                        />
+                    </div>
+                )}
             </div>
         </div>
     );

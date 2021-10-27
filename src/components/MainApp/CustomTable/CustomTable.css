@@ -1,0 +1,56 @@
+.table-container {
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+}
+
+.table-body {
+    height: 100px;
+    width: 100%;
+}
+
+.table-column-titles {
+    /*display: grid;*/
+    /*grid-template-columns: repeat(3, 1fr);*/
+    /*gap: 10px;*/
+    /*grid-auto-rows: minmax(60px, auto);*/
+    display: flex;
+    justify-content: space-between;
+    font-size: 25px;
+    /*background-color: dimgray;*/
+}
+
+.table-column-title-all-songs {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    padding-left: 20px;
+    color: white;
+    size: 50px;
+    font-weight: 500;
+}
+
+/*.table-column-title-albums {*/
+/*    display: flex;*/
+/*    justify-content: right;*/
+/*    align-items: center;*/
+/*    padding-right: 50px;*/
+/*    color: white;*/
+/*}*/
+
+.table-column-title-action {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    padding-right: 65px;
+    color: white;
+    font-weight: 500;
+}
+
+.table-items {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    padding-top: 20px;
+}

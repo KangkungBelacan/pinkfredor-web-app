@@ -47,8 +47,8 @@ const EditTrackModal = (props: EditTrackModalProps) => {
             payload.file_metadata.album_track_no = album_track_no;
         if (artist_id !== undefined)
             payload.file_metadata.song_artistid = artist_id;
-        if (album_id !== undefined) payload.file_metadata.album_id = album_id;
-        if (genre_id !== undefined) payload.file_metadata.genre_id = genre_id;
+        if (album_id !== undefined) payload.file_metadata.song_albumid = album_id;
+        if (genre_id !== undefined) payload.file_metadata.song_genreid = genre_id;
 
         axios({
             url: `/api/indexes/files/${file_id}`,

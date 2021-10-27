@@ -22,7 +22,7 @@ const AuthService = () => {
             setLoading(false);
         };
         run();
-    });
+    }, []);
 
     return { authed, loading };
 };

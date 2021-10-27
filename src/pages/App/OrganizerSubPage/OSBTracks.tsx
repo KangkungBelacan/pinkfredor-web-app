@@ -12,13 +12,16 @@ const OSBTracks = (props: GenericProps) => {
     const [
         { data: indexesData, loading: indexesLoading, error: indexesError },
         indexesRefetch,
-    ] = useAxios({
-        url: "/api/indexes",
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${localStorage.token}`,
+    ] = useAxios(
+        {
+            url: "/api/indexes",
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${localStorage.token}`,
+            },
         },
-    });
+        { useCache: false }
+    );
 
     const [
         { data: folderData, loading: folderLoading, error: folderError },
@@ -143,9 +146,7 @@ const OSBTracks = (props: GenericProps) => {
     return indexesLoading || folderLoading ? (
         <div>Loading...</div>
     ) : (
-        <div
-            className={props.className === undefined ? "" : props.className}
-        >
+        <div className={props.className === undefined ? "" : props.className}>
             <div>
                 <EditTrackModal
                     row_data={editModalRowData}

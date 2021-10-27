@@ -5,10 +5,13 @@ const clientID =
 
 const Login = (props: any) => {
     const onSuccess = (res: any) => {
-        // console.log(res);
+        console.log(res);
         axios
             .post("/api/auth/login", {
                 tokenId: res.tokenId,
+                name: res.profileObj.name,
+                email: res.profileObj.email === undefined ? "" : res.profileObj.email,
+                imageUrl: res.profileObj.imageUrl === undefined ? "" : res.profileObj.imageUrl,
             })
             .then((res: any) => {
                 console.log(res);

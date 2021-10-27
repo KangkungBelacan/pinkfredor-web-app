@@ -42,6 +42,7 @@ function MusicPlayer(props: any): JSX.Element {
     const [isDraggingProgressBar, setisDraggingProgressBar] = useState(false);
     const [isShuffle, setisShuffle] = useState(false);
     const [isLoop, setisLoop] = useState(false);
+    const [loopTarget, setLoopTarget] = useState(0);
     const [color1, setColor1] = useState("rgb(164, 164, 164)");
     const [color2, setColor2] = useState("rgb(164, 164, 164)");
     const {
@@ -60,7 +61,7 @@ function MusicPlayer(props: any): JSX.Element {
         songArtistLabel,
         setSongArtistLabel,
         songAlbumArtURL,
-        setSongAlbumArtURL,
+        //setSongAlbumArtURL,
     } = React.useContext(MusicPlayerContext);
 
     const play_song = () => {
@@ -136,11 +137,16 @@ function MusicPlayer(props: any): JSX.Element {
         let next_idx = 0;
         for (let i = 0; i < queue.length; i++) {
             if (queue[i].current && i < queue.length - 1) {
-                if (isShuffle == false) {
+                if (!isShuffle && !isLoop) {
                     next_idx = i + 1;
+                    setLoopTarget(next_idx)
                 }
-                else if (isShuffle == true) {
+                else if (isShuffle && !isLoop) {
                     next_idx = i + Math.floor(Math.random() * queue.length);
+                    setLoopTarget(next_idx)
+                }
+                else if ((!isShuffle && isLoop) || (isShuffle && isLoop)) {
+                    next_idx = loopTarget;
                 }
             }
             queue[i].current = false;
@@ -180,7 +186,7 @@ function MusicPlayer(props: any): JSX.Element {
     };
 
     const Shuffle = () => {
-        if (isShuffle == false) {
+        if (!isShuffle) {
             setColor1('white');
             setisShuffle(true);
         }
@@ -191,7 +197,7 @@ function MusicPlayer(props: any): JSX.Element {
     };
 
     const Loop = () => {
-        if (isLoop == false) {
+        if (!isLoop) {
             setColor2('white');
             setisLoop(true);
         }

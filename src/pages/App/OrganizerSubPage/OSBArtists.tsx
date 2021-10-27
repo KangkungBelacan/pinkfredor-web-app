@@ -25,7 +25,8 @@ const OSBArtists = (props: any) => {
         headers: {
             Authorization: `Bearer ${localStorage.token}`,
         },
-    });
+    },
+    { useCache: false });
     useEffect(() => {
         if (artistsLoading) {
             return;
