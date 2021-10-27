@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faPlayCircle,
@@ -28,6 +28,7 @@ const bars = <FontAwesomeIcon icon={faBars} />;
 const volumeUp = <FontAwesomeIcon icon={faVolumeUp} />;
 const ShuffleIcon = <FontAwesomeIcon icon={faRandom} />;
 const LoopIcon = <FontAwesomeIcon icon={faSync} />;
+const spinner = <FontAwesomeIcon icon="spinner" />;
 
 //Music Player Component.
 function MusicPlayer(props: any): JSX.Element {
@@ -62,9 +63,14 @@ function MusicPlayer(props: any): JSX.Element {
         setSongArtistLabel,
         songAlbumArtURL,
         //setSongAlbumArtURL,
+        isLoadingSong,
+        setIsLoadingSong,
     } = React.useContext(MusicPlayerContext);
 
     const play_song = () => {
+        if (isLoadingSong) {
+            return;
+        }
         if (status !== "PLAYING") {
             if (nowPlayingURL === "") {
                 if (queue.length === 0) {
@@ -126,7 +132,6 @@ function MusicPlayer(props: any): JSX.Element {
         }
     };
 
-    
     const next_song = () => {
         setCurPos(0);
         setProgress(0);
@@ -139,13 +144,11 @@ function MusicPlayer(props: any): JSX.Element {
             if (queue[i].current && i < queue.length - 1) {
                 if (!isShuffle && !isLoop) {
                     next_idx = i + 1;
-                    setLoopTarget(next_idx)
-                }
-                else if (isShuffle && !isLoop) {
+                    setLoopTarget(next_idx);
+                } else if (isShuffle && !isLoop) {
                     next_idx = i + Math.floor(Math.random() * queue.length);
-                    setLoopTarget(next_idx)
-                }
-                else if ((!isShuffle && isLoop) || (isShuffle && isLoop)) {
+                    setLoopTarget(next_idx);
+                } else if ((!isShuffle && isLoop) || (isShuffle && isLoop)) {
                     next_idx = loopTarget;
                 }
             }
@@ -187,22 +190,20 @@ function MusicPlayer(props: any): JSX.Element {
 
     const Shuffle = () => {
         if (!isShuffle) {
-            setColor1('white');
+            setColor1("white");
             setisShuffle(true);
-        }
-        else {
-            setColor1('rgb(164, 164, 164)');
+        } else {
+            setColor1("rgb(164, 164, 164)");
             setisShuffle(false);
         }
     };
 
     const Loop = () => {
         if (!isLoop) {
-            setColor2('white');
+            setColor2("white");
             setisLoop(true);
-        }
-        else {
-            setColor2('rgb(164, 164, 164)');
+        } else {
+            setColor2("rgb(164, 164, 164)");
             setisLoop(false);
         }
     };
@@ -233,6 +234,16 @@ function MusicPlayer(props: any): JSX.Element {
         stop_song,
     };
 
+    // Called whenever nowPlayingURL changes
+    useEffect(() => {
+        if (typeof nowPlayingURL !== "undefined" && nowPlayingURL !== "") {
+            // Set to true because it takes time for the song to be loaded
+            // It is set back to true when the song is finally loaded
+            // There is a slim chance onLoad() will be called before this is called somehow, please double check in future
+            setIsLoadingSong(true);
+        }
+    }, [nowPlayingURL]);
+
     return (
         <div style={{ gridColumnStart: "span 2" }}>
             <NowPlayingQueuePopUp
@@ -248,6 +259,9 @@ function MusicPlayer(props: any): JSX.Element {
                 onLoading={(args?: any) => {
                     setMaxDuration(format(args.duration / 1000));
                     setProgressSlidermax(Math.round(args.duration / 1000));
+                }}
+                onLoad={() => {
+                    setIsLoadingSong(false);
                 }}
                 onPlaying={(args?: any) => {
                     // console.log(args);
@@ -284,7 +298,9 @@ function MusicPlayer(props: any): JSX.Element {
                     <div
                         style={{ display: "inline-block", paddingLeft: "10px" }}
                     >
-                        <p className="player-song-info-title">{songTitleLabel}</p>
+                        <p className="player-song-info-title">
+                            {songTitleLabel}
+                        </p>
                         <p className="player-song-info-artist">
                             {songArtistLabel}
                         </p>
@@ -293,7 +309,7 @@ function MusicPlayer(props: any): JSX.Element {
                 <div className="player-controls col-md-6 col-5">
                     <div className="player-controls-buttons">
                         <button
-                            style={{color:color1}}
+                            style={{ color: color1 }}
                             className="player-controls-button-toggle d-md-inline-block d-none"
                             onClick={Shuffle}
                         >
@@ -314,8 +330,17 @@ function MusicPlayer(props: any): JSX.Element {
                         <button
                             className="player-controls-button-play"
                             onClick={play_song}
+                            style={{
+                                animation: isLoadingSong
+                                    ? "spin 2s linear infinite"
+                                    : "none",
+                            }}
                         >
-                            {status === "PLAYING" ? pauseCircle : playCircle}
+                            {isLoadingSong
+                                ? spinner
+                                : status === "PLAYING"
+                                ? pauseCircle
+                                : playCircle}
                         </button>
                         <button
                             className="player-controls-button-misc d-md-inline-block d-none"
@@ -336,7 +361,7 @@ function MusicPlayer(props: any): JSX.Element {
                             {bars}
                         </button>
                         <button
-                            style={{color:color2}}
+                            style={{ color: color2 }}
                             className="player-controls-button-toggle d-md-inline-block d-none"
                             onClick={Loop}
                         >
