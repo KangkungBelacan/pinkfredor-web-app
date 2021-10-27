@@ -5,13 +5,13 @@
 
 .table-item-container {
     display: grid;
-    grid-template-columns: 5% 6% 70% 19%;
+    grid-template-columns: 25px 55px 1fr 50px;
     padding: 10px;
 }
 
 .table-item-container-yellow {
     display: grid;
-    grid-template-columns: 5% 6% 70% 19%;
+    grid-template-columns: 20px 55px 1fr 50px;
     padding: 10px;
     background-color: rgb(42, 41, 32);
     border-radius: 15px;

@@ -10,41 +10,30 @@
 }
 
 .table-column-titles {
-    /*display: grid;*/
-    /*grid-template-columns: repeat(3, 1fr);*/
-    /*gap: 10px;*/
-    /*grid-auto-rows: minmax(60px, auto);*/
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 20px 55px 1fr 150px;
     font-size: 25px;
-    /*background-color: dimgray;*/
 }
 
 .table-column-title-all-songs {
     display: flex;
-    justify-content: left;
+    justify-content: center;
     align-items: center;
-    padding-left: 20px;
     color: white;
     size: 50px;
     font-weight: 500;
+    grid-column-start: 1;
+    grid-column-end: 4;
 }
-
-/*.table-column-title-albums {*/
-/*    display: flex;*/
-/*    justify-content: right;*/
-/*    align-items: center;*/
-/*    padding-right: 50px;*/
-/*    color: white;*/
-/*}*/
 
 .table-column-title-action {
     display: flex;
-    justify-content: right;
+    justify-content: center;
     align-items: center;
-    padding-right: 65px;
     color: white;
     font-weight: 500;
+    grid-column-start: 4;
+    grid-column-end: 5;
 }
 
 .table-items {
