@@ -58,7 +58,9 @@ const TableItem = (props: any) => {
                 {play}
             </div>
             <div className={"table-item-container-info"}>
-                <div className={"table-item-container-title"}>{songData.file_metadata.song_title}</div>
+                <div className={"table-item-container-title"}>
+                    {("song_title" in songData.file_metadata && songData.file_metadata.song_title !== "") ? songData.file_metadata.song_title : songData.filename}
+                </div>
                 <div className={"table-item-container-details"}>{containerDetails}</div>
             </div>
             <div className={"table-item-container-actions"}>
