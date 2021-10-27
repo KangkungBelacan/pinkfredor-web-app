@@ -5,13 +5,13 @@
 
 .table-item-container {
     display: grid;
-    grid-template-columns: 25px 55px 1fr 50px;
+    grid-template-columns: 25px auto 1fr auto;
     padding: 10px;
 }
 
 .table-item-container-yellow {
     display: grid;
-    grid-template-columns: 20px 55px 1fr 50px;
+    grid-template-columns: 25px auto 1fr auto;
     padding: 10px;
     background-color: rgb(42, 41, 32);
     border-radius: 15px;
@@ -20,10 +20,11 @@
 .table-item-container-number {
     color: white;
     display: flex;
-    justify-content: center;
+    justify-content: left;
     align-items: center;
     font-size: 23px;
     font-weight: 600;
+    padding-right: 30px;
 }
 
 .table-item-container-image {
@@ -81,9 +82,10 @@
     align-items: flex-start;
     justify-content: center;
     color: white;
+    padding-left: 20px;
 }
 
-.table-item-container-title {
+.table-item-container-info-title {
     display: flex;
     align-items: center;
     font-size: 20px;
@@ -91,7 +93,7 @@
     font-weight: 600;
 }
 
-.table-item-container-details {
+.table-item-container-info-details {
     font-size: 13px;
     color: gray;
     font-weight: 500;
@@ -102,5 +104,5 @@
     display: flex;
     align-items: center;
     justify-content: right;
-    padding-right: 70px;
+    padding-right: 55px;
 }
