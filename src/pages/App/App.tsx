@@ -160,6 +160,11 @@ function App() {
                                     <AppSubPage.Organizer className="mainapp-content-container" />
                                 )}
                             />
+                            <Route
+                                exact
+                                path="/app/playlist/:playlist_id"
+                                component={AppSubPage.Playlist}
+                            />
                         </div>
                     </div>
 
