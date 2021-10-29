@@ -10,11 +10,15 @@
 }
 
 .mainapp-content-container {
-    /* display: flex; */
+    display: flex;
     overflow-y: auto;
     align-items: stretch;
     flex-direction: row;
     width: 100%;
+}
+
+.mainapp-content {
+    flex: 1
 }
 
 .player {

@@ -31,10 +31,10 @@ const Organizer = (props: GenericProps) => {
     ];
     return (
         <div
-            className={props.className ? props.className : ""}
+            className={props.className ? props.className: ""}
             style={props.style ? props.style : {}}
         >
-            <div className="organizer-body">
+            <div className="organizer-body mainapp-content">
                 <CategoriesTopBar items={items} />
                 {/* <div className="row" style={{overflowY:"auto", height: "calc(100% - 64px)", paddingTop: "12px"}}> */}
                 <Route

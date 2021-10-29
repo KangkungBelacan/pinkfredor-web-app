@@ -213,6 +213,7 @@ const LinkGDrive = () => {
     return (
         <div className="mainapp-content-container">
             <div
+                className="mainapp-content"
                 style={{
                     display: "grid",
                     gridTemplateColumns: "5fr 1fr",

@@ -10,6 +10,7 @@ function UserAccount() {
     return (
         <div className="mainapp-content-container">
             <div
+                className="mainapp-content"
                 style={{
                     height: "85vh",
                     overflowY: "auto",
@@ -20,7 +21,9 @@ function UserAccount() {
                 }}
             >
                 <div
-                    className={isBiggerThanPhone ? "container" : "container-fluid"}
+                    className={
+                        isBiggerThanPhone ? "container" : "container-fluid"
+                    }
                     style={
                         isBiggerThanPhone
                             ? {}
