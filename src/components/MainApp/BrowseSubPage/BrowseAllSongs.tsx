@@ -105,7 +105,7 @@ const BrowseAllSongs = (props: any) => {
         },
         albumRefetch,
     ] = useAxios({
-        url: "/api/indexes/albums   ",
+        url: "/api/indexes/albums",
         method: "GET",
         headers: {
             Authorization: `Bearer ${localStorage.token}`,

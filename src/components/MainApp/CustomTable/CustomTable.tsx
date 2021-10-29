@@ -8,7 +8,7 @@ const CustomTable = (props: any) => {
                                    artistsDataState={props.artistsDataState} albumDataState={props.albumDataState}
                                    songItemOnClick={props.songItemOnClick}
                                    imageColor={'#' + (Math.random() * 0xFFFFFF << 0).toString(16)}
-                                   nowPlayingURL={props.nowPlayingURL}/>)
+                                   nowPlayingURL={props.nowPlayingURL} indexFilesState={props.indexFilesState}/>)
     }
 
     return (

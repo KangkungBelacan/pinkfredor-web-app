@@ -49,12 +49,14 @@ const TableItem = (props: any) => {
     return (
         <div
             className={isPlayingNow ? "table-item-container table-item-playing" : "table-item-container"}
+            style={{gridTemplateColumns: `${props.indexFilesState.length.toString().length + 0.5}em auto 1fr auto`}}
             onClick={(event) => {
                 props.songItemOnClick(songData, "Play")
             }}>
             <div className={"table-item-container-number"}>{props.position}</div>
             <div className={"table-item-container-image"} style={{backgroundColor: props.imageColor}}>
-                <div className={"table-item-container-image-overlay"}></div>
+                <div className={"table-item-container-image-overlay table-item-container-image-fade"}></div>
+                <div className={"table-item-container-image-disc"}></div>
                 {play}
             </div>
             <div className={"table-item-container-info"}>

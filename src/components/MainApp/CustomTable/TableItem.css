@@ -5,7 +5,7 @@
 
 .table-item-container {
     display: grid;
-    grid-template-columns: 25px auto 1fr auto;
+    /*grid-template-columns: 35px auto 1fr auto;*/
     padding: 10px;
 }
 
@@ -21,7 +21,6 @@
     align-items: center;
     font-size: 23px;
     font-weight: 600;
-    padding-right: 30px;
 }
 
 .table-item-container-image {
@@ -45,15 +44,18 @@
 
 .table-item-container-image-overlay {
     position: absolute;
-    background-color: black;
     border-radius: 5%;
     width: 50px;
     height: 50px;
+}
+
+.table-item-container-image-fade {
+    background-color: black;
     filter: opacity(0%);
     transition: filter .3s;
 }
 
-.table-item-container:hover .table-item-container-image-overlay {
+.table-item-container:hover .table-item-container-image-fade {
     filter: opacity(80%);
 }
 
