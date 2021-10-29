@@ -3,9 +3,56 @@ import "./SideNavBar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Profile from "./../../images/pfp.png";
 import jwt_decode from "jwt-decode";
+import useAxios from "axios-hooks";
+import { useEffect, useState } from "react";
 function SideNavBar(props: any): JSX.Element {
     const current_path = useLocation().pathname;
     const jwt_payload = jwt_decode(localStorage.getItem("token") as string);
+    const [
+        { data: playlistData, loading: playlistLoading, error: playlistErr },
+        _,
+    ] = useAxios(
+        {
+            url: "/api/indexes/playlists",
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        },
+        { useCache: false }
+    );
+    const [playlistListing, setPlaylistListing] = useState<any>([]);
+    useEffect(() => {
+        if (playlistLoading) {
+            return;
+        }
+
+        if (playlistErr && playlistErr?.code !== "200") {
+            return;
+        }
+
+        let playlists = Object.values(playlistData.playlists);
+        // Sort playlist by date_added in decending order
+        playlists.sort((x, y) => {
+            return (y as any).date_added - (x as any).date_added
+        });
+        let _playlistListing = [];
+
+        for (let i = 0; i < playlists.length; i++) {
+            let pl = playlists[i];
+            _playlistListing.push(
+                <li>
+                    <div className="item-container">
+                        <span className="item-container-text">
+                            {(pl as any).playlist_name}
+                        </span>
+                    </div>
+                </li>
+            );
+        }
+
+        setPlaylistListing(_playlistListing);
+    }, [playlistLoading]);
     return (
         <div
             className="sidebar-container"
@@ -28,14 +75,22 @@ function SideNavBar(props: any): JSX.Element {
                 <div className="sidebar-header">
                     <div className="row">
                         <div className="col-md-12 col-8">
-                            <div className="flex" style={{justifyContent:"center"}}>
+                            <div
+                                className="flex"
+                                style={{ justifyContent: "center" }}
+                            >
                                 <div>
                                     <h3 style={{ textAlign: "center" }}>
                                         Pinkfredor
                                     </h3>
                                     <br />
                                     <img
-                                        src={(jwt_payload as any).imageUrl !== undefined ? (jwt_payload as any).imageUrl : Profile}
+                                        src={
+                                            (jwt_payload as any).imageUrl !==
+                                            undefined
+                                                ? (jwt_payload as any).imageUrl
+                                                : Profile
+                                        }
                                         alt="Avatar"
                                         className="center"
                                         style={{ borderRadius: "50%" }}
@@ -172,7 +227,8 @@ function SideNavBar(props: any): JSX.Element {
                     <li>
                         <p className="sidebar-subheader">Playlist</p>
                     </li>
-                    <li>
+                    {playlistListing}
+                    {/* <li>
                         <div className="item-container">
                             <span className="item-container-text">
                                 Playlist A
@@ -199,7 +255,7 @@ function SideNavBar(props: any): JSX.Element {
                                 Playlist C
                             </span>
                         </div>
-                    </li>
+                    </li> */}
                 </ul>
             </nav>
         </div>
