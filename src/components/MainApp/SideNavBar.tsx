@@ -30,7 +30,7 @@ function SideNavBar(props: any): JSX.Element {
         for (let i = 0; i < playlists.length; i++) {
             let pl = playlists[i];
             _playlistListing.push(
-                <li>
+                <li key={`sidebar-playlist-${(pl as any).playlist_id}`}>
                     <div className="item-container">
                         <span className="item-container-text">
                             {(pl as any).playlist_name}
