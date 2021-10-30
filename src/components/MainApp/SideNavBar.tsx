@@ -3,24 +3,13 @@ import "./SideNavBar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Profile from "./../../images/pfp.png";
 import jwt_decode from "jwt-decode";
-import useAxios from "axios-hooks";
-import { useEffect, useState } from "react";
+import PlaylistContext from "../../context/PlaylistContext";
+import React, { useEffect, useState } from "react";
 function SideNavBar(props: any): JSX.Element {
     const current_path = useLocation().pathname;
     const jwt_payload = jwt_decode(localStorage.getItem("token") as string);
-    const [
-        { data: playlistData, loading: playlistLoading, error: playlistErr },
-        _,
-    ] = useAxios(
-        {
-            url: "/api/indexes/playlists",
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-        },
-        { useCache: false }
-    );
+    const { playlistData, playlistLoading, playlistErr } =
+        React.useContext(PlaylistContext);
     const [playlistListing, setPlaylistListing] = useState<any>([]);
     useEffect(() => {
         if (playlistLoading) {
@@ -34,7 +23,7 @@ function SideNavBar(props: any): JSX.Element {
         let playlists = Object.values(playlistData.playlists);
         // Sort playlist by date_added in decending order
         playlists.sort((x, y) => {
-            return (y as any).date_added - (x as any).date_added
+            return (y as any).date_added - (x as any).date_added;
         });
         let _playlistListing = [];
 
