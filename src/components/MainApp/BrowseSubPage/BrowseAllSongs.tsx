@@ -1,9 +1,9 @@
-import React, {forwardRef, useEffect, useState} from "react";
+import React, { forwardRef, useCallback, useEffect, useState } from "react";
 import useAxios from "axios-hooks";
 import "../Browse.css";
 // import PlayArrow from "@material-ui/icons/PlayArrow";
 // import Queue from "@material-ui/icons/Queue";
-import {Icons} from "material-table";
+import { Icons } from "material-table";
 
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
@@ -21,46 +21,45 @@ import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 // import MusicPlayerContext from "../../context/MusicPlayerContext";
-import {MusicQueueItem} from "../../../interface/context/MusicQueueItem";
+import { MusicQueueItem } from "../../../interface/context/MusicQueueItem";
 import CustomTable from "../CustomTable/CustomTable";
 import axios from "axios";
 import PlaylistContext from "../../../context/PlaylistContext";
 
 const tableIcons: Icons = {
-    Add: forwardRef((props, ref) => <AddBox {...props} ref={ref}/>),
-    Check: forwardRef((props, ref) => <Check {...props} ref={ref}/>),
-    Clear: forwardRef((props, ref) => <Clear {...props} ref={ref}/>),
-    Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref}/>),
+    Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+    Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+    Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+    Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
     DetailPanel: forwardRef((props, ref) => (
-        <ChevronRight {...props} ref={ref}/>
+        <ChevronRight {...props} ref={ref} />
     )),
-    Edit: forwardRef((props, ref) => <Edit {...props} ref={ref}/>),
-    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref}/>),
-    Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref}/>),
-    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref}/>),
-    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref}/>),
-    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref}/>),
+    Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+    Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
+    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
     PreviousPage: forwardRef((props, ref) => (
-        <ChevronLeft {...props} ref={ref}/>
+        <ChevronLeft {...props} ref={ref} />
     )),
-    ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref}/>),
-    Search: forwardRef((props, ref) => <Search {...props} ref={ref}/>),
-    SortArrow: forwardRef((props, ref) => <ArrowUpward {...props} ref={ref}/>),
+    ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+    Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+    SortArrow: forwardRef((props, ref) => <ArrowUpward {...props} ref={ref} />),
     ThirdStateCheck: forwardRef((props, ref) => (
-        <Remove {...props} ref={ref}/>
+        <Remove {...props} ref={ref} />
     )),
-    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref}/>),
+    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-interface Element {
-}
+interface Element {}
 
 const BrowseAllSongs = (props: any) => {
     const song_columns = [
-        {title: "file_id", field: "id", hidden: true},
-        {title: "Title", field: "file_metadata.song_title"},
-        {title: "Artist", field: "file_metadata.song_artist"},
-        {title: "Album", field: "file_metadata.song_album"},
+        { title: "file_id", field: "id", hidden: true },
+        { title: "Title", field: "file_metadata.song_title" },
+        { title: "Artist", field: "file_metadata.song_artist" },
+        { title: "Album", field: "file_metadata.song_album" },
     ];
 
     const [topBarSelection, setTopBar] = useState(0);
@@ -68,7 +67,7 @@ const BrowseAllSongs = (props: any) => {
     const [artistsDataState, setArtistsDataState] = useState<any>([]);
     const [albumDataState, setAlbumDataState] = useState<any>([]);
     const [pageLoading, setPageLoading] = useState(true);
-    const {playlistData, playlistLoading, playlistErr, playlistRefetch} =
+    const { playlistData, playlistLoading, playlistErr, playlistRefetch } =
         React.useContext(PlaylistContext);
 
     const [
@@ -87,11 +86,7 @@ const BrowseAllSongs = (props: any) => {
     });
 
     const [
-        {
-            data: artistsData,
-            loading: artistsLoading,
-            error: artistsError,
-        },
+        { data: artistsData, loading: artistsLoading, error: artistsError },
         artistsRefetch,
     ] = useAxios({
         url: "/api/indexes/artists",
@@ -102,11 +97,7 @@ const BrowseAllSongs = (props: any) => {
     });
 
     const [
-        {
-            data: albumData,
-            loading: albumLoading,
-            error: albumError,
-        },
+        { data: albumData, loading: albumLoading, error: albumError },
         albumRefetch,
     ] = useAxios({
         url: "/api/indexes/albums",
@@ -117,25 +108,42 @@ const BrowseAllSongs = (props: any) => {
     });
 
     useEffect(() => {
-        if (indexFilesLoading || indexFilesError || artistsLoading || artistsError || albumLoading || albumError || !pageLoading) return;
+        if (
+            indexFilesLoading ||
+            indexFilesError ||
+            artistsLoading ||
+            artistsError ||
+            albumLoading ||
+            albumError ||
+            !pageLoading
+        )
+            return;
 
         let indexFiles = Object.values(indexFilesData.files);
         setIndexFilesState(indexFiles);
         setArtistsDataState(artistsData.artists);
         setAlbumDataState(albumData.albums);
         setPageLoading(false);
-    }, [indexFilesData, indexFilesLoading, indexFilesError, artistsData, artistsLoading, artistsError, albumData, albumLoading, albumError, pageLoading]);
+    }, [
+        indexFilesData,
+        indexFilesLoading,
+        indexFilesError,
+        artistsData,
+        artistsLoading,
+        artistsError,
+        albumData,
+        albumLoading,
+        albumError,
+        pageLoading,
+    ]);
 
-    const Play = (songData: any) => {
+    const Play = useCallback((songData: any) => {
         let new_queue: Array<MusicQueueItem> = [];
         // Set queue to all songs in view
         for (let i = 0; i < indexFilesState.length; i++) {
             new_queue.push({
                 item_id: "queue_item_" + indexFilesState[i].id,
-                current:
-                    indexFilesState[i].id === songData.id
-                        ? true
-                        : false,
+                current: indexFilesState[i].id === songData.id ? true : false,
                 playingURL: `/api/driveapi/files/download?token=${localStorage.token}&fileid=${indexFilesState[i].id}`,
                 song_title: indexFilesState[i].file_metadata.song_title,
                 song_artist: indexFilesState[i].file_metadata.song_artist,
@@ -158,31 +166,43 @@ const BrowseAllSongs = (props: any) => {
         //         " Action: " +
         //         event.currentTarget.id
         // );
-    };
+    }, []);
 
     // Use axios.post to make a POST request to the server to create a new playlist at the endpoint /api/indexes/playlists while passing in bearer token
-    const CreateNewPlaylist = (songData: any, newPlaylistName: string) => {
-        axios.post(`/api/indexes/playlists`, {
-            playlists: [{
-                playlistid: "",
-                playlist_name: newPlaylistName,
-                playlist_tracks: [
-                    songData.id
-                ]
-            }]
-        }, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`
-            }
-        }).then(res => {
-            console.log("Success"); // TODO: Add notification here
-            playlistRefetch();
-        }).catch(err => {
-            console.log(err);
-        });
-    };
+    const CreateNewPlaylist = useCallback(
+        (songData: any, newPlaylistName: string) => {
+            axios
+                .post(
+                    `/api/indexes/playlists`,
+                    {
+                        playlists: [
+                            {
+                                playlistid: "",
+                                playlist_name: newPlaylistName,
+                                playlist_tracks: [songData.id],
+                            },
+                        ],
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem(
+                                "token"
+                            )}`,
+                        },
+                    }
+                )
+                .then((res) => {
+                    console.log("Success"); // TODO: Add notification here
+                    playlistRefetch();
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+        []
+    );
 
-    const AddToPlaylist = (songData: any, playlistName: string) => {
+    const AddToPlaylist = useCallback((songData: any, playlistName: string) => {
         // new Promise((resolve, reject) => {
         //     let payload: any = {
         //         album_name: newData.albumName,
@@ -213,79 +233,89 @@ const BrowseAllSongs = (props: any) => {
         //             reject();
         //         });
         // })
-    };
+    }, []);
 
-    const PlayNext = (songData: any) => {
+    const PlayNext = useCallback((songData: any) => {
         // Get current playing song ID from playing url
-        let currentPlayingSongID = props.nowPlayingURL.split("&fileid=")[1]
+        let currentPlayingSongID = props.nowPlayingURL.split("&fileid=")[1];
         // Get index of currently playing song
-        let currentPlayingSongIndex = props.queue.findIndex((song: any) => song.playingURL.split("&fileid=")[1] === currentPlayingSongID)
+        let currentPlayingSongIndex = props.queue.findIndex(
+            (song: any) =>
+                song.playingURL.split("&fileid=")[1] === currentPlayingSongID
+        );
         if (currentPlayingSongIndex === -1) {
             // TODO: Use notification toast to tell the user that there are currently no playing songs
             return;
         }
         let newSongItem = {
-            item_id:
-                "queue_item_" +
-                songData.id +
-                Date.now().toString(),
+            item_id: "queue_item_" + songData.id + Date.now().toString(),
             current: false,
             playingURL: `/api/driveapi/files/download?token=${localStorage.token}&fileid=${songData.id}`,
             song_title: songData.file_metadata.song_title,
             song_artist: songData.file_metadata.song_artist,
-        }
-        let newQueue = props.queue
-        newQueue.splice(currentPlayingSongIndex + 1, 0, newSongItem)
+        };
+        let newQueue = props.queue;
+        newQueue.splice(currentPlayingSongIndex + 1, 0, newSongItem);
         props.setQueue(newQueue);
-    };
+    }, []);
 
-    const AddToQ = (songData: any) => {
+    const AddToQ = useCallback((songData: any) => {
         props.setQueue([
             ...props.queue,
             {
-                item_id:
-                    "queue_item_" +
-                    songData.id +
-                    Date.now().toString(),
+                item_id: "queue_item_" + songData.id + Date.now().toString(),
                 current: false,
                 playingURL: `/api/driveapi/files/download?token=${localStorage.token}&fileid=${songData.id}`,
                 song_title: songData.file_metadata.song_title,
                 song_artist: songData.file_metadata.song_artist,
             },
         ]);
-    };
+    }, []);
 
-    const songActions = (songData: any, action: string, playlistName: string) => {
-        // const possibleAction = ["AddToQ", "PlayNext", "AddToPlaylist", "Play"];
-        if (playlistName === undefined) playlistName = ""
+    const songActions = useCallback(
+        (songData: any, action: string, playlistName: string) => {
+            // const possibleAction = ["AddToQ", "PlayNext", "AddToPlaylist", "Play"];
+            if (playlistName === undefined) playlistName = "";
 
-        switch (action) {
-            case "AddToQ":
-                AddToQ(songData);
-                break;
-            case "PlayNext":
-                PlayNext(songData);
-                break;
-            case "CreateNewPlaylist":
-                CreateNewPlaylist(songData, playlistName);
-                break;
-            case "AddToPlaylist":
-                AddToPlaylist(songData, playlistName);
-                break;
-            case "Play":
-                Play(songData);
-                break;
-        }
-    };
+            switch (action) {
+                case "AddToQ":
+                    AddToQ(songData);
+                    break;
+                case "PlayNext":
+                    PlayNext(songData);
+                    break;
+                case "CreateNewPlaylist":
+                    CreateNewPlaylist(songData, playlistName);
+                    break;
+                case "AddToPlaylist":
+                    AddToPlaylist(songData, playlistName);
+                    break;
+                case "Play":
+                    Play(songData);
+                    break;
+            }
+        },
+        []
+    );
 
     return (
         <div>
-            {indexFilesState.length !== 0 ?
-                <CustomTable indexFilesState={indexFilesState} songActions={songActions}
-                             artistsDataState={artistsDataState} albumDataState={albumDataState}
-                             nowPlayingURL={props.nowPlayingURL} playlistData={playlistData}
-                             playlistLoading={playlistLoading} playlistRefetch={playlistLoading}/> :
-                <div style={{color: "white"}}>Loading... (change this shit later)</div>}
+            {indexFilesState.length !== 0 ? (
+                <CustomTable
+                    indexFilesState={indexFilesState}
+                    songActions={songActions}
+                    artistsDataState={artistsDataState}
+                    albumDataState={albumDataState}
+                    nowPlayingURL={props.nowPlayingURL}
+                    playlistData={playlistData}
+                    playlistLoading={playlistLoading}
+                    playlistRefetch={playlistLoading}
+                />
+            ) : (
+                <div style={{ color: "white" }}>
+                    Loading... (change this shit later)
+                </div>
+            )}
             {/*<MaterialTable*/}
             {/*    icons={tableIcons}*/}
             {/*    columns={song_columns}*/}

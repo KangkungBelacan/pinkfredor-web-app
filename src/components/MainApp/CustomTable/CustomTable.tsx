@@ -1,3 +1,5 @@
+import React from "react";
+import useTraceUpdate from "../../../debug-hooks/useTraceUpdate";
 import "./CustomTable.css"
 import TableItem from "./TableItem";
 
@@ -29,4 +31,4 @@ const CustomTable = (props: any) => {
     );
 };
 
-export default CustomTable;
+export default React.memo(CustomTable);
