@@ -25,6 +25,9 @@ import { MusicQueueItem } from "../../../interface/context/MusicQueueItem";
 import CustomTable from "../CustomTable/CustomTable";
 import axios from "axios";
 import PlaylistContext from "../../../context/PlaylistContext";
+import useTraceUpdate from "../../../debug-hooks/useTraceUpdate";
+import MusicPlayerContext from "../../../context/MusicPlayerContext";
+import TableItem from "../CustomTable/TableItem";
 
 const tableIcons: Icons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -55,6 +58,16 @@ const tableIcons: Icons = {
 interface Element {}
 
 const BrowseAllSongs = (props: any) => {
+    const {
+        setStatus,
+        nowPlayingURL,
+        setNowPlayingURL,
+        setProgress,
+        queue,
+        setQueue,
+        setSongTitleLabel,
+        setSongArtistLabel,
+    } = React.useContext(MusicPlayerContext);
     const song_columns = [
         { title: "file_id", field: "id", hidden: true },
         { title: "Title", field: "file_metadata.song_title" },
@@ -62,6 +75,7 @@ const BrowseAllSongs = (props: any) => {
         { title: "Album", field: "file_metadata.song_album" },
     ];
 
+    const [tableItems, setTableItems] = useState<any>([]);
     const [topBarSelection, setTopBar] = useState(0);
     const [indexFilesState, setIndexFilesState] = useState<any>([]);
     const [artistsDataState, setArtistsDataState] = useState<any>([]);
@@ -107,37 +121,7 @@ const BrowseAllSongs = (props: any) => {
         },
     });
 
-    useEffect(() => {
-        if (
-            indexFilesLoading ||
-            indexFilesError ||
-            artistsLoading ||
-            artistsError ||
-            albumLoading ||
-            albumError ||
-            !pageLoading
-        )
-            return;
-
-        let indexFiles = Object.values(indexFilesData.files);
-        setIndexFilesState(indexFiles);
-        setArtistsDataState(artistsData.artists);
-        setAlbumDataState(albumData.albums);
-        setPageLoading(false);
-    }, [
-        indexFilesData,
-        indexFilesLoading,
-        indexFilesError,
-        artistsData,
-        artistsLoading,
-        artistsError,
-        albumData,
-        albumLoading,
-        albumError,
-        pageLoading,
-    ]);
-
-    const Play = useCallback((songData: any) => {
+    const Play = (songData: any) => {
         let new_queue: Array<MusicQueueItem> = [];
         // Set queue to all songs in view
         for (let i = 0; i < indexFilesState.length; i++) {
@@ -149,15 +133,15 @@ const BrowseAllSongs = (props: any) => {
                 song_artist: indexFilesState[i].file_metadata.song_artist,
             });
         }
-        props.setQueue(new_queue);
-        props.setProgress(0);
-        props.setNowPlayingURL(
+        setQueue(new_queue);
+        setProgress(0);
+        setNowPlayingURL(
             `/api/driveapi/files/download?token=${localStorage.token}&fileid=${songData.id}`
         );
-        props.setSongTitleLabel(songData.file_metadata.song_title);
-        props.setSongArtistLabel(songData.file_metadata.song_artist);
+        setSongTitleLabel(songData.file_metadata.song_title);
+        setSongArtistLabel(songData.file_metadata.song_artist);
         // setSongAlbumArtURL("");
-        props.setStatus("PLAYING");
+        setStatus("PLAYING");
 
         // console.log(rowData);
         // window.alert(
@@ -166,43 +150,40 @@ const BrowseAllSongs = (props: any) => {
         //         " Action: " +
         //         event.currentTarget.id
         // );
-    }, []);
+    };
 
     // Use axios.post to make a POST request to the server to create a new playlist at the endpoint /api/indexes/playlists while passing in bearer token
-    const CreateNewPlaylist = useCallback(
-        (songData: any, newPlaylistName: string) => {
-            axios
-                .post(
-                    `/api/indexes/playlists`,
-                    {
-                        playlists: [
-                            {
-                                playlistid: "",
-                                playlist_name: newPlaylistName,
-                                playlist_tracks: [songData.id],
-                            },
-                        ],
-                    },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem(
-                                "token"
-                            )}`,
+    const CreateNewPlaylist = (songData: any, newPlaylistName: string) => {
+        axios
+            .post(
+                `/api/indexes/playlists`,
+                {
+                    playlists: [
+                        {
+                            playlistid: "",
+                            playlist_name: newPlaylistName,
+                            playlist_tracks: [songData.id],
                         },
-                    }
-                )
-                .then((res) => {
-                    console.log("Success"); // TODO: Add notification here
-                    playlistRefetch();
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        },
-        []
-    );
+                    ],
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "token"
+                        )}`,
+                    },
+                }
+            )
+            .then((res) => {
+                console.log("Success"); // TODO: Add notification here
+                playlistRefetch();
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
 
-    const AddToPlaylist = useCallback((songData: any, playlistName: string) => {
+    const AddToPlaylist = (songData: any, playlistName: string) => {
         // new Promise((resolve, reject) => {
         //     let payload: any = {
         //         album_name: newData.albumName,
@@ -233,13 +214,13 @@ const BrowseAllSongs = (props: any) => {
         //             reject();
         //         });
         // })
-    }, []);
+    };
 
-    const PlayNext = useCallback((songData: any) => {
+    const PlayNext = (songData: any) => {
         // Get current playing song ID from playing url
-        let currentPlayingSongID = props.nowPlayingURL.split("&fileid=")[1];
+        let currentPlayingSongID = nowPlayingURL.split("&fileid=")[1];
         // Get index of currently playing song
-        let currentPlayingSongIndex = props.queue.findIndex(
+        let currentPlayingSongIndex = queue.findIndex(
             (song: any) =>
                 song.playingURL.split("&fileid=")[1] === currentPlayingSongID
         );
@@ -254,14 +235,14 @@ const BrowseAllSongs = (props: any) => {
             song_title: songData.file_metadata.song_title,
             song_artist: songData.file_metadata.song_artist,
         };
-        let newQueue = props.queue;
+        let newQueue = queue;
         newQueue.splice(currentPlayingSongIndex + 1, 0, newSongItem);
-        props.setQueue(newQueue);
-    }, []);
+        setQueue(newQueue);
+    };
 
-    const AddToQ = useCallback((songData: any) => {
-        props.setQueue([
-            ...props.queue,
+    const AddToQ = (songData: any) => {
+        setQueue([
+            ...queue,
             {
                 item_id: "queue_item_" + songData.id + Date.now().toString(),
                 current: false,
@@ -270,33 +251,84 @@ const BrowseAllSongs = (props: any) => {
                 song_artist: songData.file_metadata.song_artist,
             },
         ]);
-    }, []);
+    };
 
-    const songActions = useCallback(
-        (songData: any, action: string, playlistName: string) => {
-            // const possibleAction = ["AddToQ", "PlayNext", "AddToPlaylist", "Play"];
-            if (playlistName === undefined) playlistName = "";
+    const songActions = (
+        songData: any,
+        action: string,
+        playlistName: string
+    ) => {
+        // const possibleAction = ["AddToQ", "PlayNext", "AddToPlaylist", "Play"];
+        if (playlistName === undefined) playlistName = "";
 
-            switch (action) {
-                case "AddToQ":
-                    AddToQ(songData);
-                    break;
-                case "PlayNext":
-                    PlayNext(songData);
-                    break;
-                case "CreateNewPlaylist":
-                    CreateNewPlaylist(songData, playlistName);
-                    break;
-                case "AddToPlaylist":
-                    AddToPlaylist(songData, playlistName);
-                    break;
-                case "Play":
-                    Play(songData);
-                    break;
-            }
-        },
-        []
-    );
+        switch (action) {
+            case "AddToQ":
+                AddToQ(songData);
+                break;
+            case "PlayNext":
+                PlayNext(songData);
+                break;
+            case "CreateNewPlaylist":
+                CreateNewPlaylist(songData, playlistName);
+                break;
+            case "AddToPlaylist":
+                AddToPlaylist(songData, playlistName);
+                break;
+            case "Play":
+                Play(songData);
+                break;
+        }
+    };
+
+    useEffect(() => {
+        if (
+            indexFilesLoading ||
+            indexFilesError ||
+            artistsLoading ||
+            artistsError ||
+            albumLoading ||
+            albumError ||
+            !pageLoading
+        )
+            return;
+
+        let indexFiles = Object.values(indexFilesData.files);
+
+        let _tbl_items = [];
+        for (let i = 0; i < indexFiles.length; i++) {
+            _tbl_items.push(
+                <TableItem
+                    key={i}
+                    position={i + 1}
+                    songData={indexFiles[i]}
+                    artistsDataState={artistsDataState}
+                    albumDataState={albumDataState}
+                    songActions={songActions}
+                    imageColor={
+                        "#" + ((Math.random() * 0xffffff) << 0).toString(16)
+                    }
+                    nowPlayingURL={nowPlayingURL}
+                    indexFilesState={indexFiles}
+                />
+            );
+        }
+        setTableItems(_tbl_items);
+        setIndexFilesState(indexFiles);
+        setArtistsDataState(artistsData.artists);
+        setAlbumDataState(albumData.albums);
+        setPageLoading(false);
+    }, [
+        indexFilesData,
+        indexFilesLoading,
+        indexFilesError,
+        artistsData,
+        artistsLoading,
+        artistsError,
+        albumData,
+        albumLoading,
+        albumError,
+        pageLoading,
+    ]);
 
     return (
         <div>
@@ -306,11 +338,10 @@ const BrowseAllSongs = (props: any) => {
                     songActions={songActions}
                     artistsDataState={artistsDataState}
                     albumDataState={albumDataState}
-                    nowPlayingURL={props.nowPlayingURL}
-                    playlistData={playlistData}
-                    playlistLoading={playlistLoading}
-                    playlistRefetch={playlistLoading}
-                />
+                    nowPlayingURL={nowPlayingURL}
+                >
+                    {tableItems}
+                </CustomTable>
             ) : (
                 <div style={{ color: "white" }}>
                     Loading... (change this shit later)

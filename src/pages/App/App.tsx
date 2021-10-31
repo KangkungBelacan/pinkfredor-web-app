@@ -153,21 +153,6 @@ function App() {
                                     path="/app/browse"
                                     render={() => (
                                         <MainAppComponent.Browse
-                                            setStatus={setStatus}
-                                            setNowPlayingURL={setNowPlayingURL}
-                                            nowPlayingURL={nowPlayingURL}
-                                            setProgress={setProgress}
-                                            queue={queue}
-                                            setQueue={setQueue}
-                                            setSongTitleLabel={
-                                                setSongTitleLabel
-                                            }
-                                            setSongArtistLabel={
-                                                setSongArtistLabel
-                                            }
-                                            setSongAlbumArtURL={
-                                                setSongAlbumArtURL
-                                            }
                                         />
                                     )}
                                 />

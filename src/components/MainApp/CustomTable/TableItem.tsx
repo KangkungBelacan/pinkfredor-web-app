@@ -1,45 +1,75 @@
-import "./TableItem.css"
-import {ButtonGroup, Dropdown} from "react-bootstrap";
-import React, {useEffect, useState} from "react";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCaretLeft, faEllipsisH, faPlay, faPlus} from "@fortawesome/free-solid-svg-icons";
+import "./TableItem.css";
+import { ButtonGroup, Dropdown } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faCaretLeft,
+    faEllipsisH,
+    faPlay,
+    faPlus,
+} from "@fortawesome/free-solid-svg-icons";
+import PlaylistContext from "../../../context/PlaylistContext";
+import MusicPlayerContext from "../../../context/MusicPlayerContext";
 
-const ellipsisH = <FontAwesomeIcon icon={faEllipsisH}/>;
-const play = <FontAwesomeIcon className={"icons-play"} icon={faPlay}/>;
-const plus = <FontAwesomeIcon className={"icons-plus"} icon={faPlus}/>;
-const caretLeft = <FontAwesomeIcon className={"icons-caret-left"} icon={faCaretLeft}/>;
+const ellipsisH = <FontAwesomeIcon icon={faEllipsisH} />;
+const play = <FontAwesomeIcon className={"icons-play"} icon={faPlay} />;
+const plus = <FontAwesomeIcon className={"icons-plus"} icon={faPlus} />;
+const caretLeft = (
+    <FontAwesomeIcon className={"icons-caret-left"} icon={faCaretLeft} />
+);
 
 const TableItem = (props: any) => {
+    const { nowPlayingURL } = React.useContext(MusicPlayerContext);
+    const { playlistData } = React.useContext(PlaylistContext);
     let songData = props.songData;
     let indexFilesState = props.indexFilesState;
-    let playlistData = props.playlistData
-    let artistsDataState = props.artistsDataState
-    let songActions = props.songActions
+
+    let artistsDataState = props.artistsDataState;
+    let songActions = props.songActions;
     const [dropdownPlaylistItems, setDropdownPlaylistItems] = useState<any>([]);
     let containerDetails: string = "";
-    let isPlayingNow: boolean = songData.id === props.nowPlayingURL.split("&fileid=")[1]
+    let isPlayingNow: boolean =
+        songData.id === nowPlayingURL.split("&fileid=")[1];
 
-    if (songData.file_metadata.song_artistid != "" || songData.file_metadata.song_albumid != "" || "song_artistid" in songData.file_metadata || "song_albumid" in songData.file_metadata) {
+    if (
+        songData.file_metadata.song_artistid != "" ||
+        songData.file_metadata.song_albumid != "" ||
+        "song_artistid" in songData.file_metadata ||
+        "song_albumid" in songData.file_metadata
+    ) {
         if ("song_artistid" in songData.file_metadata) {
             if (songData.file_metadata.song_artistid !== "") {
-                containerDetails = artistsDataState[songData.file_metadata.song_artistid].artist_name;
+                containerDetails =
+                    artistsDataState[songData.file_metadata.song_artistid]
+                        .artist_name;
             }
         }
 
-        if ("song_artistid" in songData.file_metadata && "song_albumid" in songData.file_metadata) {
-            if (songData.file_metadata.song_artistid !== "" && songData.file_metadata.song_albumid !== "") {
-                containerDetails += ", "
+        if (
+            "song_artistid" in songData.file_metadata &&
+            "song_albumid" in songData.file_metadata
+        ) {
+            if (
+                songData.file_metadata.song_artistid !== "" &&
+                songData.file_metadata.song_albumid !== ""
+            ) {
+                containerDetails += ", ";
             }
         }
 
         if ("song_albumid" in songData.file_metadata) {
             if (songData.file_metadata.song_albumid !== "") {
-                containerDetails += props.albumDataState[songData.file_metadata.song_albumid].album_name;
+                containerDetails +=
+                    props.albumDataState[songData.file_metadata.song_albumid]
+                        .album_name;
             }
         }
     }
 
-    const tableItemActions = React.forwardRef<HTMLButtonElement, React.PropsWithChildren<any>>((props, ref: any) => (
+    const tableItemActions = React.forwardRef<
+        HTMLButtonElement,
+        React.PropsWithChildren<any>
+    >((props, ref: any) => (
         <a
             className={"table-item-actions"}
             href=""
@@ -53,7 +83,10 @@ const TableItem = (props: any) => {
         </a>
     ));
 
-    const playlistActions = React.forwardRef<HTMLButtonElement, React.PropsWithChildren<any>>((props, ref: any) => (
+    const playlistActions = React.forwardRef<
+        HTMLButtonElement,
+        React.PropsWithChildren<any>
+    >((props, ref: any) => (
         <a
             className={"playlist-actions"}
             href=""
@@ -64,16 +97,14 @@ const TableItem = (props: any) => {
             }}
         >
             {caretLeft}
-            <div className={"add-to-playlist-text"}>
-                Add to playlist
-            </div>
+            <div className={"add-to-playlist-text"}>Add to playlist</div>
         </a>
     ));
 
     // Use for loop to generate a list of dropdownPlaylistItems
     const GenerateDropdownPlaylistItems = () => {
         let dropdownPlaylistItems: any[] = [];
-        let playlistDataKeys = Object.keys(playlistData.playlists)
+        let playlistDataKeys = Object.keys(playlistData.playlists);
         let playlists = playlistData.playlists;
         for (let i = 0; i < playlistDataKeys.length; i++) {
             let playlistID = playlistDataKeys[i];
@@ -98,22 +129,45 @@ const TableItem = (props: any) => {
 
     return (
         <div
-            className={isPlayingNow ? "table-item-container table-item-playing" : "table-item-container"}
-            style={{gridTemplateColumns: `${indexFilesState.length.toString().length + 0.5}em auto 1fr auto`}}
+            className={
+                isPlayingNow
+                    ? "table-item-container table-item-playing"
+                    : "table-item-container"
+            }
+            style={{
+                gridTemplateColumns: `${
+                    indexFilesState.length.toString().length + 0.5
+                }em auto 1fr auto`,
+            }}
             onClick={(event) => {
-                songActions(songData, "Play")
-            }}>
-            <div className={"table-item-container-number"}>{props.position}</div>
-            <div className={"table-item-container-image"} style={{backgroundColor: props.imageColor}}>
-                <div className={"table-item-container-image-overlay table-item-container-image-fade"}></div>
+                songActions(songData, "Play");
+            }}
+        >
+            <div className={"table-item-container-number"}>
+                {props.position}
+            </div>
+            <div
+                className={"table-item-container-image"}
+                style={{ backgroundColor: props.imageColor }}
+            >
+                <div
+                    className={
+                        "table-item-container-image-overlay table-item-container-image-fade"
+                    }
+                ></div>
                 <div className={"table-item-container-image-disc"}></div>
                 {play}
             </div>
             <div className={"table-item-container-info"}>
                 <div className={"table-item-container-info-title"}>
-                    {("song_title" in songData.file_metadata && songData.file_metadata.song_title !== "") ? songData.file_metadata.song_title : songData.filename}
+                    {"song_title" in songData.file_metadata &&
+                    songData.file_metadata.song_title !== ""
+                        ? songData.file_metadata.song_title
+                        : songData.filename}
                 </div>
-                <div className={"table-item-container-info-details"}>{containerDetails}</div>
+                <div className={"table-item-container-info-details"}>
+                    {containerDetails}
+                </div>
             </div>
             <div className={"table-item-container-actions"}>
                 <Dropdown
@@ -140,9 +194,7 @@ const TableItem = (props: any) => {
                     <Dropdown.Menu>
                         <Dropdown.Item
                             id="AddToQ"
-                            onClick={(event) =>
-                                songActions(songData, "AddToQ")
-                            }
+                            onClick={(event) => songActions(songData, "AddToQ")}
                         >
                             Add to queue
                         </Dropdown.Item>
@@ -173,7 +225,12 @@ const TableItem = (props: any) => {
                                         id="NewPlaylist"
                                         onClick={(event) =>
                                             // TODO: Make this open a modal box to create a new playlist
-                                            songActions(songData, prompt("Enter playlist name:") as string)
+                                            songActions(
+                                                songData,
+                                                prompt(
+                                                    "Enter playlist name:"
+                                                ) as string
+                                            )
                                         }
                                     >
                                         {plus}

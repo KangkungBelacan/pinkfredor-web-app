@@ -3,6 +3,7 @@ import React, {useEffect} from "react";
 import useAxios from "axios-hooks";
 import "./Browse.css";
 import BrowseAllSongs from "./BrowseSubPage/BrowseAllSongs";
+import useTraceUpdate from "../../debug-hooks/useTraceUpdate";
 
 function Browse(props: any): JSX.Element {
     const [
@@ -27,19 +28,7 @@ function Browse(props: any): JSX.Element {
         <div>
             <div className="content-body">
                 <BrowseAllSongs
-                    setStatus={props.setStatus}
-                    setNowPlayingURL={props.setNowPlayingURL}
-                    nowPlayingURL={props.nowPlayingURL}
-                    setProgress={props.setProgress}
-                    queue={props.queue}
-                    setQueue={props.setQueue}
-                    setSongTitleLabel={props.setSongTitleLabel}
-                    setSongArtistLabel={
-                        props.setSongArtistLabel
-                    }
-                    setSongAlbumArtURL={
-                        props.setSongAlbumArtURL
-                    }
+                    
                 />
                 {/*<div*/}
                 {/*    style={{ display: "flex", flexDirection: "column" }}*/}
