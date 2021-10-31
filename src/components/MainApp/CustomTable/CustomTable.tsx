@@ -6,9 +6,11 @@ const CustomTable = (props: any) => {
     for (let i = 0; i < props.indexFilesState.length; i++) {
         tableItems.push(<TableItem key={i} position={i + 1} songData={props.indexFilesState[i]}
                                    artistsDataState={props.artistsDataState} albumDataState={props.albumDataState}
-                                   songItemOnClick={props.songItemOnClick}
+                                   songActions={props.songActions}
                                    imageColor={'#' + (Math.random() * 0xFFFFFF << 0).toString(16)}
-                                   nowPlayingURL={props.nowPlayingURL} indexFilesState={props.indexFilesState}/>)
+                                   nowPlayingURL={props.nowPlayingURL} indexFilesState={props.indexFilesState}
+                                   playlistData={props.playlistData} playlistLoading={props.playlistLoading}
+                                   playlistRefetch={props.playlistLoading}/>)
     }
 
     return (

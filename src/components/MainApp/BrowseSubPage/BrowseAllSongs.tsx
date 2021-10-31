@@ -23,6 +23,8 @@ import ViewColumn from "@material-ui/icons/ViewColumn";
 // import MusicPlayerContext from "../../context/MusicPlayerContext";
 import {MusicQueueItem} from "../../../interface/context/MusicQueueItem";
 import CustomTable from "../CustomTable/CustomTable";
+import axios from "axios";
+import PlaylistContext from "../../../context/PlaylistContext";
 
 const tableIcons: Icons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref}/>),
@@ -66,6 +68,8 @@ const BrowseAllSongs = (props: any) => {
     const [artistsDataState, setArtistsDataState] = useState<any>([]);
     const [albumDataState, setAlbumDataState] = useState<any>([]);
     const [pageLoading, setPageLoading] = useState(true);
+    const {playlistData, playlistLoading, playlistErr, playlistRefetch} =
+        React.useContext(PlaylistContext);
 
     const [
         {
@@ -155,9 +159,62 @@ const BrowseAllSongs = (props: any) => {
         //         event.currentTarget.id
         // );
     };
-    const AddToPlaylist = (songData: any) => {
-        // TODO: Add to playlist
+
+    // Use axios.post to make a POST request to the server to create a new playlist at the endpoint /api/indexes/playlists while passing in bearer token
+    const CreateNewPlaylist = (songData: any, newPlaylistName: string) => {
+        axios.post(`/api/indexes/playlists`, {
+            playlists: [{
+                playlistid: "",
+                playlist_name: newPlaylistName,
+                playlist_tracks: [
+                    songData.id
+                ]
+            }]
+        }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
+        }).then(res => {
+            console.log("Success"); // TODO: Add notification here
+            playlistRefetch();
+        }).catch(err => {
+            console.log(err);
+        });
     };
+
+    const AddToPlaylist = (songData: any, playlistName: string) => {
+        // new Promise((resolve, reject) => {
+        //     let payload: any = {
+        //         album_name: newData.albumName,
+        //         year_released: newData.yearReleased,
+        //     };
+        //
+        //     if (newData.albumArtist !== undefined) {
+        //         payload.artistid = newData.albumArtist;
+        //     }
+        //
+        //     axios({
+        //         url: `/api/indexes/albums/${oldData.album_id}`,
+        //         method: "PUT",
+        //         headers: {
+        //             Authorization: `Bearer ${localStorage.token}`,
+        //         },
+        //         data: payload,
+        //     })
+        //         .then((response: any) => {
+        //             const dataUpdate = [...t_data];
+        //             const index = oldData.tableData.id;
+        //             dataUpdate[index] = newData;
+        //             set_t_data([...dataUpdate]);
+        //             resolve(true);
+        //         })
+        //         .catch((error: any) => {
+        //             console.error(error);
+        //             reject();
+        //         });
+        // })
+    };
+
     const PlayNext = (songData: any) => {
         // Get current playing song ID from playing url
         let currentPlayingSongID = props.nowPlayingURL.split("&fileid=")[1]
@@ -181,6 +238,7 @@ const BrowseAllSongs = (props: any) => {
         newQueue.splice(currentPlayingSongIndex + 1, 0, newSongItem)
         props.setQueue(newQueue);
     };
+
     const AddToQ = (songData: any) => {
         props.setQueue([
             ...props.queue,
@@ -197,8 +255,10 @@ const BrowseAllSongs = (props: any) => {
         ]);
     };
 
-    const SongItemOnClick = (songData: any, action: string) => {
+    const songActions = (songData: any, action: string, playlistName: string) => {
         // const possibleAction = ["AddToQ", "PlayNext", "AddToPlaylist", "Play"];
+        if (playlistName === undefined) playlistName = ""
+
         switch (action) {
             case "AddToQ":
                 AddToQ(songData);
@@ -206,8 +266,11 @@ const BrowseAllSongs = (props: any) => {
             case "PlayNext":
                 PlayNext(songData);
                 break;
+            case "CreateNewPlaylist":
+                CreateNewPlaylist(songData, playlistName);
+                break;
             case "AddToPlaylist":
-                AddToPlaylist(songData);
+                AddToPlaylist(songData, playlistName);
                 break;
             case "Play":
                 Play(songData);
@@ -218,9 +281,10 @@ const BrowseAllSongs = (props: any) => {
     return (
         <div>
             {indexFilesState.length !== 0 ?
-                <CustomTable indexFilesState={indexFilesState} songItemOnClick={SongItemOnClick}
+                <CustomTable indexFilesState={indexFilesState} songActions={songActions}
                              artistsDataState={artistsDataState} albumDataState={albumDataState}
-                             nowPlayingURL={props.nowPlayingURL}/> :
+                             nowPlayingURL={props.nowPlayingURL} playlistData={playlistData}
+                             playlistLoading={playlistLoading} playlistRefetch={playlistLoading}/> :
                 <div style={{color: "white"}}>Loading... (change this shit later)</div>}
             {/*<MaterialTable*/}
             {/*    icons={tableIcons}*/}
