@@ -25,7 +25,6 @@ import { MusicQueueItem } from "../../../interface/context/MusicQueueItem";
 import CustomTable from "../CustomTable/CustomTable";
 import axios from "axios";
 import PlaylistContext from "../../../context/PlaylistContext";
-import useTraceUpdate from "../../../debug-hooks/useTraceUpdate";
 import MusicPlayerContext from "../../../context/MusicPlayerContext";
 import TableItem from "../CustomTable/TableItem";
 
@@ -333,13 +332,7 @@ const BrowseAllSongs = (props: any) => {
     return (
         <div>
             {indexFilesState.length !== 0 ? (
-                <CustomTable
-                    indexFilesState={indexFilesState}
-                    songActions={songActions}
-                    artistsDataState={artistsDataState}
-                    albumDataState={albumDataState}
-                    nowPlayingURL={nowPlayingURL}
-                >
+                <CustomTable>
                     {tableItems}
                 </CustomTable>
             ) : (

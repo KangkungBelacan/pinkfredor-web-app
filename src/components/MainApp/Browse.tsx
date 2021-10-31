@@ -3,7 +3,6 @@ import React, {useEffect} from "react";
 import useAxios from "axios-hooks";
 import "./Browse.css";
 import BrowseAllSongs from "./BrowseSubPage/BrowseAllSongs";
-import useTraceUpdate from "../../debug-hooks/useTraceUpdate";
 
 function Browse(props: any): JSX.Element {
     const [

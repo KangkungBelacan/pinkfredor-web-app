@@ -1,5 +1,3 @@
-import React from "react";
-import useTraceUpdate from "../../../debug-hooks/useTraceUpdate";
 import "./CustomTable.css";
 
 const CustomTable = (props: any) => {
