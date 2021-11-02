@@ -300,8 +300,8 @@ const BrowseAllSongs = (props: any) => {
                     key={i}
                     position={i + 1}
                     songData={indexFiles[i]}
-                    artistsDataState={artistsDataState}
-                    albumDataState={albumDataState}
+                    artistsDataState={artistsData.artists}
+                    albumDataState={albumData.albums}
                     songActions={songActions}
                     imageColor={
                         "#" + ((Math.random() * 0xffffff) << 0).toString(16)
