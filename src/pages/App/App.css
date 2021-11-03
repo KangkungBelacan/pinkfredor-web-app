@@ -18,7 +18,8 @@
 }
 
 .mainapp-content {
-    flex: 1
+    flex: 1;
+    color: white;
 }
 
 .player {

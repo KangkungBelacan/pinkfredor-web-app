@@ -12,7 +12,11 @@ const Playlist = () => {
             { url: "/api/indexes/files", method: "GET" },
             { useCache: false }
         );
-    return <div className="mainapp-content-container">Playlist stuff here</div>;
+    return (
+        <div className="mainapp-content-container">
+            <div className="mainapp-content">Test</div>
+        </div>
+    );
 };
 
 export default Playlist;
