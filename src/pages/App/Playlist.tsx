@@ -1,5 +1,6 @@
 import useAxios from "axios-hooks";
 import { useParams } from "react-router-dom";
+import "./Playlist.css";
 const Playlist = () => {
     const { playlist_id }: any = useParams();
     const [{ data: pl_data, loading: pl_loading, error: pl_err }, _p] =
@@ -14,7 +15,23 @@ const Playlist = () => {
         );
     return (
         <div className="mainapp-content-container">
-            <div className="mainapp-content">Test</div>
+            <div
+                className="mainapp-content playlist-container"
+            >
+                <div className="playlist-header-container">Header</div>
+                <div className="playlist-content-container">
+                    Content
+                    <br/>
+                    Content
+                    <br/>
+                    Content
+                    <br/>
+                    Content
+                    <br/>
+                    Content
+                    <br/>
+                </div>
+            </div>
         </div>
     );
 };
