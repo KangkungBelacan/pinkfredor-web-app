@@ -15,21 +15,21 @@ const Playlist = () => {
         );
     return (
         <div className="mainapp-content-container">
-            <div
-                className="mainapp-content playlist-container"
-            >
-                <div className="playlist-header-container">Header</div>
+            <div className="mainapp-content playlist-container">
+                <div className="row playlist-header-container">
+                    <div className="playlist-header">Header</div>
+                </div>
                 <div className="playlist-content-container">
                     Content
-                    <br/>
+                    <br />
                     Content
-                    <br/>
+                    <br />
                     Content
-                    <br/>
+                    <br />
                     Content
-                    <br/>
+                    <br />
                     Content
-                    <br/>
+                    <br />
                 </div>
             </div>
         </div>

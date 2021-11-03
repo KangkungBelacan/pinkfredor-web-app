@@ -2,20 +2,18 @@
 
 .playlist-container {
     --header-padding: 1em;
-    position: relative;
-    min-height: 100px;
 }
 
 .playlist-header-container {
-    position: absolute;
-    width: calc(100% + var(--bs-gutter-x, 0.75rem));
-    left: var(---bs-gutter-x, -0.75rem);
-    padding: var(--header-padding);
     background-color: rgb(50,50,12);
     font-size: 1.5em;
     font-weight: bold;
 }
 
+.playlist-header {
+    padding: var(--header-padding)
+}
+
 .playlist-content-container {
-    padding-top: 6em
+    color: red
 }
