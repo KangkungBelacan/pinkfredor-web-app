@@ -142,7 +142,7 @@ function App() {
                                     />
                                 </div>
                             </div>
-                            <div className="row">
+                            <div className="row" style={{height: "100%"}}>
                                 {/* Redirect to /app/browse by default */}
                                 <Route
                                     path="/app"
