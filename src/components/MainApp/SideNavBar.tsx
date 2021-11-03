@@ -32,11 +32,22 @@ function SideNavBar(props: any): JSX.Element {
             let pl = playlists[i];
             _playlistListing.push(
                 <li key={(pl as any).playlistid}>
-                    <div className="item-container">
-                        <span className="item-container-text">
-                            {(pl as any).playlist_name}
-                        </span>
-                    </div>
+                    <Link
+                            to={`/app/playlist/${(pl as any).playlistid}`}
+                            style={{textDecoration: "none", color: "inherit"}}
+                        >
+                            <div
+                                className={
+                                    current_path.startsWith(`/app/playlist/${(pl as any).playlistid}`)
+                                        ? "item-container selected"
+                                        : "item-container"
+                                }
+                            >
+                                <span className="item-container-text">
+                                {(pl as any).playlist_name}
+                                </span>
+                            </div>
+                        </Link>
                 </li>
             );
         }
