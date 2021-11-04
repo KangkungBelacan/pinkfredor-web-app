@@ -1,6 +1,16 @@
 .mainapp-grid-container {
+    --main-grip-gap: 10px;
     display: grid;
     grid-template: 1fr 100px / 250px 1fr;
+    row-gap: var(--main-grip-gap);
+    column-gap: var(--main-grip-gap);
+    padding: var(--main-grip-gap);
+}
+
+.mainapp-grid-item {
+    backdrop-filter: blur(20px);
+    border-radius: 10px;
+    background-color: rgba(60, 60, 60, 0.5);
 }
 
 .mainapp-body {

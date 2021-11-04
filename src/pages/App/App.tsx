@@ -111,14 +111,20 @@ function App() {
         <div className="mainapp-body max-height">
             <MusicPlayerContext.Provider value={ContextValues}>
                 <PlaylistContext.Provider value={PlaylistContextValues}>
-                    <div className="mainapp-grid-container max-height">
+                    <div
+                        className="mainapp-grid-container max-height"
+                        style={{
+                            backgroundImage: 'url(/placeholder-bg.jpg)'
+                        }}
+                    >
                         <MainAppComponent.SideNavBar
                             isMobile={isMobile}
                             setNavBarDisplay={setNavBarDisplay}
                             navBar={showNavBar}
+                            className="mainapp-grid-item"
                         />
                         <div
-                            className="container-fluid"
+                            className="container-fluid mainapp-grid-item"
                             style={{
                                 overflowX: "auto",
                             }}
@@ -162,6 +168,7 @@ function App() {
 
                         <MainAppComponent.MusicPlayer
                             song_cover={example_song_cover}
+                            className="mainapp-grid-item"
                         />
                     </div>
                 </PlaylistContext.Provider>

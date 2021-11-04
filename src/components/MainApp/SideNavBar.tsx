@@ -56,7 +56,7 @@ function SideNavBar(props: any): JSX.Element {
     }, [playlistLoading, current_path]);
     return (
         <div
-            className="sidebar-container"
+            className={props.className ? props.className + " sidebar-container" : "sidebar-container"}
             style={{
                 height: "100%",
                 zIndex: props.isMobile ? 1000 : 1,
