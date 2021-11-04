@@ -1,5 +1,6 @@
 .mainapp-grid-container {
     --main-grip-gap: 10px;
+    --back-color: rgba(60, 60, 60, 0.5);
     display: grid;
     grid-template: 1fr 100px / 250px 1fr;
     row-gap: var(--main-grip-gap);
@@ -10,7 +11,7 @@
 .mainapp-grid-item {
     backdrop-filter: blur(20px);
     border-radius: 10px;
-    background-color: rgba(60, 60, 60, 0.5);
+    background-color: var(--back-color);
 }
 
 .mainapp-body {
@@ -24,6 +25,7 @@
     align-items: stretch;
     flex-direction: row;
     width: 100%;
+    height: 100%;
 }
 
 .mainapp-content {
@@ -32,7 +34,6 @@
 }
 
 .player {
-    /* position: fixed; */
     width: 100%;
     height: 100%;
     display: flex;
@@ -40,13 +41,13 @@
     justify-content: space-between;
     align-items: center;
     bottom: 0;
-    /* height: 15%; */
     box-sizing: content-box;
     width: -webkit-fill-available;
     border: 1px;
     border-color: #282828;
-    background-color: #181818;
+    background-color: var(--back-color);
     padding: 0 15px;
+    border-radius: inherit;
 }
 
 .player-song-info {

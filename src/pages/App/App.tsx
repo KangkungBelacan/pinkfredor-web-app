@@ -125,9 +125,6 @@ function App() {
                         />
                         <div
                             className="container-fluid mainapp-grid-item"
-                            style={{
-                                overflowX: "auto",
-                            }}
                         >
                             <div className="row" style={{ height: "100%" }}>
                                 {/* Redirect to /app/browse by default */}
