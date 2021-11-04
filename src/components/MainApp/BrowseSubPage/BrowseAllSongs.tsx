@@ -1,9 +1,9 @@
-import React, { forwardRef, useCallback, useEffect, useState } from "react";
+import React, {forwardRef, useEffect, useState} from "react";
 import useAxios from "axios-hooks";
 import "../Browse.css";
 // import PlayArrow from "@material-ui/icons/PlayArrow";
 // import Queue from "@material-ui/icons/Queue";
-import { Icons } from "material-table";
+import {Icons} from "material-table";
 
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
@@ -21,7 +21,7 @@ import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 // import MusicPlayerContext from "../../context/MusicPlayerContext";
-import { MusicQueueItem } from "../../../interface/context/MusicQueueItem";
+import {MusicQueueItem} from "../../../interface/context/MusicQueueItem";
 import CustomTable from "../CustomTable/CustomTable";
 import axios from "axios";
 import PlaylistContext from "../../../context/PlaylistContext";
@@ -29,32 +29,33 @@ import MusicPlayerContext from "../../../context/MusicPlayerContext";
 import TableItem from "../CustomTable/TableItem";
 
 const tableIcons: Icons = {
-    Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-    Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-    Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+    Add: forwardRef((props, ref) => <AddBox {...props} ref={ref}/>),
+    Check: forwardRef((props, ref) => <Check {...props} ref={ref}/>),
+    Clear: forwardRef((props, ref) => <Clear {...props} ref={ref}/>),
+    Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref}/>),
     DetailPanel: forwardRef((props, ref) => (
-        <ChevronRight {...props} ref={ref} />
+        <ChevronRight {...props} ref={ref}/>
     )),
-    Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
-    Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
-    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+    Edit: forwardRef((props, ref) => <Edit {...props} ref={ref}/>),
+    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref}/>),
+    Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref}/>),
+    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref}/>),
+    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref}/>),
+    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref}/>),
     PreviousPage: forwardRef((props, ref) => (
-        <ChevronLeft {...props} ref={ref} />
+        <ChevronLeft {...props} ref={ref}/>
     )),
-    ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
-    SortArrow: forwardRef((props, ref) => <ArrowUpward {...props} ref={ref} />),
+    ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref}/>),
+    Search: forwardRef((props, ref) => <Search {...props} ref={ref}/>),
+    SortArrow: forwardRef((props, ref) => <ArrowUpward {...props} ref={ref}/>),
     ThirdStateCheck: forwardRef((props, ref) => (
-        <Remove {...props} ref={ref} />
+        <Remove {...props} ref={ref}/>
     )),
-    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
+    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref}/>),
 };
 
-interface Element {}
+interface Element {
+}
 
 const BrowseAllSongs = (props: any) => {
     const {
@@ -68,10 +69,10 @@ const BrowseAllSongs = (props: any) => {
         setSongArtistLabel,
     } = React.useContext(MusicPlayerContext);
     const song_columns = [
-        { title: "file_id", field: "id", hidden: true },
-        { title: "Title", field: "file_metadata.song_title" },
-        { title: "Artist", field: "file_metadata.song_artist" },
-        { title: "Album", field: "file_metadata.song_album" },
+        {title: "file_id", field: "id", hidden: true},
+        {title: "Title", field: "file_metadata.song_title"},
+        {title: "Artist", field: "file_metadata.song_artist"},
+        {title: "Album", field: "file_metadata.song_album"},
     ];
 
     const [tableItems, setTableItems] = useState<any>([]);
@@ -80,7 +81,7 @@ const BrowseAllSongs = (props: any) => {
     const [artistsDataState, setArtistsDataState] = useState<any>([]);
     const [albumDataState, setAlbumDataState] = useState<any>([]);
     const [pageLoading, setPageLoading] = useState(true);
-    const { playlistData, playlistLoading, playlistErr, playlistRefetch } =
+    const {playlistData, playlistLoading, playlistErr, playlistRefetch} =
         React.useContext(PlaylistContext);
 
     const [
@@ -99,7 +100,7 @@ const BrowseAllSongs = (props: any) => {
     });
 
     const [
-        { data: artistsData, loading: artistsLoading, error: artistsError },
+        {data: artistsData, loading: artistsLoading, error: artistsError},
         artistsRefetch,
     ] = useAxios({
         url: "/api/indexes/artists",
@@ -110,7 +111,7 @@ const BrowseAllSongs = (props: any) => {
     });
 
     const [
-        { data: albumData, loading: albumLoading, error: albumError },
+        {data: albumData, loading: albumLoading, error: albumError},
         albumRefetch,
     ] = useAxios({
         url: "/api/indexes/albums",
@@ -122,14 +123,15 @@ const BrowseAllSongs = (props: any) => {
 
     const Play = (songData: any) => {
         let new_queue: Array<MusicQueueItem> = [];
+        let indexFilesDataKeys = Object.keys(indexFilesData.files);
         // Set queue to all songs in view
-        for (let i = 0; i < indexFilesState.length; i++) {
+        for (let i = 0; i < indexFilesDataKeys.length; i++) {
             new_queue.push({
-                item_id: "queue_item_" + indexFilesState[i].id,
-                current: indexFilesState[i].id === songData.id ? true : false,
-                playingURL: `/api/driveapi/files/download?token=${localStorage.token}&fileid=${indexFilesState[i].id}`,
-                song_title: indexFilesState[i].file_metadata.song_title,
-                song_artist: indexFilesState[i].file_metadata.song_artist,
+                item_id: "queue_item_" + indexFilesData.files[indexFilesDataKeys[i]].id,
+                current: indexFilesData.files[indexFilesDataKeys[i]].id === songData.id ? true : false,
+                playingURL: `/api/driveapi/files/download?token=${localStorage.token}&fileid=${indexFilesData.files[indexFilesDataKeys[i]].id}`,
+                song_title: indexFilesData.files[indexFilesDataKeys[i]].file_metadata.song_title,
+                song_artist: indexFilesData.files[indexFilesDataKeys[i]].file_metadata.song_artist,
             });
         }
         setQueue(new_queue);
@@ -336,7 +338,7 @@ const BrowseAllSongs = (props: any) => {
                     {tableItems}
                 </CustomTable>
             ) : (
-                <div style={{ color: "white" }}>
+                <div style={{color: "white"}}>
                     Loading... (change this shit later)
                 </div>
             )}
