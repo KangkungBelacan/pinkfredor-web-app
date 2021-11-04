@@ -111,38 +111,20 @@ function App() {
         <div className="mainapp-body max-height">
             <MusicPlayerContext.Provider value={ContextValues}>
                 <PlaylistContext.Provider value={PlaylistContextValues}>
-                    <MainAppComponent.SideNavBar
-                        isMobile={isMobile}
-                        setNavBarDisplay={setNavBarDisplay}
-                        navBar={showNavBar}
-                    />
                     <div className="mainapp-grid-container max-height">
-                        <div className="d-md-block d-none"></div>
+                        <MainAppComponent.SideNavBar
+                            isMobile={isMobile}
+                            setNavBarDisplay={setNavBarDisplay}
+                            navBar={showNavBar}
+                        />
                         <div
                             className="container-fluid"
                             style={{
                                 overflowX: "auto",
+                                gridColumnStart: "2"
                             }}
                         >
-                            <div className="row d-md-none d-block">
-                                <div
-                                    className="col"
-                                    style={{
-                                        color: "white",
-                                        padding: "10px",
-                                        cursor: "pointer",
-                                    }}
-                                    onClick={() => {
-                                        setNavBarDisplay(!showNavBar);
-                                    }}
-                                >
-                                    <FontAwesomeIcon
-                                        size="lg"
-                                        icon="align-justify"
-                                    />
-                                </div>
-                            </div>
-                            <div className="row" style={{height: "100%"}}>
+                            <div className="row" style={{ height: "100%" }}>
                                 {/* Redirect to /app/browse by default */}
                                 <Route
                                     path="/app"
@@ -151,10 +133,7 @@ function App() {
                                 />
                                 <Route
                                     path="/app/browse"
-                                    render={() => (
-                                        <MainAppComponent.Browse
-                                        />
-                                    )}
+                                    render={() => <MainAppComponent.Browse />}
                                 />
                                 <Route
                                     path="/app/user"
