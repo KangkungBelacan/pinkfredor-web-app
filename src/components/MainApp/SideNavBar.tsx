@@ -58,10 +58,7 @@ function SideNavBar(props: any): JSX.Element {
         <div
             className="sidebar-container"
             style={{
-                // marginLeft: props.navBar && props.isMobile ? "250px" : "",
-                position: "fixed",
-                height: "calc(100vh - 100px)",
-                // height: "85vh",
+                height: props.isMobile ? "100%" : "calc(100% - 100px)",
                 zIndex: props.isMobile ? 1000 : 1,
             }}
         >

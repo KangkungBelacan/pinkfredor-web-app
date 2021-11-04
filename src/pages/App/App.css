@@ -1,7 +1,6 @@
 .mainapp-grid-container {
     display: grid;
     grid-template: 1fr 100px / 250px 1fr;
-    height: 100vh;
 }
 
 .mainapp-body {

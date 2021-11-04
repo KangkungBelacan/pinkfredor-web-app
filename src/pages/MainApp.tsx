@@ -17,7 +17,7 @@ function MainApp() {
     return loading ? (
         <div>Loading...</div>
     ) : (
-        <div>
+        <div className="max-height">
             <ThemeProvider theme={DARK_THEME}>
                 <PrivateRoute authed={authed} path="/app" component={App.App} />
             </ThemeProvider>

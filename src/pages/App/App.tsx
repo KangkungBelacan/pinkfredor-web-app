@@ -108,7 +108,7 @@ function App() {
         });
     }, []);
     return (
-        <div className="mainapp-body">
+        <div className="mainapp-body max-height">
             <MusicPlayerContext.Provider value={ContextValues}>
                 <PlaylistContext.Provider value={PlaylistContextValues}>
                     <MainAppComponent.SideNavBar
@@ -116,7 +116,7 @@ function App() {
                         setNavBarDisplay={setNavBarDisplay}
                         navBar={showNavBar}
                     />
-                    <div className="mainapp-grid-container">
+                    <div className="mainapp-grid-container max-height">
                         <div className="d-md-block d-none"></div>
                         <div
                             className="container-fluid"
