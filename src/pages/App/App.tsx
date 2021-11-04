@@ -114,7 +114,7 @@ function App() {
                     <div
                         className="mainapp-grid-container max-height"
                         style={{
-                            backgroundImage: 'url(/placeholder-bg.jpg)'
+                            backgroundImage: "url(/placeholder-bg.jpg)",
                         }}
                     >
                         <MainAppComponent.SideNavBar
@@ -123,44 +123,40 @@ function App() {
                             navBar={showNavBar}
                             className="mainapp-grid-item"
                         />
-                        <div
-                            className="container-fluid mainapp-grid-item"
-                        >
-                            <div className="row" style={{ height: "100%" }}>
-                                {/* Redirect to /app/browse by default */}
-                                <Route
-                                    path="/app"
-                                    exact
-                                    render={() => <Redirect to="/app/browse" />}
-                                />
-                                <Route
-                                    path="/app/browse"
-                                    render={() => <MainAppComponent.Browse />}
-                                />
-                                <Route
-                                    path="/app/user"
-                                    component={AppSubPage.UserAccount}
-                                />
-                                <Route
-                                    path="/app/linkdrive"
-                                    component={AppSubPage.LinkGDrive}
-                                />
-                                <Route
-                                    path="/app/test"
-                                    component={AppSubPage.TestPage}
-                                />
-                                <Route
-                                    path="/app/organize"
-                                    render={() => (
-                                        <AppSubPage.Organizer className="mainapp-content-container" />
-                                    )}
-                                />
-                                <Route
-                                    exact
-                                    path="/app/playlist/:playlist_id"
-                                    component={AppSubPage.Playlist}
-                                />
-                            </div>
+                        <div className="mainapp-grid-item">
+                            {/* Redirect to /app/browse by default */}
+                            <Route
+                                path="/app"
+                                exact
+                                render={() => <Redirect to="/app/browse" />}
+                            />
+                            <Route
+                                path="/app/browse"
+                                render={() => <MainAppComponent.Browse />}
+                            />
+                            <Route
+                                path="/app/user"
+                                component={AppSubPage.UserAccount}
+                            />
+                            <Route
+                                path="/app/linkdrive"
+                                component={AppSubPage.LinkGDrive}
+                            />
+                            <Route
+                                path="/app/test"
+                                component={AppSubPage.TestPage}
+                            />
+                            <Route
+                                path="/app/organize"
+                                render={() => (
+                                    <AppSubPage.Organizer className="mainapp-content-container" />
+                                )}
+                            />
+                            <Route
+                                exact
+                                path="/app/playlist/:playlist_id"
+                                component={AppSubPage.Playlist}
+                            />
                         </div>
 
                         <MainAppComponent.MusicPlayer

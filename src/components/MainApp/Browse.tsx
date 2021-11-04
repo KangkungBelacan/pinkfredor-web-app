@@ -24,8 +24,8 @@ function Browse(props: any): JSX.Element {
     }, []);
 
     return (
-        <div>
-            <div className="content-body">
+        <div className="mainapp-content-container">
+            <div className="content-body mainapp-content">
                 <BrowseAllSongs
                     
                 />

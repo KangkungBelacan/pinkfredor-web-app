@@ -12,6 +12,8 @@
     backdrop-filter: blur(20px);
     border-radius: 10px;
     background-color: var(--back-color);
+    height: 100%;
+    overflow: auto;
 }
 
 .mainapp-body {
@@ -26,6 +28,7 @@
     flex-direction: row;
     width: 100%;
     height: 100%;
+    padding: 10px;
 }
 
 .mainapp-content {
