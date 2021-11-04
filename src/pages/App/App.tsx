@@ -121,7 +121,6 @@ function App() {
                             className="container-fluid"
                             style={{
                                 overflowX: "auto",
-                                gridColumnStart: "2"
                             }}
                         >
                             <div className="row" style={{ height: "100%" }}>

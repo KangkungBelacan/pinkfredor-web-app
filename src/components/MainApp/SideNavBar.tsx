@@ -58,7 +58,7 @@ function SideNavBar(props: any): JSX.Element {
         <div
             className="sidebar-container"
             style={{
-                height: props.isMobile ? "100%" : "calc(100% - 100px)",
+                height: "100%",
                 zIndex: props.isMobile ? 1000 : 1,
             }}
         >

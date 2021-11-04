@@ -3,7 +3,7 @@
     align-items: stretch;
     transition: margin-left .3s;
     overflow-y: auto;
-    position: fixed;
+    /* position: fixed; */
 }
 
 .fs-sm {
