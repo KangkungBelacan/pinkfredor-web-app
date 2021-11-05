@@ -239,6 +239,7 @@ function MusicPlayer(props: any): JSX.Element {
             // Set to true because it takes time for the song to be loaded
             // It is set back to true when the song is finally loaded
             // There is a slim chance onLoad() will be called before this is called somehow, please double check in future
+            setProgress(0);
             setIsLoadingSong(true);
         }
     }, [nowPlayingURL]);
@@ -263,7 +264,6 @@ function MusicPlayer(props: any): JSX.Element {
                     setProgressSlidermax(Math.round(args.duration / 1000));
                 }}
                 onLoad={() => {
-                    setProgress(0);
                     setIsLoadingSong(false);
                 }}
                 onPlaying={(args?: any) => {
