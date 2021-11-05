@@ -44,6 +44,7 @@ function MusicPlayer(props: any): JSX.Element {
     const [isShuffle, setisShuffle] = useState(false);
     const [isLoop, setisLoop] = useState(false);
     const [loopTarget, setLoopTarget] = useState(0);
+    const [progress, setProgress] = useState(0);
     const [color1, setColor1] = useState("rgb(164, 164, 164)");
     const [color2, setColor2] = useState("rgb(164, 164, 164)");
     const {
@@ -51,8 +52,6 @@ function MusicPlayer(props: any): JSX.Element {
         setStatus,
         nowPlayingURL,
         setNowPlayingURL,
-        progress,
-        setProgress,
         volume,
         setVolume,
         queue,
@@ -264,6 +263,7 @@ function MusicPlayer(props: any): JSX.Element {
                     setProgressSlidermax(Math.round(args.duration / 1000));
                 }}
                 onLoad={() => {
+                    setProgress(0);
                     setIsLoadingSong(false);
                 }}
                 onPlaying={(args?: any) => {

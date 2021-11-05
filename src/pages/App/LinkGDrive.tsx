@@ -20,9 +20,6 @@ const LinkGDrive = () => {
     const {
         setStatus,
         setNowPlayingURL,
-        setProgress,
-        queue,
-        setQueue,
         setSongTitleLabel,
         setSongArtistLabel,
     } = React.useContext(MusicPlayerContext);

@@ -24,7 +24,6 @@ function App() {
     const [status, setStatus] =
         useState<ReactSoundProps["playStatus"]>("PAUSED");
     const [nowPlayingURL, setNowPlayingURL] = useState("");
-    const [progress, setProgress] = useState(0);
     const [volume, setVolume] = useState(100);
     const [queue, setQueue] = useState([
         // {
@@ -65,8 +64,6 @@ function App() {
         setStatus,
         nowPlayingURL,
         setNowPlayingURL,
-        progress,
-        setProgress,
         volume,
         setVolume,
         queue,

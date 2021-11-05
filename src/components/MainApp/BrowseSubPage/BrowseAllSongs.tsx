@@ -62,7 +62,6 @@ const BrowseAllSongs = (props: any) => {
         setStatus,
         nowPlayingURL,
         setNowPlayingURL,
-        setProgress,
         queue,
         setQueue,
         setSongTitleLabel,
@@ -135,7 +134,6 @@ const BrowseAllSongs = (props: any) => {
             });
         }
         setQueue(new_queue);
-        setProgress(0);
         setNowPlayingURL(
             `/api/driveapi/files/download?token=${localStorage.token}&fileid=${songData.id}`
         );
