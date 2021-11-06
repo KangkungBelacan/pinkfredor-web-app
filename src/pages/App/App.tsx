@@ -1,20 +1,22 @@
 import * as MainAppComponent from "./../../components/MainApp";
 import "./App.css";
 import example_song_cover from "./../../images/example-song-cover.png";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import * as AppSubPage from "./index";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {Route} from "react-router";
-import {useMediaQuery} from "react-responsive";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Route } from "react-router";
+import { useMediaQuery } from "react-responsive";
+import PlaylistContext from "../../context/PlaylistContext";
 import MusicPlayerContext from "../../context/MusicPlayerContext";
-import {ReactSoundProps} from "react-sound";
-import {MusicQueueItem} from "../../interface/context/MusicQueueItem";
-import {Redirect, useHistory} from "react-router-dom";
+import { ReactSoundProps } from "react-sound";
+import { MusicQueueItem } from "../../interface/context/MusicQueueItem";
+import { Redirect, useHistory } from "react-router-dom";
+import useAxios from "axios-hooks";
 
 function App() {
     const history = useHistory();
     const [showNavBar, setNavBarDisplay] = useState(false);
-    const isMobile = useMediaQuery({query: "(max-width: 768px)"});
+    const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
     // ======================================
     // Default Music Player Context Values
@@ -22,7 +24,6 @@ function App() {
     const [status, setStatus] =
         useState<ReactSoundProps["playStatus"]>("PAUSED");
     const [nowPlayingURL, setNowPlayingURL] = useState("");
-    const [progress, setProgress] = useState(0);
     const [volume, setVolume] = useState(100);
     const [queue, setQueue] = useState([
         // {
@@ -44,13 +45,25 @@ function App() {
     const [songArtistLabel, setSongArtistLabel] = useState("-");
     const [songAlbumArtURL, setSongAlbumArtURL] =
         useState<any>(example_song_cover);
+    const [isLoadingSong, setIsLoadingSong] = useState(false);
+    const [
+        { data: playlistData, loading: playlistLoading, error: playlistErr },
+        playlistRefetch,
+    ] = useAxios(
+        {
+            url: "/api/indexes/playlists",
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        },
+        { useCache: false }
+    );
     const ContextValues = {
         status,
         setStatus,
         nowPlayingURL,
         setNowPlayingURL,
-        progress,
-        setProgress,
         volume,
         setVolume,
         queue,
@@ -61,6 +74,15 @@ function App() {
         setSongArtistLabel,
         songAlbumArtURL,
         setSongAlbumArtURL,
+        isLoadingSong,
+        setIsLoadingSong,
+    };
+
+    const PlaylistContextValues = {
+        playlistData,
+        playlistLoading,
+        playlistErr,
+        playlistRefetch,
     };
     // ======================================
     // ======================================
@@ -83,61 +105,31 @@ function App() {
         });
     }, []);
     return (
-        <div className="mainapp-body">
+        <div className="mainapp-body max-height">
             <MusicPlayerContext.Provider value={ContextValues}>
-                <MainAppComponent.SideNavBar
-                    isMobile={isMobile}
-                    setNavBarDisplay={setNavBarDisplay}
-                    navBar={showNavBar}
-                />
-                <div className="mainapp-grid-container">
-                    <div className="d-md-block d-none"></div>
+                <PlaylistContext.Provider value={PlaylistContextValues}>
                     <div
-                        className="container-fluid"
+                        className="mainapp-grid-container max-height"
                         style={{
-                            overflowX: "auto",
+                            backgroundImage: "url(/placeholder-bg.jpg)",
                         }}
                     >
-                        <div className="row d-md-none d-block">
-                            <div
-                                className="col"
-                                style={{
-                                    color: "white",
-                                    padding: "10px",
-                                    cursor: "pointer",
-                                }}
-                                onClick={() => {
-                                    setNavBarDisplay(!showNavBar);
-                                }}
-                            >
-                                <FontAwesomeIcon
-                                    size="lg"
-                                    icon="align-justify"
-                                />
-                            </div>
-                        </div>
-                        <div className="row">
+                        <MainAppComponent.SideNavBar
+                            isMobile={isMobile}
+                            setNavBarDisplay={setNavBarDisplay}
+                            navBar={showNavBar}
+                            className="mainapp-grid-item"
+                        />
+                        <div className="mainapp-grid-item">
                             {/* Redirect to /app/browse by default */}
                             <Route
                                 path="/app"
                                 exact
-                                render={() => <Redirect to="/app/browse"/>}
+                                render={() => <Redirect to="/app/browse" />}
                             />
                             <Route
                                 path="/app/browse"
-                                render={() => (
-                                    <MainAppComponent.Browse
-                                        setStatus={setStatus}
-                                        setNowPlayingURL={setNowPlayingURL}
-                                        nowPlayingURL={nowPlayingURL}
-                                        setProgress={setProgress}
-                                        queue={queue}
-                                        setQueue={setQueue}
-                                        setSongTitleLabel={setSongTitleLabel}
-                                        setSongArtistLabel={setSongArtistLabel}
-                                        setSongAlbumArtURL={setSongAlbumArtURL}
-                                    />
-                                )}
+                                render={() => <MainAppComponent.Browse />}
                             />
                             <Route
                                 path="/app/user"
@@ -154,16 +146,22 @@ function App() {
                             <Route
                                 path="/app/organize"
                                 render={() => (
-                                    <AppSubPage.Organizer className="mainapp-content-container"/>
+                                    <AppSubPage.Organizer className="mainapp-content-container" />
                                 )}
                             />
+                            <Route
+                                exact
+                                path="/app/playlist/:playlist_id"
+                                component={AppSubPage.Playlist}
+                            />
                         </div>
-                    </div>
 
-                    <MainAppComponent.MusicPlayer
-                        song_cover={example_song_cover}
-                    />
-                </div>
+                        <MainAppComponent.MusicPlayer
+                            song_cover={example_song_cover}
+                            className="mainapp-grid-item"
+                        />
+                    </div>
+                </PlaylistContext.Provider>
             </MusicPlayerContext.Provider>
         </div>
     );

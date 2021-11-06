@@ -51,6 +51,8 @@ package-lock.json
 **/*/package-lock.json
 .vscode
 **/*/.vscode
+.vs
+**/*/.vs
 .idea
 **/*/.idea
 **/*/.env

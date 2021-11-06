@@ -20,9 +20,6 @@ const LinkGDrive = () => {
     const {
         setStatus,
         setNowPlayingURL,
-        setProgress,
-        queue,
-        setQueue,
         setSongTitleLabel,
         setSongArtistLabel,
     } = React.useContext(MusicPlayerContext);
@@ -213,6 +210,7 @@ const LinkGDrive = () => {
     return (
         <div className="mainapp-content-container">
             <div
+                className="mainapp-content"
                 style={{
                     display: "grid",
                     gridTemplateColumns: "5fr 1fr",

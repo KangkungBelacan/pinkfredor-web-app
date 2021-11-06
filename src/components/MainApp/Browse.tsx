@@ -24,22 +24,10 @@ function Browse(props: any): JSX.Element {
     }, []);
 
     return (
-        <div>
-            <div className="content-body">
+        <div className="mainapp-content-container">
+            <div className="content-body mainapp-content">
                 <BrowseAllSongs
-                    setStatus={props.setStatus}
-                    setNowPlayingURL={props.setNowPlayingURL}
-                    nowPlayingURL={props.nowPlayingURL}
-                    setProgress={props.setProgress}
-                    queue={props.queue}
-                    setQueue={props.setQueue}
-                    setSongTitleLabel={props.setSongTitleLabel}
-                    setSongArtistLabel={
-                        props.setSongArtistLabel
-                    }
-                    setSongAlbumArtURL={
-                        props.setSongAlbumArtURL
-                    }
+                    
                 />
                 {/*<div*/}
                 {/*    style={{ display: "flex", flexDirection: "column" }}*/}
