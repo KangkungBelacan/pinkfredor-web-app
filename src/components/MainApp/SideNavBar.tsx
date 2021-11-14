@@ -1,32 +1,40 @@
-import {Link, useLocation} from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "./SideNavBar.css";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Profile from "./../../images/pfp.png";
 import jwt_decode from "jwt-decode";
-import React, {useEffect, useState} from "react";
-import {useAppSelector} from '../../app/hooks';
-import {selectPlaylistError, selectPlaylistLoading, selectPlaylistsData} from '../../app/reducers/musicPlayerSlice';
+import React, { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import {
+    playlistStatusSelector,
+    playlistDataSelector,
+    playlistErrorSelector,
+    fetchPlaylist,
+} from "../../app/reducers/playlistSlice";
 
 function SideNavBar(props: any): JSX.Element {
-    const playlistData = useAppSelector(selectPlaylistsData);
-    const playlistLoading = useAppSelector(selectPlaylistLoading);
-    const playlistError = useAppSelector(selectPlaylistError);
+    const playlistData = useAppSelector(playlistDataSelector);
+    const playlistStatus = useAppSelector(playlistStatusSelector);
+    const playlistError = useAppSelector(playlistErrorSelector);
+    const dispatch = useAppDispatch();
 
     const current_path = useLocation().pathname;
     const jwt_payload = jwt_decode(localStorage.getItem("token") as string);
 
     const [playlistListing, setPlaylistListing] = useState<any>([]);
     useEffect(() => {
-        if (playlistData === null || playlistData === undefined) {
+        if(playlistStatus === "idle") {
+            dispatch(fetchPlaylist())
             return;
         }
 
-        if (playlistLoading) {
+        if(playlistStatus === "loading") {
             return;
         }
 
-        if (playlistError) {
-            return;
+        if(playlistStatus === "failed") {
+            console.error(playlistError)
+            return
         }
 
         let playlists = Object.values(playlistData.playlists);
@@ -43,18 +51,20 @@ function SideNavBar(props: any): JSX.Element {
                 <li key={(pl as any).playlistid}>
                     <Link
                         to={`/app/playlist/${(pl as any).playlistid}`}
-                        style={{textDecoration: "none", color: "inherit"}}
+                        style={{ textDecoration: "none", color: "inherit" }}
                     >
                         <div
                             className={
-                                current_path.startsWith(`/app/playlist/${(pl as any).playlistid}`)
+                                current_path.startsWith(
+                                    `/app/playlist/${(pl as any).playlistid}`
+                                )
                                     ? "item-container selected"
                                     : "item-container"
                             }
                         >
-                                <span className="item-container-text">
+                            <span className="item-container-text">
                                 {(pl as any).playlist_name}
-                                </span>
+                            </span>
                         </div>
                     </Link>
                 </li>
@@ -65,7 +75,11 @@ function SideNavBar(props: any): JSX.Element {
     }, [playlistData, current_path]);
     return (
         <div
-            className={props.className ? props.className + " sidebar-container" : "sidebar-container"}
+            className={
+                props.className
+                    ? props.className + " sidebar-container"
+                    : "sidebar-container"
+            }
             style={{
                 zIndex: props.isMobile ? 1000 : 1,
             }}
@@ -83,13 +97,13 @@ function SideNavBar(props: any): JSX.Element {
                         <div className="col-md-12 col-8">
                             <div
                                 className="flex"
-                                style={{justifyContent: "center"}}
+                                style={{ justifyContent: "center" }}
                             >
                                 <div>
-                                    <h3 style={{textAlign: "center"}}>
+                                    <h3 style={{ textAlign: "center" }}>
                                         Pinkfredor
                                     </h3>
-                                    <br/>
+                                    <br />
                                     <img
                                         src={
                                             (jwt_payload as any).imageUrl !==
@@ -99,7 +113,7 @@ function SideNavBar(props: any): JSX.Element {
                                         }
                                         alt="Avatar"
                                         className="center"
-                                        style={{borderRadius: "50%"}}
+                                        style={{ borderRadius: "50%" }}
                                     ></img>
                                     <h3
                                         style={{
@@ -117,13 +131,13 @@ function SideNavBar(props: any): JSX.Element {
                                 <Link
                                     to="/app/user"
                                     className="Nav-Items-Container"
-                                    style={{margin: "10px"}}
+                                    style={{ margin: "10px" }}
                                 >
                                     Settings
                                 </Link>
                                 <div
                                     className="Nav-Items-Container"
-                                    style={{margin: "10px"}}
+                                    style={{ margin: "10px" }}
                                 >
                                     Log Out
                                 </div>
@@ -131,12 +145,12 @@ function SideNavBar(props: any): JSX.Element {
                         </div>
                         <div
                             className="col-4 d-md-none d-block"
-                            style={{textAlign: "right", cursor: "pointer"}}
+                            style={{ textAlign: "right", cursor: "pointer" }}
                             onClick={() => {
                                 props.setNavBarDisplay(false);
                             }}
                         >
-                            <FontAwesomeIcon icon="times"/>
+                            <FontAwesomeIcon icon="times" />
                         </div>
                     </div>
                 </div>
@@ -144,7 +158,7 @@ function SideNavBar(props: any): JSX.Element {
                     <li>
                         <Link
                             to="/app/test"
-                            style={{textDecoration: "none", color: "inherit"}}
+                            style={{ textDecoration: "none", color: "inherit" }}
                         >
                             <div
                                 className={
@@ -153,7 +167,7 @@ function SideNavBar(props: any): JSX.Element {
                                         : "item-container"
                                 }
                             >
-                                <FontAwesomeIcon icon="vial"/>
+                                <FontAwesomeIcon icon="vial" />
                                 <span className="item-container-text fs-lg">
                                     Test Page
                                 </span>
@@ -163,7 +177,7 @@ function SideNavBar(props: any): JSX.Element {
                     <li>
                         <Link
                             to="/app/linkdrive"
-                            style={{textDecoration: "none", color: "inherit"}}
+                            style={{ textDecoration: "none", color: "inherit" }}
                         >
                             <div
                                 className={
@@ -184,7 +198,7 @@ function SideNavBar(props: any): JSX.Element {
                     <li>
                         <Link
                             to="/app/browse"
-                            style={{textDecoration: "none", color: "inherit"}}
+                            style={{ textDecoration: "none", color: "inherit" }}
                         >
                             <div
                                 className={
@@ -193,7 +207,7 @@ function SideNavBar(props: any): JSX.Element {
                                         : "item-container"
                                 }
                             >
-                                <FontAwesomeIcon icon="list"/>
+                                <FontAwesomeIcon icon="list" />
                                 <span className="item-container-text fs-lg">
                                     Browse
                                 </span>
@@ -203,7 +217,7 @@ function SideNavBar(props: any): JSX.Element {
                     <li>
                         <Link
                             to="/app/organize"
-                            style={{textDecoration: "none", color: "inherit"}}
+                            style={{ textDecoration: "none", color: "inherit" }}
                         >
                             <div
                                 className={
@@ -212,7 +226,7 @@ function SideNavBar(props: any): JSX.Element {
                                         : "item-container"
                                 }
                             >
-                                <FontAwesomeIcon icon="columns"/>
+                                <FontAwesomeIcon icon="columns" />
                                 <span className="item-container-text fs-lg">
                                     Organize
                                 </span>
@@ -221,7 +235,7 @@ function SideNavBar(props: any): JSX.Element {
                     </li>
                     <li>
                         <div className="item-container">
-                            <FontAwesomeIcon icon="broadcast-tower"/>
+                            <FontAwesomeIcon icon="broadcast-tower" />
                             <span className="item-container-text fs-lg">
                                 Recently Played
                             </span>

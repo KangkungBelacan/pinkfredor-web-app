@@ -1,22 +1,33 @@
 import "./TableItem.css";
-import {ButtonGroup, Dropdown} from "react-bootstrap";
-import React, {useEffect, useState} from "react";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCaretLeft, faEllipsisH, faPlay, faPlus,} from "@fortawesome/free-solid-svg-icons";
-import {useAppSelector} from '../../../app/hooks';
-import {selectNowPlayingURL, selectPlaylistsData,} from '../../../app/reducers/musicPlayerSlice';
+import { ButtonGroup, Dropdown } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faCaretLeft,
+    faEllipsisH,
+    faPlay,
+    faPlus,
+} from "@fortawesome/free-solid-svg-icons";
+import { useAppSelector } from "../../../app/hooks";
+import { selectNowPlayingURL } from "../../../app/reducers/musicPlayerSlice";
 
+import {
+    playlistStatusSelector,
+    playlistDataSelector,
+    playlistErrorSelector,
+    fetchPlaylist,
+} from "../../../app/reducers/playlistSlice";
 
-const ellipsisH = <FontAwesomeIcon icon={faEllipsisH}/>;
-const play = <FontAwesomeIcon className={"icons-play"} icon={faPlay}/>;
-const plus = <FontAwesomeIcon className={"icons-plus"} icon={faPlus}/>;
+const ellipsisH = <FontAwesomeIcon icon={faEllipsisH} />;
+const play = <FontAwesomeIcon className={"icons-play"} icon={faPlay} />;
+const plus = <FontAwesomeIcon className={"icons-plus"} icon={faPlus} />;
 const caretLeft = (
-    <FontAwesomeIcon className={"icons-caret-left"} icon={faCaretLeft}/>
+    <FontAwesomeIcon className={"icons-caret-left"} icon={faCaretLeft} />
 );
 
 const TableItem = (props: any) => {
     const nowPlayingURL = useAppSelector(selectNowPlayingURL);
-    const playlistsData = useAppSelector(selectPlaylistsData);
+    const playlistsData = useAppSelector(playlistDataSelector);
     let songData = props.songData;
     let indexFilesState = props.indexFilesState;
 
@@ -62,8 +73,10 @@ const TableItem = (props: any) => {
         }
     }
 
-    const tableItemActions = React.forwardRef<HTMLButtonElement,
-        React.PropsWithChildren<any>>((props, ref: any) => (
+    const tableItemActions = React.forwardRef<
+        HTMLButtonElement,
+        React.PropsWithChildren<any>
+    >((props, ref: any) => (
         <a
             className={"table-item-actions"}
             href=""
@@ -77,8 +90,10 @@ const TableItem = (props: any) => {
         </a>
     ));
 
-    const playlistActions = React.forwardRef<HTMLButtonElement,
-        React.PropsWithChildren<any>>((props, ref: any) => (
+    const playlistActions = React.forwardRef<
+        HTMLButtonElement,
+        React.PropsWithChildren<any>
+    >((props, ref: any) => (
         <a
             className={"playlist-actions"}
             href=""
@@ -141,7 +156,7 @@ const TableItem = (props: any) => {
             </div>
             <div
                 className={"table-item-container-image"}
-                style={{backgroundColor: props.imageColor}}
+                style={{ backgroundColor: props.imageColor }}
             >
                 <div
                     className={
