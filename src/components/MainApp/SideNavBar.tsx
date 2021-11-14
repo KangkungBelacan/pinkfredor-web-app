@@ -72,7 +72,7 @@ function SideNavBar(props: any): JSX.Element {
         }
 
         setPlaylistListing(_playlistListing);
-    }, [playlistData, current_path]);
+    }, [playlistStatus, current_path]);
     return (
         <div
             className={
