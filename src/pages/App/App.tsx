@@ -1,22 +1,24 @@
 import * as MainAppComponent from "./../../components/MainApp";
 import "./App.css";
 import example_song_cover from "./../../images/example-song-cover.png";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import * as AppSubPage from "./index";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Route } from "react-router";
-import { useMediaQuery } from "react-responsive";
-import PlaylistContext from "../../context/PlaylistContext";
-import MusicPlayerContext from "../../context/MusicPlayerContext";
-import { ReactSoundProps } from "react-sound";
-import { MusicQueueItem } from "../../interface/context/MusicQueueItem";
-import { Redirect, useHistory } from "react-router-dom";
+import {Route} from "react-router";
+import {useMediaQuery} from "react-responsive";
+import {ReactSoundProps} from "react-sound";
+import {MusicQueueItem} from "../../interface/context/MusicQueueItem";
+import {Redirect, useHistory} from "react-router-dom";
 import useAxios from "axios-hooks";
+import {store} from '../../app/store';
+import {Provider} from 'react-redux';
+import MusicPlayerContext from "../../context/MusicPlayerContext";
+import PlaylistContext from "../../context/PlaylistContext";
+
 
 function App() {
     const history = useHistory();
     const [showNavBar, setNavBarDisplay] = useState(false);
-    const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+    const isMobile = useMediaQuery({query: "(max-width: 768px)"});
 
     // ======================================
     // Default Music Player Context Values
@@ -47,7 +49,7 @@ function App() {
         useState<any>(example_song_cover);
     const [isLoadingSong, setIsLoadingSong] = useState(false);
     const [
-        { data: playlistData, loading: playlistLoading, error: playlistErr },
+        {data: playlistData, loading: playlistLoading, error: playlistErr},
         playlistRefetch,
     ] = useAxios(
         {
@@ -57,7 +59,7 @@ function App() {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
         },
-        { useCache: false }
+        {useCache: false}
     );
     const ContextValues = {
         status,
@@ -108,59 +110,61 @@ function App() {
         <div className="mainapp-body max-height">
             <MusicPlayerContext.Provider value={ContextValues}>
                 <PlaylistContext.Provider value={PlaylistContextValues}>
-                    <div
-                        className="mainapp-grid-container max-height"
-                        style={{
-                            backgroundImage: "url(/placeholder-bg.jpg)",
-                        }}
-                    >
-                        <MainAppComponent.SideNavBar
-                            isMobile={isMobile}
-                            setNavBarDisplay={setNavBarDisplay}
-                            navBar={showNavBar}
-                            className="mainapp-grid-item"
-                        />
-                        <div className="mainapp-grid-item">
-                            {/* Redirect to /app/browse by default */}
-                            <Route
-                                path="/app"
-                                exact
-                                render={() => <Redirect to="/app/browse" />}
+                    <Provider store={store}>
+                        <div
+                            className="mainapp-grid-container max-height"
+                            style={{
+                                backgroundImage: "url(/placeholder-bg.jpg)",
+                            }}
+                        >
+                            <MainAppComponent.SideNavBar
+                                isMobile={isMobile}
+                                setNavBarDisplay={setNavBarDisplay}
+                                navBar={showNavBar}
+                                className="mainapp-grid-item"
                             />
-                            <Route
-                                path="/app/browse"
-                                render={() => <MainAppComponent.Browse />}
-                            />
-                            <Route
-                                path="/app/user"
-                                component={AppSubPage.UserAccount}
-                            />
-                            <Route
-                                path="/app/linkdrive"
-                                component={AppSubPage.LinkGDrive}
-                            />
-                            <Route
-                                path="/app/test"
-                                component={AppSubPage.TestPage}
-                            />
-                            <Route
-                                path="/app/organize"
-                                render={() => (
-                                    <AppSubPage.Organizer className="mainapp-content-container" />
-                                )}
-                            />
-                            <Route
-                                exact
-                                path="/app/playlist/:playlist_id"
-                                component={AppSubPage.Playlist}
+                            <div className="mainapp-grid-item">
+                                {/* Redirect to /app/browse by default */}
+                                <Route
+                                    path="/app"
+                                    exact
+                                    render={() => <Redirect to="/app/browse"/>}
+                                />
+                                <Route
+                                    path="/app/browse"
+                                    render={() => <MainAppComponent.Browse/>}
+                                />
+                                <Route
+                                    path="/app/user"
+                                    component={AppSubPage.UserAccount}
+                                />
+                                <Route
+                                    path="/app/linkdrive"
+                                    component={AppSubPage.LinkGDrive}
+                                />
+                                <Route
+                                    path="/app/test"
+                                    component={AppSubPage.TestPage}
+                                />
+                                <Route
+                                    path="/app/organize"
+                                    render={() => (
+                                        <AppSubPage.Organizer className="mainapp-content-container"/>
+                                    )}
+                                />
+                                <Route
+                                    exact
+                                    path="/app/playlist/:playlist_id"
+                                    component={AppSubPage.Playlist}
+                                />
+                            </div>
+
+                            <MainAppComponent.MusicPlayer
+                                song_cover={example_song_cover}
+                                className="mainapp-grid-item"
                             />
                         </div>
-
-                        <MainAppComponent.MusicPlayer
-                            song_cover={example_song_cover}
-                            className="mainapp-grid-item"
-                        />
-                    </div>
+                    </Provider>
                 </PlaylistContext.Provider>
             </MusicPlayerContext.Provider>
         </div>
