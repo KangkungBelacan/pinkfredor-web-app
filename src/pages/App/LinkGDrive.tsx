@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAxiosPOST } from "../../global-imports";
 import useAxios from "axios-hooks";
 import useUnindexedDriveFiles from "../../custom-hooks/useUnindexedDriveFiles";
-import MusicPlayerContext from "../../context/MusicPlayerContext";
+// import MusicPlayerContext from "../../context/MusicPlayerContext";
 const LinkGDrive = () => {
     const tableRef = useRef<any>();
     const [statusText, setStatusText] = useState<string>("");
@@ -17,12 +17,12 @@ const LinkGDrive = () => {
     const [isLoadingFiles, setIsLoadingFiles] = useState<boolean>(false);
     const [loadText, setLoadText] = useState<string>("Load");
     const [loadAllText, setLoadAllText] = useState<string>("Load All");
-    const {
-        setStatus,
-        setNowPlayingURL,
-        setSongTitleLabel,
-        setSongArtistLabel,
-    } = React.useContext(MusicPlayerContext);
+    // const {
+    //     setStatus,
+    //     setNowPlayingURL,
+    //     setSongTitleLabel,
+    //     setSongArtistLabel,
+    // } = React.useContext(MusicPlayerContext);
     /**
      *
      * @param getAll (Optional) set to true to get all row's data ignoring if its checked or not
@@ -403,23 +403,23 @@ const LinkGDrive = () => {
                                     position: "row",
                                     onClick: (event, rowData) => {
                                         // console.log((rowData as any).id);
-                                        console.log(
-                                            `/api/driveapi/files/download?token=${localStorage.getItem(
-                                                "token"
-                                            )}&fileid=${(rowData as any).id}`
-                                        );
-                                        setNowPlayingURL(
-                                            `/api/driveapi/files/download?token=${localStorage.getItem(
-                                                "token"
-                                            )}&fileid=${(rowData as any).id}`
-                                        );
-                                        setSongTitleLabel(
-                                            (rowData as any).filename
-                                        );
-                                        setSongArtistLabel(
-                                            (rowData as any).path
-                                        );
-                                        setStatus("PLAYING");
+                                        // console.log(
+                                        //     `/api/driveapi/files/download?token=${localStorage.getItem(
+                                        //         "token"
+                                        //     )}&fileid=${(rowData as any).id}`
+                                        // );
+                                        // setNowPlayingURL(
+                                        //     `/api/driveapi/files/download?token=${localStorage.getItem(
+                                        //         "token"
+                                        //     )}&fileid=${(rowData as any).id}`
+                                        // );
+                                        // setSongTitleLabel(
+                                        //     (rowData as any).filename
+                                        // );
+                                        // setSongArtistLabel(
+                                        //     (rowData as any).path
+                                        // );
+                                        // setStatus("PLAYING");
                                     },
                                 },
                             ]}

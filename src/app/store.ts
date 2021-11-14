@@ -1,9 +1,11 @@
 import {Action, configureStore, ThunkAction} from '@reduxjs/toolkit';
 import musicPlayerReducer from './reducers/musicPlayerSlice';
+import playlistSlice from './reducers/playlistSlice';
 
 export const store = configureStore({
     reducer: {
         musicPlayer: musicPlayerReducer,
+        playlist: playlistSlice
     },
 });
 
