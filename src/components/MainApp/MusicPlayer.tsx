@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, {useEffect, useState} from "react";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
     faBackward,
     faBars,
@@ -12,23 +12,40 @@ import {
     faSync,
     faVolumeUp,
 } from "@fortawesome/free-solid-svg-icons";
-import { useWindowSize } from "../../global-imports";
-import MusicPlayerContext from "../../context/MusicPlayerContext";
+import {useWindowSize} from "../../global-imports";
 import Sound from "react-sound";
 import VolumeBar from "./MusicPlayerSubComponent/VolumeBar";
 import NowPlayingQueuePopUp from "./MusicPlayerSubComponent/NowPlayingQueuePopUp";
+import {useAppDispatch, useAppSelector} from '../../app/hooks';
+import {
+    selectIsLoadingSong,
+    selectNowPlayingURL,
+    selectPlayStatus,
+    selectQueue,
+    selectSongAlbumArtURL,
+    selectSongArtistLabel,
+    selectSongTitleLabel,
+    selectVolume,
+    setIsLoadingSong,
+    setNowPlayingURL,
+    setPlayStatus,
+    setQueue,
+    setSongArtistLabel,
+    setSongTitleLabel,
+    setVolume
+} from '../../app/reducers/musicPlayerSlice';
 
-const stepBackward = <FontAwesomeIcon icon={faStepBackward} />;
-const stepForward = <FontAwesomeIcon icon={faStepForward} />;
-const forward = <FontAwesomeIcon icon={faForward} />;
-const backward = <FontAwesomeIcon icon={faBackward} />;
-const playCircle = <FontAwesomeIcon icon={faPlayCircle} />;
-const pauseCircle = <FontAwesomeIcon icon={faPauseCircle} />;
-const bars = <FontAwesomeIcon icon={faBars} />;
-const volumeUp = <FontAwesomeIcon icon={faVolumeUp} />;
-const ShuffleIcon = <FontAwesomeIcon icon={faRandom} />;
-const LoopIcon = <FontAwesomeIcon icon={faSync} />;
-const spinner = <FontAwesomeIcon icon="spinner" />;
+const stepBackward = <FontAwesomeIcon icon={faStepBackward}/>;
+const stepForward = <FontAwesomeIcon icon={faStepForward}/>;
+const forward = <FontAwesomeIcon icon={faForward}/>;
+const backward = <FontAwesomeIcon icon={faBackward}/>;
+const playCircle = <FontAwesomeIcon icon={faPlayCircle}/>;
+const pauseCircle = <FontAwesomeIcon icon={faPauseCircle}/>;
+const bars = <FontAwesomeIcon icon={faBars}/>;
+const volumeUp = <FontAwesomeIcon icon={faVolumeUp}/>;
+const ShuffleIcon = <FontAwesomeIcon icon={faRandom}/>;
+const LoopIcon = <FontAwesomeIcon icon={faSync}/>;
+const spinner = <FontAwesomeIcon icon="spinner"/>;
 
 //Music Player Component.
 function MusicPlayer(props: any): JSX.Element {
@@ -47,30 +64,23 @@ function MusicPlayer(props: any): JSX.Element {
     const [progress, setProgress] = useState(0);
     const [color1, setColor1] = useState("rgb(164, 164, 164)");
     const [color2, setColor2] = useState("rgb(164, 164, 164)");
-    const {
-        status,
-        setStatus,
-        nowPlayingURL,
-        setNowPlayingURL,
-        volume,
-        setVolume,
-        queue,
-        setQueue,
-        songTitleLabel,
-        setSongTitleLabel,
-        songArtistLabel,
-        setSongArtistLabel,
-        songAlbumArtURL,
-        //setSongAlbumArtURL,
-        isLoadingSong,
-        setIsLoadingSong,
-    } = React.useContext(MusicPlayerContext);
+
+    const isLoadingSong = useAppSelector(selectIsLoadingSong);
+    const playStatus = useAppSelector(selectPlayStatus);
+    const nowPlayingURL = useAppSelector(selectNowPlayingURL);
+    const queue = useAppSelector(selectQueue);
+    const volume = useAppSelector(selectVolume);
+    const songAlbumArtURL = useAppSelector(selectSongAlbumArtURL);
+    const songTitleLabel = useAppSelector(selectSongTitleLabel);
+    const songArtistLabel = useAppSelector(selectSongArtistLabel);
+
+    const dispatch = useAppDispatch();
 
     const play_song = () => {
         if (isLoadingSong) {
             return;
         }
-        if (status !== "PLAYING") {
+        if (playStatus !== "PLAYING") {
             if (nowPlayingURL === "") {
                 if (queue.length === 0) {
                     return;
@@ -81,10 +91,10 @@ function MusicPlayer(props: any): JSX.Element {
                 queue[0].current = true;
                 setQueue(queue);
             }
-            setStatus("PLAYING");
+            dispatch(setPlayStatus("PLAYING"));
             return;
         }
-        setStatus("PAUSED");
+        dispatch(setPlayStatus("PAUSED"));
     };
 
     const seek_back = () => {
@@ -126,8 +136,8 @@ function MusicPlayer(props: any): JSX.Element {
         setSongArtistLabel(queue[next_idx].song_artist);
         queue[next_idx].current = true;
         setQueue(queue);
-        if (status !== "PLAYING") {
-            setStatus("PLAYING");
+        if (playStatus !== "PLAYING") {
+            dispatch(setPlayStatus("PLAYING"));
         }
     };
 
@@ -158,8 +168,8 @@ function MusicPlayer(props: any): JSX.Element {
         setSongArtistLabel(queue[next_idx].song_artist);
         queue[next_idx].current = true;
         setQueue(queue);
-        if (status !== "PLAYING") {
-            setStatus("PLAYING");
+        if (playStatus !== "PLAYING") {
+            dispatch(setPlayStatus("PLAYING"));
         }
     };
 
@@ -173,8 +183,8 @@ function MusicPlayer(props: any): JSX.Element {
                 setSongTitleLabel(queue[i].song_title);
                 setSongArtistLabel(queue[i].song_artist);
                 queue[i].current = true;
-                if (status !== "PLAYING") {
-                    setStatus("PLAYING");
+                if (playStatus !== "PLAYING") {
+                    dispatch(setPlayStatus("PLAYING"));
                 }
             } else {
                 queue[i].current = false;
@@ -184,7 +194,7 @@ function MusicPlayer(props: any): JSX.Element {
     };
 
     const stop_song = () => {
-        setStatus("STOPPED");
+        dispatch(setPlayStatus("STOPPED"));
     };
 
     const Shuffle = () => {
@@ -240,13 +250,13 @@ function MusicPlayer(props: any): JSX.Element {
             // It is set back to true when the song is finally loaded
             // There is a slim chance onLoad() will be called before this is called somehow, please double check in future
             setProgress(0);
-            setIsLoadingSong(true);
+            dispatch(setIsLoadingSong(true));
         }
     }, [nowPlayingURL]);
 
     return (
         <div
-            style={{ gridColumnStart: "span 2" }}
+            style={{gridColumnStart: "span 2"}}
             className={props.className ? props.className : ""}
         >
             <NowPlayingQueuePopUp
@@ -256,7 +266,7 @@ function MusicPlayer(props: any): JSX.Element {
             />
             <Sound
                 url={nowPlayingURL}
-                playStatus={status}
+                playStatus={playStatus}
                 autoLoad={true}
                 playFromPosition={curPos}
                 onLoading={(args?: any) => {
@@ -273,12 +283,13 @@ function MusicPlayer(props: any): JSX.Element {
                         setProgress(
                             Math.round(
                                 (args.position / args.duration) *
-                                    Math.round(args.duration / 1000)
+                                Math.round(args.duration / 1000)
                             )
                         );
                 }}
                 onFinishedPlaying={next_song}
-                onError={() => {}}
+                onError={() => {
+                }}
                 volume={volume}
             />
 
@@ -299,7 +310,7 @@ function MusicPlayer(props: any): JSX.Element {
                         alt="Example_Song_Cover"
                     ></img>
                     <div
-                        style={{ display: "inline-block", paddingLeft: "10px" }}
+                        style={{display: "inline-block", paddingLeft: "10px"}}
                     >
                         <p className="player-song-info-title">
                             {songTitleLabel}
@@ -312,7 +323,7 @@ function MusicPlayer(props: any): JSX.Element {
                 <div className="player-controls col-md-6 col-5">
                     <div className="player-controls-buttons">
                         <button
-                            style={{ color: color1 }}
+                            style={{color: color1}}
                             className="player-controls-button-toggle d-md-inline-block d-none"
                             onClick={Shuffle}
                         >
@@ -341,9 +352,9 @@ function MusicPlayer(props: any): JSX.Element {
                         >
                             {isLoadingSong
                                 ? spinner
-                                : status === "PLAYING"
-                                ? pauseCircle
-                                : playCircle}
+                                : playStatus === "PLAYING"
+                                    ? pauseCircle
+                                    : playCircle}
                         </button>
                         <button
                             className="player-controls-button-misc d-md-inline-block d-none"
@@ -364,7 +375,7 @@ function MusicPlayer(props: any): JSX.Element {
                             {bars}
                         </button>
                         <button
-                            style={{ color: color2 }}
+                            style={{color: color2}}
                             className="player-controls-button-toggle d-md-inline-block d-none"
                             onClick={Loop}
                         >
@@ -404,7 +415,7 @@ function MusicPlayer(props: any): JSX.Element {
                 </div>
                 <div
                     className="player-misc-controls col-md-3 d-md-flex d-none"
-                    style={{ display: "flex", justifyContent: "flex-end" }}
+                    style={{display: "flex", justifyContent: "flex-end"}}
                 >
                     <button
                         className="player-controls-button-misc"
@@ -413,7 +424,7 @@ function MusicPlayer(props: any): JSX.Element {
                         {bars}
                     </button>
                     <div className="player-misc-controls-volume-slider-container">
-                        <VolumeBar setVolume={setVolume} />
+                        <VolumeBar setVolume={dispatch(setVolume)}/>
                     </div>
                     <p
                         style={{

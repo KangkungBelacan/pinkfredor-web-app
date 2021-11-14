@@ -1,14 +1,16 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Dropdown } from "react-bootstrap";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {Dropdown} from "react-bootstrap";
 import NowPlayingQueuePopUpRowProps from "../../../interface/components/MainApp/NowPlayingQueuePopUpRowProps";
-import MusicPlayerContext from "../../../context/MusicPlayerContext";
-import { Draggable } from "react-beautiful-dnd";
+import {Draggable} from "react-beautiful-dnd";
 import composeRefs from '@seznam/compose-react-refs'
+import {useAppSelector} from '../../../app/hooks';
+import {selectQueue, setQueue} from '../../../app/reducers/musicPlayerSlice';
+
 const NowPlayingQueuePopUpRow = React.forwardRef((props: NowPlayingQueuePopUpRowProps, rowRef: any) => {
-    const { queue, setQueue } = React.useContext(MusicPlayerContext);
+    const queue = useAppSelector(selectQueue);
     const CustomToggle = React.forwardRef(
-        ({ children, onClick }: any, ref: any) => (
+        ({children, onClick}: any, ref: any) => (
             <div
                 style={{
                     width: "100%",
@@ -24,7 +26,7 @@ const NowPlayingQueuePopUpRow = React.forwardRef((props: NowPlayingQueuePopUpRow
                 }}
             >
                 {children}
-                <FontAwesomeIcon icon="ellipsis-v" />
+                <FontAwesomeIcon icon="ellipsis-v"/>
             </div>
         )
     );
@@ -33,7 +35,7 @@ const NowPlayingQueuePopUpRow = React.forwardRef((props: NowPlayingQueuePopUpRow
     // Dropdown needs access to the DOM of the Menu to measure it
     const CustomMenu = React.forwardRef(
         (
-            { children, style, className, "aria-labelledby": labeledBy }: any,
+            {children, style, className, "aria-labelledby": labeledBy}: any,
             ref: any
         ) => {
             return (
@@ -43,7 +45,7 @@ const NowPlayingQueuePopUpRow = React.forwardRef((props: NowPlayingQueuePopUpRow
                     className={className + " bootstrap-drop-down-container"}
                     aria-labelledby={labeledBy}
                 >
-                    <ul className="list-unstyled" style={{ marginBottom: "0" }}>
+                    <ul className="list-unstyled" style={{marginBottom: "0"}}>
                         {children}
                     </ul>
                 </div>
@@ -89,7 +91,7 @@ const NowPlayingQueuePopUpRow = React.forwardRef((props: NowPlayingQueuePopUpRow
                     ref={composeRefs(rowRef, provided.innerRef)}
                 >
                     <div className="col-1 d-flex align-items-center now-playing-queue-grip">
-                        <FontAwesomeIcon icon="grip-vertical" />
+                        <FontAwesomeIcon icon="grip-vertical"/>
                     </div>
                     <div
                         className={
@@ -119,10 +121,10 @@ const NowPlayingQueuePopUpRow = React.forwardRef((props: NowPlayingQueuePopUpRow
                                 : "d-none"
                         }
                     >
-                        <FontAwesomeIcon icon="play" size="xs" />
+                        <FontAwesomeIcon icon="play" size="xs"/>
                     </div>
                     <Dropdown
-                        style={{ padding: "0" }}
+                        style={{padding: "0"}}
                         className="col-1 d-flex align-items-center now-playing-queue-ellipsis"
                     >
                         <Dropdown.Toggle

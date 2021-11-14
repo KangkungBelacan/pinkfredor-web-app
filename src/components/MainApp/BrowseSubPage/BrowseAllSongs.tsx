@@ -20,13 +20,25 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
-// import MusicPlayerContext from "../../context/MusicPlayerContext";
 import {MusicQueueItem} from "../../../interface/context/MusicQueueItem";
 import CustomTable from "../CustomTable/CustomTable";
 import axios from "axios";
-import PlaylistContext from "../../../context/PlaylistContext";
-import MusicPlayerContext from "../../../context/MusicPlayerContext";
 import TableItem from "../CustomTable/TableItem";
+import {useAppDispatch, useAppSelector} from '../../../app/hooks';
+import {
+    selectNowPlayingURL,
+    selectPlaylistError,
+    selectPlaylistLoading,
+    selectPlaylistsData,
+    selectPlayStatus,
+    selectQueue,
+    setNowPlayingURL,
+    setPlaylistsData,
+    setPlayStatus,
+    setQueue,
+    setSongArtistLabel,
+    setSongTitleLabel
+} from '../../../app/reducers/musicPlayerSlice';
 
 const tableIcons: Icons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref}/>),
@@ -58,21 +70,14 @@ interface Element {
 }
 
 const BrowseAllSongs = (props: any) => {
-    const {
-        setStatus,
-        nowPlayingURL,
-        setNowPlayingURL,
-        queue,
-        setQueue,
-        setSongTitleLabel,
-        setSongArtistLabel,
-    } = React.useContext(MusicPlayerContext);
-    const song_columns = [
-        {title: "file_id", field: "id", hidden: true},
-        {title: "Title", field: "file_metadata.song_title"},
-        {title: "Artist", field: "file_metadata.song_artist"},
-        {title: "Album", field: "file_metadata.song_album"},
-    ];
+    const playStatus = useAppSelector(selectPlayStatus);
+    const nowPlayingURL = useAppSelector(selectNowPlayingURL);
+    const playlistsData = useAppSelector(selectPlaylistsData);
+    const playlistLoading = useAppSelector(selectPlaylistLoading);
+    const playlistError = useAppSelector(selectPlaylistError);
+    const queue = useAppSelector(selectQueue);
+
+    const dispatch = useAppDispatch();
 
     const [tableItems, setTableItems] = useState<any>([]);
     const [topBarSelection, setTopBar] = useState(0);
@@ -80,8 +85,6 @@ const BrowseAllSongs = (props: any) => {
     const [artistsDataState, setArtistsDataState] = useState<any>([]);
     const [albumDataState, setAlbumDataState] = useState<any>([]);
     const [pageLoading, setPageLoading] = useState(true);
-    const {playlistData, playlistLoading, playlistErr, playlistRefetch} =
-        React.useContext(PlaylistContext);
 
     const [
         {
@@ -120,6 +123,17 @@ const BrowseAllSongs = (props: any) => {
         },
     });
 
+    const [
+        {data: _playlistsData, loading: _playlistsLoading, error: _playlistsError},
+        playlistsRefetch,
+    ] = useAxios({
+        url: "/api/indexes/playlists",
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${localStorage.token}`,
+        },
+    });
+
     const Play = (songData: any) => {
         let new_queue: Array<MusicQueueItem> = [];
         let indexFilesDataKeys = Object.keys(indexFilesData.files);
@@ -135,12 +149,12 @@ const BrowseAllSongs = (props: any) => {
         }
         setQueue(new_queue);
         setNowPlayingURL(
-            `/api/driveapi/files/download?token=${localStorage.token}&fileid=${songData.id}`
+            songData.id
         );
         setSongTitleLabel(songData.file_metadata.song_title);
         setSongArtistLabel(songData.file_metadata.song_artist);
         // setSongAlbumArtURL("");
-        setStatus("PLAYING");
+        setPlayStatus("PLAYING");
 
         // console.log(rowData);
         // window.alert(
@@ -175,7 +189,6 @@ const BrowseAllSongs = (props: any) => {
             )
             .then((res) => {
                 console.log("Success"); // TODO: Add notification here
-                playlistRefetch();
             })
             .catch((err) => {
                 console.log(err);
@@ -287,6 +300,8 @@ const BrowseAllSongs = (props: any) => {
             artistsError ||
             albumLoading ||
             albumError ||
+            _playlistsLoading ||
+            _playlistsError ||
             !pageLoading
         )
             return;
@@ -315,6 +330,7 @@ const BrowseAllSongs = (props: any) => {
         setIndexFilesState(indexFiles);
         setArtistsDataState(artistsData.artists);
         setAlbumDataState(albumData.albums);
+        setPlaylistsData(_playlistsData);
         setPageLoading(false);
     }, [
         indexFilesData,
@@ -326,6 +342,9 @@ const BrowseAllSongs = (props: any) => {
         albumData,
         albumLoading,
         albumError,
+        _playlistsData,
+        _playlistsLoading,
+        _playlistsError,
         pageLoading,
     ]);
 

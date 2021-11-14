@@ -1,26 +1,22 @@
 import "./TableItem.css";
-import { ButtonGroup, Dropdown } from "react-bootstrap";
-import React, { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faCaretLeft,
-    faEllipsisH,
-    faPlay,
-    faPlus,
-} from "@fortawesome/free-solid-svg-icons";
-import PlaylistContext from "../../../context/PlaylistContext";
-import MusicPlayerContext from "../../../context/MusicPlayerContext";
+import {ButtonGroup, Dropdown} from "react-bootstrap";
+import React, {useEffect, useState} from "react";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCaretLeft, faEllipsisH, faPlay, faPlus,} from "@fortawesome/free-solid-svg-icons";
+import {useAppSelector} from '../../../app/hooks';
+import {selectNowPlayingURL, selectPlaylistsData,} from '../../../app/reducers/musicPlayerSlice';
 
-const ellipsisH = <FontAwesomeIcon icon={faEllipsisH} />;
-const play = <FontAwesomeIcon className={"icons-play"} icon={faPlay} />;
-const plus = <FontAwesomeIcon className={"icons-plus"} icon={faPlus} />;
+
+const ellipsisH = <FontAwesomeIcon icon={faEllipsisH}/>;
+const play = <FontAwesomeIcon className={"icons-play"} icon={faPlay}/>;
+const plus = <FontAwesomeIcon className={"icons-plus"} icon={faPlus}/>;
 const caretLeft = (
-    <FontAwesomeIcon className={"icons-caret-left"} icon={faCaretLeft} />
+    <FontAwesomeIcon className={"icons-caret-left"} icon={faCaretLeft}/>
 );
 
 const TableItem = (props: any) => {
-    const { nowPlayingURL } = React.useContext(MusicPlayerContext);
-    const { playlistData } = React.useContext(PlaylistContext);
+    const nowPlayingURL = useAppSelector(selectNowPlayingURL);
+    const playlistsData = useAppSelector(selectPlaylistsData);
     let songData = props.songData;
     let indexFilesState = props.indexFilesState;
 
@@ -66,10 +62,8 @@ const TableItem = (props: any) => {
         }
     }
 
-    const tableItemActions = React.forwardRef<
-        HTMLButtonElement,
-        React.PropsWithChildren<any>
-    >((props, ref: any) => (
+    const tableItemActions = React.forwardRef<HTMLButtonElement,
+        React.PropsWithChildren<any>>((props, ref: any) => (
         <a
             className={"table-item-actions"}
             href=""
@@ -83,10 +77,8 @@ const TableItem = (props: any) => {
         </a>
     ));
 
-    const playlistActions = React.forwardRef<
-        HTMLButtonElement,
-        React.PropsWithChildren<any>
-    >((props, ref: any) => (
+    const playlistActions = React.forwardRef<HTMLButtonElement,
+        React.PropsWithChildren<any>>((props, ref: any) => (
         <a
             className={"playlist-actions"}
             href=""
@@ -103,9 +95,10 @@ const TableItem = (props: any) => {
 
     // Use for loop to generate a list of dropdownPlaylistItems
     const GenerateDropdownPlaylistItems = () => {
+        if (playlistsData === null) return;
         let dropdownPlaylistItems: any[] = [];
-        let playlistDataKeys = Object.keys(playlistData.playlists);
-        let playlists = playlistData.playlists;
+        let playlistDataKeys = Object.keys(playlistsData.playlists);
+        let playlists = playlistsData.playlists;
         for (let i = 0; i < playlistDataKeys.length; i++) {
             let playlistID = playlistDataKeys[i];
             dropdownPlaylistItems.push(
@@ -123,9 +116,9 @@ const TableItem = (props: any) => {
     };
 
     useEffect(() => {
-        if (playlistData === undefined) return;
+        if (playlistsData === undefined) return;
         setDropdownPlaylistItems(GenerateDropdownPlaylistItems());
-    }, [playlistData]);
+    }, [playlistsData]);
 
     return (
         <div
@@ -148,7 +141,7 @@ const TableItem = (props: any) => {
             </div>
             <div
                 className={"table-item-container-image"}
-                style={{ backgroundColor: props.imageColor }}
+                style={{backgroundColor: props.imageColor}}
             >
                 <div
                     className={

@@ -3,25 +3,34 @@ import "./SideNavBar.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import Profile from "./../../images/pfp.png";
 import jwt_decode from "jwt-decode";
-import PlaylistContext from "../../context/PlaylistContext";
 import React, {useEffect, useState} from "react";
+import {useAppSelector} from '../../app/hooks';
+import {selectPlaylistError, selectPlaylistLoading, selectPlaylistsData} from '../../app/reducers/musicPlayerSlice';
 
 function SideNavBar(props: any): JSX.Element {
+    const playlistData = useAppSelector(selectPlaylistsData);
+    const playlistLoading = useAppSelector(selectPlaylistLoading);
+    const playlistError = useAppSelector(selectPlaylistError);
+
     const current_path = useLocation().pathname;
     const jwt_payload = jwt_decode(localStorage.getItem("token") as string);
-    const {playlistData, playlistLoading, playlistErr} =
-        React.useContext(PlaylistContext);
+
     const [playlistListing, setPlaylistListing] = useState<any>([]);
     useEffect(() => {
+        if (playlistData === null || playlistData === undefined) {
+            return;
+        }
+
         if (playlistLoading) {
             return;
         }
 
-        if (playlistErr && playlistErr?.code !== "200") {
+        if (playlistError) {
             return;
         }
 
         let playlists = Object.values(playlistData.playlists);
+        console.log(playlistData);
         // Sort playlist by date_added in decending order
         playlists.sort((x, y) => {
             return (y as any).date_added - (x as any).date_added;
@@ -33,27 +42,27 @@ function SideNavBar(props: any): JSX.Element {
             _playlistListing.push(
                 <li key={(pl as any).playlistid}>
                     <Link
-                            to={`/app/playlist/${(pl as any).playlistid}`}
-                            style={{textDecoration: "none", color: "inherit"}}
+                        to={`/app/playlist/${(pl as any).playlistid}`}
+                        style={{textDecoration: "none", color: "inherit"}}
+                    >
+                        <div
+                            className={
+                                current_path.startsWith(`/app/playlist/${(pl as any).playlistid}`)
+                                    ? "item-container selected"
+                                    : "item-container"
+                            }
                         >
-                            <div
-                                className={
-                                    current_path.startsWith(`/app/playlist/${(pl as any).playlistid}`)
-                                        ? "item-container selected"
-                                        : "item-container"
-                                }
-                            >
                                 <span className="item-container-text">
                                 {(pl as any).playlist_name}
                                 </span>
-                            </div>
-                        </Link>
+                        </div>
+                    </Link>
                 </li>
             );
         }
 
         setPlaylistListing(_playlistListing);
-    }, [playlistLoading, current_path]);
+    }, [playlistData, current_path]);
     return (
         <div
             className={props.className ? props.className + " sidebar-container" : "sidebar-container"}

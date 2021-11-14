@@ -4,14 +4,16 @@ import ModalHeader from "react-bootstrap/ModalHeader";
 import ModalFooter from "react-bootstrap/ModalFooter";
 import ModalTitle from "react-bootstrap/ModalTitle";
 import "./NowPlayingQueuePopUp.css";
-import MusicPlayerContext from "../../../context/MusicPlayerContext";
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import NowPlayingQueuePopUpRow from "./NowPlayingQueuePopUpRow";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { useEffect } from "react";
+import {DragDropContext, Droppable} from "react-beautiful-dnd";
 import composeRefs from "@seznam/compose-react-refs";
+import {useAppSelector} from '../../../app/hooks';
+import {selectQueue, setQueue,} from '../../../app/reducers/musicPlayerSlice';
+
 const NowPlayingQueuePopUp = (props: any) => {
-    const { queue, setQueue } = React.useContext(MusicPlayerContext);
+    const queue = useAppSelector(selectQueue);
+
     const [nowPlayingCounter, setNowPlayingCounter] = useState("");
     const nowPlayingItemRef = React.useRef<HTMLDivElement>(null);
     const nowPlayingQueueContainerRef = React.useRef<HTMLDivElement>(null);
@@ -83,14 +85,14 @@ const NowPlayingQueuePopUp = (props: any) => {
                 <ModalTitle>Now Playing {nowPlayingCounter}</ModalTitle>
             </ModalHeader>
             <ModalBody
-                style={{ color: "white", backgroundColor: "rgb(18,18,18)" }}
+                style={{color: "white", backgroundColor: "rgb(18,18,18)"}}
             >
                 <DragDropContext onDragEnd={onDragEnd}>
                     <Droppable droppableId={"queue_container_droppable"}>
                         {(provided: any) => (
                             <div
                                 className="container-fluid now-playing-queue-container"
-                                style={{ overflow: "auto", height: "50vh" }}
+                                style={{overflow: "auto", height: "50vh"}}
                                 ref={composeRefs(provided.innerRef, nowPlayingQueueContainerRef)}
                                 {...provided.droppableProps}
                             >
