@@ -4,37 +4,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Profile from "./../../images/pfp.png";
 import jwt_decode from "jwt-decode";
 import React, { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import {
-    playlistStatusSelector,
-    playlistDataSelector,
-    playlistErrorSelector,
-    fetchPlaylist,
-} from "../../app/reducers/playlistSlice";
+import usePlaylistData from "../../custom-hooks/usePlaylistData";
 
 function SideNavBar(props: any): JSX.Element {
-    const playlistData = useAppSelector(playlistDataSelector);
-    const playlistStatus = useAppSelector(playlistStatusSelector);
-    const playlistError = useAppSelector(playlistErrorSelector);
-    const dispatch = useAppDispatch();
+    const [playlistData, playlistStatus] = usePlaylistData();
 
     const current_path = useLocation().pathname;
     const jwt_payload = jwt_decode(localStorage.getItem("token") as string);
 
     const [playlistListing, setPlaylistListing] = useState<any>([]);
     useEffect(() => {
-        if(playlistStatus === "idle") {
-            dispatch(fetchPlaylist())
+        if (playlistStatus !== "succeeded") {
             return;
-        }
-
-        if(playlistStatus === "loading") {
-            return;
-        }
-
-        if(playlistStatus === "failed") {
-            console.error(playlistError)
-            return
         }
 
         let playlists = Object.values(playlistData.playlists);
