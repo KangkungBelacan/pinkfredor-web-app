@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {RootState} from '../../app/store';
+import {RootState} from '../store';
 import {ReactSoundProps} from "react-sound";
 import {MusicQueueItem} from "../../interface/context/MusicQueueItem";
 
@@ -36,7 +36,7 @@ const initialState: MusicPlayerState = {
 };
 
 // The function below is called a thunk and allows us to perform async logic. It
-// can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
+// can be dispatched like a regular customAction: `dispatch(incrementAsync(10))`. This
 // will call the thunk with the `dispatch` function as the first argument. Async
 // code can then be executed and other actions can be dispatched. Thunks are
 // typically used to make async requests.
@@ -73,7 +73,7 @@ export const musicPlayerSlice = createSlice({
         setNowPlayingURL: (state, action: PayloadAction<string>) => {
             state.nowPlayingURL = `/api/driveapi/files/download?token=${localStorage.token}&fileid=${action.payload}`;
         },
-        // Use the PayloadAction type to declare the contents of `action.payload`
+        // Use the PayloadAction type to declare the contents of `customAction.payload`
         setVolume: (state, action: PayloadAction<number>) => {
             state.volume = action.payload;
         },

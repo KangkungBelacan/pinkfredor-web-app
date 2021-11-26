@@ -21,12 +21,10 @@ import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 // import MusicPlayerContext from "../../context/MusicPlayerContext";
-import {MusicQueueItem} from "../../../interface/context/MusicQueueItem";
 import CustomTable from "../CustomTable/CustomTable";
-import axios from "axios";
+import ExampleSongActions from "../CustomTable/ExampleSongActions";
 import PlaylistContext from "../../../context/PlaylistContext";
 import MusicPlayerContext from "../../../context/MusicPlayerContext";
-import TableItem from "../CustomTable/TableItem";
 
 const tableIcons: Icons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref}/>),
@@ -120,165 +118,6 @@ const BrowseAllSongs = (props: any) => {
         },
     });
 
-    const Play = (songData: any) => {
-        let new_queue: Array<MusicQueueItem> = [];
-        let indexFilesDataKeys = Object.keys(indexFilesData.files);
-        // Set queue to all songs in view
-        for (let i = 0; i < indexFilesDataKeys.length; i++) {
-            new_queue.push({
-                item_id: "queue_item_" + indexFilesData.files[indexFilesDataKeys[i]].id,
-                current: indexFilesData.files[indexFilesDataKeys[i]].id === songData.id ? true : false,
-                playingURL: `/api/driveapi/files/download?token=${localStorage.token}&fileid=${indexFilesData.files[indexFilesDataKeys[i]].id}`,
-                song_title: indexFilesData.files[indexFilesDataKeys[i]].file_metadata.song_title,
-                song_artist: indexFilesData.files[indexFilesDataKeys[i]].file_metadata.song_artist,
-            });
-        }
-        setQueue(new_queue);
-        setNowPlayingURL(
-            `/api/driveapi/files/download?token=${localStorage.token}&fileid=${songData.id}`
-        );
-        setSongTitleLabel(songData.file_metadata.song_title);
-        setSongArtistLabel(songData.file_metadata.song_artist);
-        // setSongAlbumArtURL("");
-        setStatus("PLAYING");
-
-        // console.log(rowData);
-        // window.alert(
-        //     "You clicked on " +
-        //         (rowData as any).title +
-        //         " Action: " +
-        //         event.currentTarget.id
-        // );
-    };
-
-    // Use axios.post to make a POST request to the server to create a new playlist at the endpoint /api/indexes/playlists while passing in bearer token
-    const CreateNewPlaylist = (songData: any, newPlaylistName: string) => {
-        axios
-            .post(
-                `/api/indexes/playlists`,
-                {
-                    playlists: [
-                        {
-                            playlistid: "",
-                            playlist_name: newPlaylistName,
-                            playlist_tracks: [songData.id],
-                        },
-                    ],
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem(
-                            "token"
-                        )}`,
-                    },
-                }
-            )
-            .then((res) => {
-                console.log("Success"); // TODO: Add notification here
-                playlistRefetch();
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
-
-    const AddToPlaylist = (songData: any, playlistName: string) => {
-        // new Promise((resolve, reject) => {
-        //     let payload: any = {
-        //         album_name: newData.albumName,
-        //         year_released: newData.yearReleased,
-        //     };
-        //
-        //     if (newData.albumArtist !== undefined) {
-        //         payload.artistid = newData.albumArtist;
-        //     }
-        //
-        //     axios({
-        //         url: `/api/indexes/albums/${oldData.album_id}`,
-        //         method: "PUT",
-        //         headers: {
-        //             Authorization: `Bearer ${localStorage.token}`,
-        //         },
-        //         data: payload,
-        //     })
-        //         .then((response: any) => {
-        //             const dataUpdate = [...t_data];
-        //             const index = oldData.tableData.id;
-        //             dataUpdate[index] = newData;
-        //             set_t_data([...dataUpdate]);
-        //             resolve(true);
-        //         })
-        //         .catch((error: any) => {
-        //             console.error(error);
-        //             reject();
-        //         });
-        // })
-    };
-
-    const PlayNext = (songData: any) => {
-        // Get current playing song ID from playing url
-        let currentPlayingSongID = nowPlayingURL.split("&fileid=")[1];
-        // Get index of currently playing song
-        let currentPlayingSongIndex = queue.findIndex(
-            (song: any) =>
-                song.playingURL.split("&fileid=")[1] === currentPlayingSongID
-        );
-        if (currentPlayingSongIndex === -1) {
-            // TODO: Use notification toast to tell the user that there are currently no playing songs
-            return;
-        }
-        let newSongItem = {
-            item_id: "queue_item_" + songData.id + Date.now().toString(),
-            current: false,
-            playingURL: `/api/driveapi/files/download?token=${localStorage.token}&fileid=${songData.id}`,
-            song_title: songData.file_metadata.song_title,
-            song_artist: songData.file_metadata.song_artist,
-        };
-        let newQueue = queue;
-        newQueue.splice(currentPlayingSongIndex + 1, 0, newSongItem);
-        setQueue(newQueue);
-    };
-
-    const AddToQ = (songData: any) => {
-        setQueue([
-            ...queue,
-            {
-                item_id: "queue_item_" + songData.id + Date.now().toString(),
-                current: false,
-                playingURL: `/api/driveapi/files/download?token=${localStorage.token}&fileid=${songData.id}`,
-                song_title: songData.file_metadata.song_title,
-                song_artist: songData.file_metadata.song_artist,
-            },
-        ]);
-    };
-
-    const songActions = (
-        songData: any,
-        action: string,
-        playlistName: string
-    ) => {
-        // const possibleAction = ["AddToQ", "PlayNext", "AddToPlaylist", "Play"];
-        if (playlistName === undefined) playlistName = "";
-
-        switch (action) {
-            case "AddToQ":
-                AddToQ(songData);
-                break;
-            case "PlayNext":
-                PlayNext(songData);
-                break;
-            case "CreateNewPlaylist":
-                CreateNewPlaylist(songData, playlistName);
-                break;
-            case "AddToPlaylist":
-                AddToPlaylist(songData, playlistName);
-                break;
-            case "Play":
-                Play(songData);
-                break;
-        }
-    };
-
     useEffect(() => {
         if (
             indexFilesLoading ||
@@ -292,26 +131,6 @@ const BrowseAllSongs = (props: any) => {
             return;
 
         let indexFiles = Object.values(indexFilesData.files);
-
-        let _tbl_items = [];
-        for (let i = 0; i < indexFiles.length; i++) {
-            _tbl_items.push(
-                <TableItem
-                    key={i}
-                    position={i + 1}
-                    songData={indexFiles[i]}
-                    artistsDataState={artistsData.artists}
-                    albumDataState={albumData.albums}
-                    songActions={songActions}
-                    imageColor={
-                        "#" + ((Math.random() * 0xffffff) << 0).toString(16)
-                    }
-                    nowPlayingURL={nowPlayingURL}
-                    indexFilesState={indexFiles}
-                />
-            );
-        }
-        setTableItems(_tbl_items);
         setIndexFilesState(indexFiles);
         setArtistsDataState(artistsData.artists);
         setAlbumDataState(albumData.albums);
@@ -332,86 +151,16 @@ const BrowseAllSongs = (props: any) => {
     return (
         <div>
             {indexFilesState.length !== 0 ? (
-                <CustomTable>
-                    {tableItems}
-                </CustomTable>
+                <CustomTable songs={indexFilesState}
+                             artists={artistsDataState}
+                             albums={albumDataState}
+                             customAction={<ExampleSongActions/>}
+                />
             ) : (
                 <div style={{color: "white"}}>
                     Loading... (change this shit later)
                 </div>
             )}
-            {/*<MaterialTable*/}
-            {/*    icons={tableIcons}*/}
-            {/*    columns={song_columns}*/}
-            {/*    data={indexFilesState}*/}
-            {/*    title="All Songs"*/}
-            {/*    actions={[*/}
-            {/*        {*/}
-            {/*            icon: MoreVert,*/}
-            {/*            tooltip: "More Options",*/}
-            {/*            onClick: matTableActionOnClick,*/}
-            {/*        },*/}
-            {/*    ]}*/}
-            {/*    components={{*/}
-            {/*        Action: (props) => (*/}
-            {/*            <Dropdown*/}
-            {/*                as={ButtonGroup}*/}
-            {/*                onClick={(evt: any) => {*/}
-            {/*                    evt.stopPropagation();*/}
-            {/*                }}*/}
-            {/*            >*/}
-            {/*                <Button*/}
-            {/*                    id="Play"*/}
-            {/*                    onClick={(event) =>*/}
-            {/*                        props.action.onClick(event, props.data)*/}
-            {/*                    }*/}
-            {/*                    variant="success"*/}
-            {/*                >*/}
-            {/*                    Play*/}
-            {/*                </Button>*/}
-
-            {/*                <Dropdown.Toggle*/}
-            {/*                    split*/}
-            {/*                    variant="success"*/}
-            {/*                    id="dropdown-split-basic"*/}
-            {/*                />*/}
-
-            {/*                <Dropdown.Menu>*/}
-            {/*                    <Dropdown.Item*/}
-            {/*                        id="AddToQ"*/}
-            {/*                        onClick={(event) =>*/}
-            {/*                            props.action.onClick(event, props.data)*/}
-            {/*                        }*/}
-            {/*                    >*/}
-            {/*                        Add to queue*/}
-            {/*                    </Dropdown.Item>*/}
-            {/*                    <Dropdown.Item*/}
-            {/*                        id="PlayNext"*/}
-            {/*                        onClick={(event) =>*/}
-            {/*                            props.action.onClick(event, props.data)*/}
-            {/*                        }*/}
-            {/*                    >*/}
-            {/*                        Play next*/}
-            {/*                    </Dropdown.Item>*/}
-            {/*                    <Dropdown.Item*/}
-            {/*                        id="AddToPlaylist"*/}
-            {/*                        onClick={(event) =>*/}
-            {/*                            props.action.onClick(event, props.data)*/}
-            {/*                        }*/}
-            {/*                    >*/}
-            {/*                        Add to playlist*/}
-            {/*                    </Dropdown.Item>*/}
-            {/*                </Dropdown.Menu>*/}
-            {/*            </Dropdown>*/}
-            {/*        ),*/}
-            {/*    // }}*/}
-            {/*    options={{*/}
-            {/*        actionsColumnIndex: -1,*/}
-            {/*    }}*/}
-            {/*    onRowClick={(e, rowData) => {*/}
-            {/*        Play(e, rowData);*/}
-            {/*    }}*/}
-            {/*/>*/}
         </div>
     );
 };
