@@ -4,11 +4,18 @@ import MaterialTable from "material-table";
 import TABLE_ICONS from "../../components/generic/MaterialTableIcons";
 import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useAxiosPOST } from "../../global-imports";
 import useAxios from "axios-hooks";
 import useUnindexedDriveFiles from "../../custom-hooks/useUnindexedDriveFiles";
+import { useAppDispatch } from "../../app/hooks";
+import {
+    setNowPlayingURL,
+    setSongTitleLabel,
+    setSongArtistLabel,
+    setPlayStatus,
+} from "../../app/reducers/musicPlayerSlice";
 // import MusicPlayerContext from "../../context/MusicPlayerContext";
 const LinkGDrive = () => {
+    const dispatch = useAppDispatch();
     const tableRef = useRef<any>();
     const [statusText, setStatusText] = useState<string>("");
     const [driveLinkState, setDriveLinkState] = useState<
@@ -174,8 +181,8 @@ const LinkGDrive = () => {
             selectedRows = getSelectedRowsData();
         }
 
-        if(selectedRows.length === 0) {
-            alert("There is no files to load")
+        if (selectedRows.length === 0) {
+            alert("There is no files to load");
             return;
         }
 
@@ -204,7 +211,7 @@ const LinkGDrive = () => {
         let _t_data = [...t_data];
         _t_data = _t_data.filter((e: any) => !fileid.includes(e.id));
         set_t_data(_t_data);
-        alert(`Successfully loaded ${selectedRows.length} file(s)`)
+        alert(`Successfully loaded ${selectedRows.length} file(s)`);
     };
 
     return (
@@ -315,17 +322,27 @@ const LinkGDrive = () => {
                         variant={isLoadingFiles ? "secondary" : "success"}
                         onClick={() => {
                             if (isLoadingFiles) return;
-                            setIsLoadingFiles(true)
+                            setIsLoadingFiles(true);
                             setLoadAllText("Loading");
                             loadFilesOnClick(true).then((_) => {
                                 setLoadAllText("Load All");
-                                setIsLoadingFiles(false)
+                                setIsLoadingFiles(false);
                             });
                         }}
                     >
                         <FontAwesomeIcon
-                            icon={loadAllText === "Loading" ? "spinner" : "angle-double-down"}
-                            style={{ marginRight: "5px", animation: loadAllText === "Loading" ? "spin 1s linear infinite" : "none" }}
+                            icon={
+                                loadAllText === "Loading"
+                                    ? "spinner"
+                                    : "angle-double-down"
+                            }
+                            style={{
+                                marginRight: "5px",
+                                animation:
+                                    loadAllText === "Loading"
+                                        ? "spin 1s linear infinite"
+                                        : "none",
+                            }}
                         />
                         {loadAllText}
                     </Button>
@@ -334,17 +351,25 @@ const LinkGDrive = () => {
                         style={{ marginLeft: "10px" }}
                         onClick={() => {
                             if (isLoadingFiles) return;
-                            setIsLoadingFiles(true)
+                            setIsLoadingFiles(true);
                             setLoadText("Loading");
                             loadFilesOnClick(false).then((_) => {
                                 setLoadText("Load");
-                                setIsLoadingFiles(false)
+                                setIsLoadingFiles(false);
                             });
                         }}
                     >
                         <FontAwesomeIcon
-                            icon={loadText === "Loading" ? "spinner" : "download"}
-                            style={{ marginRight: "5px", animation: loadText === "Loading" ? "spin 1s linear infinite" : "none" }}
+                            icon={
+                                loadText === "Loading" ? "spinner" : "download"
+                            }
+                            style={{
+                                marginRight: "5px",
+                                animation:
+                                    loadText === "Loading"
+                                        ? "spin 1s linear infinite"
+                                        : "none",
+                            }}
                         />
                         {loadText}
                     </Button>
@@ -408,18 +433,26 @@ const LinkGDrive = () => {
                                         //         "token"
                                         //     )}&fileid=${(rowData as any).id}`
                                         // );
-                                        // setNowPlayingURL(
-                                        //     `/api/driveapi/files/download?token=${localStorage.getItem(
-                                        //         "token"
-                                        //     )}&fileid=${(rowData as any).id}`
-                                        // );
-                                        // setSongTitleLabel(
-                                        //     (rowData as any).filename
-                                        // );
-                                        // setSongArtistLabel(
-                                        //     (rowData as any).path
-                                        // );
-                                        // setStatus("PLAYING");
+                                        dispatch(
+                                            setNowPlayingURL(
+                                                `/api/driveapi/files/download?token=${localStorage.getItem(
+                                                    "token"
+                                                )}&fileid=${
+                                                    (rowData as any).id
+                                                }`
+                                            )
+                                        );
+                                        dispatch(
+                                            setSongTitleLabel(
+                                                (rowData as any).filename
+                                            )
+                                        );
+                                        dispatch(
+                                            setSongArtistLabel(
+                                                (rowData as any).path
+                                            )
+                                        );
+                                        dispatch(setPlayStatus("PLAYING"));
                                     },
                                 },
                             ]}

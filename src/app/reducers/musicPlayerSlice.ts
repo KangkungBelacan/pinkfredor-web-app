@@ -45,7 +45,7 @@ export const musicPlayerSlice = createSlice({
             state.playStatus = action.payload;
         },
         setNowPlayingURL: (state, action: PayloadAction<string>) => {
-            state.nowPlayingURL = `/api/driveapi/files/download?token=${localStorage.token}&fileid=${action.payload}`;
+            state.nowPlayingURL = action.payload;
         },
         // Use the PayloadAction type to declare the contents of `action.payload`
         setVolume: (state, action: PayloadAction<number>) => {

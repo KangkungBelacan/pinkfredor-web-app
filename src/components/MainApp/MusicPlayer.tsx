@@ -68,7 +68,6 @@ function MusicPlayer(props: any): JSX.Element {
     const isLoadingSong = useAppSelector(selectIsLoadingSong);
     const playStatus = useAppSelector(selectPlayStatus);
     const nowPlayingURL = useAppSelector(selectNowPlayingURL);
-    const queue = useAppSelector(selectQueue);
     const volume = useAppSelector(selectVolume);
     const songAlbumArtURL = useAppSelector(selectSongAlbumArtURL);
     const songTitleLabel = useAppSelector(selectSongTitleLabel);
@@ -164,7 +163,7 @@ function MusicPlayer(props: any): JSX.Element {
                     setProgressSlidermax(Math.round(args.duration / 1000));
                 }}
                 onLoad={() => {
-                    setIsLoadingSong(false);
+                    dispatch(setIsLoadingSong(false));
                 }}
                 onPlaying={(args?: any) => {
                     // console.log(args);
