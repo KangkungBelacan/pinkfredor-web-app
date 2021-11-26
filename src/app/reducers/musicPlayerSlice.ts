@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import { ReactSoundProps } from "react-sound";
 import { MusicQueueItem } from "../../interface/context/MusicQueueItem";
-
+import example_song_cover from "../../images/example-song-cover.png"
 export interface MusicPlayerState {
     playStatus: ReactSoundProps["playStatus"];
     nowPlayingURL: string;
@@ -23,7 +23,7 @@ const initialState: MusicPlayerState = {
     queue: [],
     songTitleLabel: "",
     songArtistLabel: "",
-    songAlbumArtURL: "",
+    songAlbumArtURL: example_song_cover,
     isLoadingSong: false,
     isLoop: true,
     isShuffle: true
