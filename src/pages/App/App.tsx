@@ -1,24 +1,24 @@
 import * as MainAppComponent from "./../../components/MainApp";
 import "./App.css";
 import example_song_cover from "./../../images/example-song-cover.png";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import * as AppSubPage from "./index";
-import {Route} from "react-router";
-import {useMediaQuery} from "react-responsive";
-import {ReactSoundProps} from "react-sound";
-import {MusicQueueItem} from "../../interface/context/MusicQueueItem";
-import {Redirect, useHistory} from "react-router-dom";
+import { Route } from "react-router";
+import { useMediaQuery } from "react-responsive";
+import { ReactSoundProps } from "react-sound";
+import { MusicQueueItem } from "../../interface/context/MusicQueueItem";
+import { Redirect, useHistory } from "react-router-dom";
 import useAxios from "axios-hooks";
-import {store} from '../../app/store';
-import {Provider} from 'react-redux';
+import { store } from "../../app/store";
+import { Provider } from "react-redux";
 import MusicPlayerContext from "../../context/MusicPlayerContext";
 import PlaylistContext from "../../context/PlaylistContext";
-
+import placeholderBG from "../../images/placeholder-bg.jpg";
 
 function App() {
     const history = useHistory();
     const [showNavBar, setNavBarDisplay] = useState(false);
-    const isMobile = useMediaQuery({query: "(max-width: 768px)"});
+    const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
     // ======================================
     // Default Music Player Context Values
@@ -49,7 +49,7 @@ function App() {
         useState<any>(example_song_cover);
     const [isLoadingSong, setIsLoadingSong] = useState(false);
     const [
-        {data: playlistData, loading: playlistLoading, error: playlistErr},
+        { data: playlistData, loading: playlistLoading, error: playlistErr },
         playlistRefetch,
     ] = useAxios(
         {
@@ -59,7 +59,7 @@ function App() {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
         },
-        {useCache: false}
+        { useCache: false }
     );
     const ContextValues = {
         status,
@@ -114,7 +114,7 @@ function App() {
                         <div
                             className="mainapp-grid-container max-height"
                             style={{
-                                backgroundImage: "url(/placeholder-bg.jpg)",
+                                backgroundImage: `url(${placeholderBG})`,
                             }}
                         >
                             <MainAppComponent.SideNavBar
@@ -128,11 +128,11 @@ function App() {
                                 <Route
                                     path="/app"
                                     exact
-                                    render={() => <Redirect to="/app/browse"/>}
+                                    render={() => <Redirect to="/app/browse" />}
                                 />
                                 <Route
                                     path="/app/browse"
-                                    render={() => <MainAppComponent.Browse/>}
+                                    render={() => <MainAppComponent.Browse />}
                                 />
                                 <Route
                                     path="/app/user"
@@ -149,7 +149,7 @@ function App() {
                                 <Route
                                     path="/app/organize"
                                     render={() => (
-                                        <AppSubPage.Organizer className="mainapp-content-container"/>
+                                        <AppSubPage.Organizer className="mainapp-content-container" />
                                     )}
                                 />
                                 <Route
