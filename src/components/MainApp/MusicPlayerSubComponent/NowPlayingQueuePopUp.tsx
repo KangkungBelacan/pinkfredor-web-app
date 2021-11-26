@@ -103,9 +103,6 @@ const NowPlayingQueuePopUp = (props: any) => {
                                                 key={`queue-item-${cur.item_id}`}
                                                 ref={nowPlayingItemRef}
                                                 item_id={cur.item_id}
-                                                parent_controls={
-                                                    props.parent_controls
-                                                }
                                                 playingURL={cur.playingURL}
                                                 song_title={cur.song_title}
                                                 song_artist={cur.song_artist}
@@ -119,9 +116,6 @@ const NowPlayingQueuePopUp = (props: any) => {
                                             key={`queue-item-${cur.item_id}`}
                                             ref={null}
                                             item_id={cur.item_id}
-                                            parent_controls={
-                                                props.parent_controls
-                                            }
                                             playingURL={cur.playingURL}
                                             song_title={cur.song_title}
                                             song_artist={cur.song_artist}

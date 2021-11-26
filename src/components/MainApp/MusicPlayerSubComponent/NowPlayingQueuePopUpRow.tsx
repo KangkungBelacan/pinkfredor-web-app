@@ -4,9 +4,13 @@ import {Dropdown} from "react-bootstrap";
 import NowPlayingQueuePopUpRowProps from "../../../interface/components/MainApp/NowPlayingQueuePopUpRowProps";
 import {Draggable} from "react-beautiful-dnd";
 import composeRefs from '@seznam/compose-react-refs'
-import {useAppSelector} from '../../../app/hooks';
+import {useAppDispatch, useAppSelector} from '../../../app/hooks';
 import {selectQueue, setQueue} from '../../../app/reducers/musicPlayerSlice';
-
+import {
+    stop_song,
+    next_song,
+    change_song_in_queue
+} from "../../../app/reducers/musicPlayerSlice"
 const NowPlayingQueuePopUpRow = React.forwardRef((props: NowPlayingQueuePopUpRowProps, rowRef: any) => {
     const queue = useAppSelector(selectQueue);
     const CustomToggle = React.forwardRef(
@@ -30,6 +34,7 @@ const NowPlayingQueuePopUpRow = React.forwardRef((props: NowPlayingQueuePopUpRow
             </div>
         )
     );
+    const dispatch = useAppDispatch()
 
     // forwardRef again here!
     // Dropdown needs access to the DOM of the Menu to measure it
@@ -55,7 +60,7 @@ const NowPlayingQueuePopUpRow = React.forwardRef((props: NowPlayingQueuePopUpRow
 
     const change_song = () => {
         if (!props.is_playing) {
-            props.parent_controls.change_song_in_queue(props.item_id);
+            dispatch(change_song_in_queue(props.item_id))
         }
     };
 
@@ -66,9 +71,12 @@ const NowPlayingQueuePopUpRow = React.forwardRef((props: NowPlayingQueuePopUpRow
                     if (item.current) {
                         if (queue.length === 1) {
                             // Stop operation
-                            props.parent_controls.stop_song();
+                            // props.parent_controls.stop_song();
+                            dispatch(stop_song())
+                            
                         } else {
-                            props.parent_controls.next_song();
+                            // props.parent_controls.next_song();
+                            dispatch(next_song())
                         }
                     }
                 }

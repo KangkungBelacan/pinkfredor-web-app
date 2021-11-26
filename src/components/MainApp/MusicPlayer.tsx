@@ -19,6 +19,8 @@ import NowPlayingQueuePopUp from "./MusicPlayerSubComponent/NowPlayingQueuePopUp
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {
     selectIsLoadingSong,
+    selectIsLoop,
+    selectIsShuffle,
     selectNowPlayingURL,
     selectPlayStatus,
     selectQueue,
@@ -27,12 +29,13 @@ import {
     selectSongTitleLabel,
     selectVolume,
     setIsLoadingSong,
-    setNowPlayingURL,
-    setPlayStatus,
-    setQueue,
-    setSongArtistLabel,
-    setSongTitleLabel,
-    setVolume
+    setIsShuffle,
+    setIsLoop,
+    setVolume,
+    stop_song,
+    prev_song,
+    next_song,
+    toggle_play
 } from '../../app/reducers/musicPlayerSlice';
 
 const stepBackward = <FontAwesomeIcon icon={faStepBackward}/>;
@@ -58,9 +61,6 @@ function MusicPlayer(props: any): JSX.Element {
     const [progressSlidermin] = useState(0);
     const [progressSlidermax, setProgressSlidermax] = useState(1);
     const [isDraggingProgressBar, setisDraggingProgressBar] = useState(false);
-    const [isShuffle, setisShuffle] = useState(false);
-    const [isLoop, setisLoop] = useState(false);
-    const [loopTarget, setLoopTarget] = useState(0);
     const [progress, setProgress] = useState(0);
     const [color1, setColor1] = useState("rgb(164, 164, 164)");
     const [color2, setColor2] = useState("rgb(164, 164, 164)");
@@ -73,29 +73,10 @@ function MusicPlayer(props: any): JSX.Element {
     const songAlbumArtURL = useAppSelector(selectSongAlbumArtURL);
     const songTitleLabel = useAppSelector(selectSongTitleLabel);
     const songArtistLabel = useAppSelector(selectSongArtistLabel);
+    const isLoop = useAppSelector(selectIsLoop);
+    const isShuffle = useAppSelector(selectIsShuffle);
 
     const dispatch = useAppDispatch();
-
-    const play_song = () => {
-        if (isLoadingSong) {
-            return;
-        }
-        if (playStatus !== "PLAYING") {
-            if (nowPlayingURL === "") {
-                if (queue.length === 0) {
-                    return;
-                }
-                setNowPlayingURL(queue[0].playingURL);
-                setSongTitleLabel(queue[0].song_title);
-                setSongArtistLabel(queue[0].song_artist);
-                queue[0].current = true;
-                setQueue(queue);
-            }
-            dispatch(setPlayStatus("PLAYING"));
-            return;
-        }
-        dispatch(setPlayStatus("PAUSED"));
-    };
 
     const seek_back = () => {
         if (progress - 5 >= 0) {
@@ -117,103 +98,23 @@ function MusicPlayer(props: any): JSX.Element {
         setProgress(progressSlidermax);
     };
 
-    const prev_song = () => {
-        setCurPos(0);
-        setProgress(0);
-        setProgressSlidermax(1);
-        if (queue.length === 0) {
-            return;
-        }
-        let next_idx = queue.length - 1;
-        for (let i = queue.length - 1; i !== -1; i--) {
-            if (queue[i].current && i !== 0) {
-                next_idx = i - 1;
-            }
-            queue[i].current = false;
-        }
-        setNowPlayingURL(queue[next_idx].playingURL);
-        setSongTitleLabel(queue[next_idx].song_title);
-        setSongArtistLabel(queue[next_idx].song_artist);
-        queue[next_idx].current = true;
-        setQueue(queue);
-        if (playStatus !== "PLAYING") {
-            dispatch(setPlayStatus("PLAYING"));
-        }
-    };
-
-    const next_song = () => {
-        setCurPos(0);
-        setProgress(0);
-        setProgressSlidermax(1);
-        if (queue.length === 0) {
-            return;
-        }
-        let next_idx = 0;
-        for (let i = 0; i < queue.length; i++) {
-            if (queue[i].current && i < queue.length - 1) {
-                if (!isShuffle && !isLoop) {
-                    next_idx = i + 1;
-                    setLoopTarget(next_idx);
-                } else if (isShuffle && !isLoop) {
-                    next_idx = i + Math.floor(Math.random() * queue.length);
-                    setLoopTarget(next_idx);
-                } else if ((!isShuffle && isLoop) || (isShuffle && isLoop)) {
-                    next_idx = loopTarget;
-                }
-            }
-            queue[i].current = false;
-        }
-        setNowPlayingURL(queue[next_idx].playingURL);
-        setSongTitleLabel(queue[next_idx].song_title);
-        setSongArtistLabel(queue[next_idx].song_artist);
-        queue[next_idx].current = true;
-        setQueue(queue);
-        if (playStatus !== "PLAYING") {
-            dispatch(setPlayStatus("PLAYING"));
-        }
-    };
-
-    const change_song_in_queue = (item_id: string) => {
-        setCurPos(0);
-        setProgress(0);
-        setProgressSlidermax(1);
-        for (let i = 0; i < queue.length; i++) {
-            if (queue[i].item_id === item_id) {
-                setNowPlayingURL(queue[i].playingURL);
-                setSongTitleLabel(queue[i].song_title);
-                setSongArtistLabel(queue[i].song_artist);
-                queue[i].current = true;
-                if (playStatus !== "PLAYING") {
-                    dispatch(setPlayStatus("PLAYING"));
-                }
-            } else {
-                queue[i].current = false;
-            }
-        }
-        setQueue(queue);
-    };
-
-    const stop_song = () => {
-        dispatch(setPlayStatus("STOPPED"));
-    };
-
     const Shuffle = () => {
         if (!isShuffle) {
             setColor1("white");
-            setisShuffle(true);
+            dispatch(setIsShuffle(true))
         } else {
             setColor1("rgb(164, 164, 164)");
-            setisShuffle(false);
+            dispatch(setIsShuffle(false))
         }
     };
 
     const Loop = () => {
         if (!isLoop) {
             setColor2("white");
-            setisLoop(true);
+            dispatch(setIsLoop(true))
         } else {
             setColor2("rgb(164, 164, 164)");
-            setisLoop(false);
+            dispatch(setIsLoop(false))
         }
     };
 
@@ -233,16 +134,6 @@ function MusicPlayer(props: any): JSX.Element {
         return ret;
     }
 
-    const parent_controls = {
-        play_song,
-        seek_back,
-        seek_forward,
-        prev_song,
-        next_song,
-        change_song_in_queue,
-        stop_song,
-    };
-
     // Called whenever nowPlayingURL changes
     useEffect(() => {
         if (typeof nowPlayingURL !== "undefined" && nowPlayingURL !== "") {
@@ -260,7 +151,6 @@ function MusicPlayer(props: any): JSX.Element {
             className={props.className ? props.className : ""}
         >
             <NowPlayingQueuePopUp
-                parent_controls={parent_controls}
                 showNowPlayingQueuePopup={showNowPlayingQueuePopup}
                 setshowNowPlayingQueuePopup={setshowNowPlayingQueuePopup}
             />
@@ -343,7 +233,7 @@ function MusicPlayer(props: any): JSX.Element {
                         </button>
                         <button
                             className="player-controls-button-play"
-                            onClick={play_song}
+                            onClick={toggle_play}
                             style={{
                                 animation: isLoadingSong
                                     ? "spin 2s linear infinite"
