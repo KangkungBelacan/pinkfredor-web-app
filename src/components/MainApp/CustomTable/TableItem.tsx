@@ -87,6 +87,23 @@ const TableItem = (props: TableItemProps) => {
     let isPlayingNow: boolean =
         songObject.id === nowPlayingURL.split("&fileid=")[1];
 
+    const albumArt = () => {
+        return (
+            <div
+                className={"table-item-container-image"}
+                style={{backgroundColor: "#" + ((Math.random() * 0xffffff) << 0).toString(16)}}
+            >
+                <div
+                    className={
+                        "table-item-container-image-overlay table-item-container-image-fade"
+                    }
+                ></div>
+                <div className={"table-item-container-image-disc"}></div>
+                {play}
+            </div>
+        )
+    }
+
     return (
         <div
             className={
@@ -104,18 +121,7 @@ const TableItem = (props: TableItemProps) => {
             <div className={"table-item-container-number"}>
                 {props.allSongs.indexOf(songObject) + 1}
             </div>
-            <div
-                className={"table-item-container-image"}
-                style={{backgroundColor: "#" + ((Math.random() * 0xffffff) << 0).toString(16)}}
-            >
-                <div
-                    className={
-                        "table-item-container-image-overlay table-item-container-image-fade"
-                    }
-                ></div>
-                <div className={"table-item-container-image-disc"}></div>
-                {play}
-            </div>
+            {props.albumArtEnabled ? albumArt() : null}
             <div className={"table-item-container-info"}>
                 <div className={"table-item-container-info-title"}>
                     {"song_title" in songObject.file_metadata &&

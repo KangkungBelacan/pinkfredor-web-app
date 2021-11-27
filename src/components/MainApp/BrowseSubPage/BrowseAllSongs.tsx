@@ -154,7 +154,9 @@ const BrowseAllSongs = (props: any) => {
                 <CustomTable songs={indexFilesState}
                              artists={artistsDataState}
                              albums={albumDataState}
+                             albumArtEnabled={false}
                              customAction={<ExampleSongActions/>}
+                             tableItemOnClick={(song) => alert("You clicked on " + song.file_metadata.song_title)}
                 />
             ) : (
                 <div style={{color: "white"}}>

@@ -43,7 +43,7 @@ const CustomTable = (props: CustomTableProps) => {
                 artistsData={props.artists}
                 albumsData={props.albums}
                 customAction={props.customAction ? React.cloneElement(props.customAction, {songObject: songs[i]}) : null}
-                albumArtEnabled={props.albumArtEnabled ? props.albumArtEnabled : true}
+                albumArtEnabled={props.albumArtEnabled === undefined ? true : props.albumArtEnabled}
                 tableItemOnClick={props.tableItemOnClick ? props.tableItemOnClick : null}
             />
         );
