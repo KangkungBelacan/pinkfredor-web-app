@@ -1,0 +1,17 @@
+.ptl-table {
+
+}
+
+.ptl-table th,
+.ptl-table td {
+    padding: 10px
+}
+
+.ptl-thead {
+    border-bottom: 1px solid grey;
+}
+
+.ptl-tbody tr:hover {
+    background-color: rgba(128, 128, 128, 0.25);
+    cursor: pointer;
+}

@@ -1,19 +1,12 @@
 
 
 .playlist-container {
-    --header-padding: 1em;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 50px auto auto 1fr;
+    row-gap: 10px;
 }
 
-.playlist-header-container {
-    background-color: rgb(50,50,12);
-    font-size: 1.5em;
-    font-weight: bold;
-}
-
-.playlist-header {
-    padding: var(--header-padding)
-}
-
-.playlist-content-container {
-    color: red
+.playlist-tracklist-container {
+    display: grid;
 }

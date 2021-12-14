@@ -18,12 +18,23 @@ import {
     fetchPlaylist,
 } from "../../../app/reducers/playlistSlice";
 
-const ellipsisH = <FontAwesomeIcon icon={faEllipsisH} />;
-const play = <FontAwesomeIcon className={"icons-play"} icon={faPlay} />;
-const plus = <FontAwesomeIcon className={"icons-plus"} icon={faPlus} />;
-const caretLeft = (
-    <FontAwesomeIcon className={"icons-caret-left"} icon={faCaretLeft} />
-);
+const play = <FontAwesomeIcon className={"icons-play"} icon={faPlay}/>;
+
+interface SongObject {
+    id: string;
+    parents: string[];
+    file_metadata: {
+        song_comment: string;
+        song_artistid: string;
+        song_albumid: string;
+        song_title: string;
+        song_genreid: string;
+        album_track_no: string;
+        [x: string]: any;
+    };
+    filename: string;
+    [x: string]: any;
+}
 
 const TableItem = (props: any) => {
     const nowPlayingURL = useAppSelector(selectNowPlayingURL);
@@ -31,83 +42,85 @@ const TableItem = (props: any) => {
     let songData = props.songData;
     let indexFilesState = props.indexFilesState;
 
-    let artistsDataState = props.artistsDataState;
-    let songActions = props.songActions;
-    const [dropdownPlaylistItems, setDropdownPlaylistItems] = useState<any>([]);
-    let containerDetails: string = "";
-    let isPlayingNow: boolean =
-        songData.id === nowPlayingURL.split("&fileid=")[1];
+interface TableItemProps {
+    songObject: SongObject;
+    allSongs: SongObject[];
+    artistsData: any;
+    albumsData: any;
+    customAction: any;
+    albumArtEnabled: boolean;
+    tableItemOnClick?: any;
+}
 
+const EvaluateContainerDetails = (props: TableItemProps) => {
+    let songObject = props.songObject;
+    let artistsDataState = props.artistsData;
+    let albumsDataState = props.albumsData;
+    let containerDetails = "";
     if (
-        songData.file_metadata.song_artistid != "" ||
-        songData.file_metadata.song_albumid != "" ||
-        "song_artistid" in songData.file_metadata ||
-        "song_albumid" in songData.file_metadata
+        songObject.file_metadata.song_artistid != "" ||
+        songObject.file_metadata.song_albumid != "" ||
+        "song_artistid" in songObject.file_metadata ||
+        "song_albumid" in songObject.file_metadata
     ) {
-        if ("song_artistid" in songData.file_metadata) {
-            if (songData.file_metadata.song_artistid !== "") {
+        if ("song_artistid" in songObject.file_metadata) {
+            if (songObject.file_metadata.song_artistid !== "") {
                 containerDetails =
-                    artistsDataState[songData.file_metadata.song_artistid]
+                    artistsDataState[songObject.file_metadata.song_artistid]
                         .artist_name;
             }
         }
 
         if (
-            "song_artistid" in songData.file_metadata &&
-            "song_albumid" in songData.file_metadata
+            "song_artistid" in songObject.file_metadata &&
+            "song_albumid" in songObject.file_metadata
         ) {
             if (
-                songData.file_metadata.song_artistid !== "" &&
-                songData.file_metadata.song_albumid !== ""
+                songObject.file_metadata.song_artistid !== "" &&
+                songObject.file_metadata.song_albumid !== ""
             ) {
                 containerDetails += ", ";
             }
         }
 
-        if ("song_albumid" in songData.file_metadata) {
-            if (songData.file_metadata.song_albumid !== "") {
+        if ("song_albumid" in songObject.file_metadata) {
+            if (songObject.file_metadata.song_albumid !== "") {
                 containerDetails +=
-                    props.albumDataState[songData.file_metadata.song_albumid]
+                    albumsDataState[songObject.file_metadata.song_albumid]
                         .album_name;
             }
         }
     }
 
-    const tableItemActions = React.forwardRef<
-        HTMLButtonElement,
-        React.PropsWithChildren<any>
-    >((props, ref: any) => (
-        <a
-            className={"table-item-actions"}
-            href=""
-            ref={ref}
-            onClick={(e) => {
-                e.preventDefault();
-                props.onClick(e);
-            }}
-        >
-            {ellipsisH}
-        </a>
-    ));
+    return containerDetails;
+}
 
-    const playlistActions = React.forwardRef<
-        HTMLButtonElement,
-        React.PropsWithChildren<any>
-    >((props, ref: any) => (
-        <a
-            className={"playlist-actions"}
-            href=""
-            ref={ref}
-            onClick={(e) => {
-                e.preventDefault();
-                props.onClick(e);
-            }}
-        >
-            {caretLeft}
-            <div className={"add-to-playlist-text"}>Add to playlist</div>
-        </a>
-    ));
+const TableItem = (props: TableItemProps) => {
+    const {nowPlayingURL} = React.useContext(MusicPlayerContext);
+    const {playlistData} = React.useContext(PlaylistContext);
+    let songObject = props.songObject;
 
+    let songActions = props.customAction;
+    let containerDetails: string = "";
+    let isPlayingNow: boolean =
+        songObject.id === nowPlayingURL.split("&fileid=")[1];
+
+    const albumArt = () => {
+        return (
+            <div
+                className={"table-item-container-image"}
+                style={{backgroundColor: "#" + ((Math.random() * 0xffffff) << 0).toString(16)}}
+            >
+                <div
+                    className={
+                        "table-item-container-image-overlay table-item-container-image-fade"
+                    }
+                ></div>
+                <div className={"table-item-container-image-disc"}></div>
+                {play}
+            </div>
+        )
+    }
     // Use for loop to generate a list of dropdownPlaylistItems
     const GenerateDropdownPlaylistItems = () => {
         if (playlistsData === null) return;
@@ -144,112 +157,28 @@ const TableItem = (props: any) => {
             }
             style={{
                 gridTemplateColumns: `${
-                    indexFilesState.length.toString().length + 0.5
+                    props.allSongs.length.toString().length + 0.5
                 }em auto 1fr auto`,
             }}
-            onClick={(event) => {
-                songActions(songData, "Play");
-            }}
+            onClick={() => props.tableItemOnClick?.(songObject)}
         >
             <div className={"table-item-container-number"}>
-                {props.position}
+                {props.allSongs.indexOf(songObject) + 1}
             </div>
-            <div
-                className={"table-item-container-image"}
-                style={{ backgroundColor: props.imageColor }}
-            >
-                <div
-                    className={
-                        "table-item-container-image-overlay table-item-container-image-fade"
-                    }
-                ></div>
-                <div className={"table-item-container-image-disc"}></div>
-                {play}
-            </div>
+            {props.albumArtEnabled ? albumArt() : null}
             <div className={"table-item-container-info"}>
                 <div className={"table-item-container-info-title"}>
-                    {"song_title" in songData.file_metadata &&
-                    songData.file_metadata.song_title !== ""
-                        ? songData.file_metadata.song_title
-                        : songData.filename}
+                    {"song_title" in songObject.file_metadata &&
+                    songObject.file_metadata.song_title !== ""
+                        ? songObject.file_metadata.song_title
+                        : songObject.filename}
                 </div>
                 <div className={"table-item-container-info-details"}>
-                    {containerDetails}
+                    {EvaluateContainerDetails(props)}
                 </div>
             </div>
             <div className={"table-item-container-actions"}>
-                <Dropdown
-                    as={ButtonGroup}
-                    onClick={(evt: any) => {
-                        evt.stopPropagation();
-                    }}
-                >
-                    {/*<Button*/}
-                    {/*    id="Play"*/}
-                    {/*    onClick={(event) =>*/}
-                    {/*        songActions(songData, "Play")*/}
-                    {/*    }*/}
-                    {/*    variant="success"*/}
-                    {/*>*/}
-                    {/*    Play*/}
-                    {/*/Button>*/}
-
-                    <Dropdown.Toggle
-                        as={tableItemActions}
-                        variant="success"
-                        id="dropdown-split-basic"
-                    />
-                    <Dropdown.Menu>
-                        <Dropdown.Item
-                            id="AddToQ"
-                            onClick={(event) => songActions(songData, "AddToQ")}
-                        >
-                            Add to queue
-                        </Dropdown.Item>
-                        <Dropdown.Item
-                            id="PlayNext"
-                            onClick={(event) =>
-                                songActions(songData, "PlayNext")
-                            }
-                        >
-                            Play next
-                        </Dropdown.Item>
-                        <div className="dropdown-divider"></div>
-                        <div className="add-to-playlist-dropdown">
-                            <Dropdown
-                                as={ButtonGroup}
-                                onClick={(evt: any) => {
-                                    evt.stopPropagation();
-                                }}
-                                drop={"left"}
-                            >
-                                <Dropdown.Toggle
-                                    as={playlistActions}
-                                    variant="success"
-                                />
-                                <Dropdown.Menu>
-                                    <Dropdown.Item
-                                        className={"action-new-playlist"}
-                                        id="NewPlaylist"
-                                        onClick={(event) =>
-                                            // TODO: Make this open a modal box to create a new playlist
-                                            songActions(
-                                                songData,
-                                                prompt(
-                                                    "Enter playlist name:"
-                                                ) as string
-                                            )
-                                        }
-                                    >
-                                        {plus}
-                                        New playlist
-                                    </Dropdown.Item>
-                                    {dropdownPlaylistItems}
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        </div>
-                    </Dropdown.Menu>
-                </Dropdown>
+                {props.customAction}
             </div>
         </div>
     );

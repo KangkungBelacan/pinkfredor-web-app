@@ -1,5 +1,6 @@
 import useAxios from "axios-hooks";
 import { useParams } from "react-router-dom";
+import PlaylistTrackListing from "../../components/MainApp/PlaylistTrackListing";
 import "./Playlist.css";
 const Playlist = () => {
     const { playlist_id }: any = useParams();
@@ -16,21 +17,18 @@ const Playlist = () => {
     return (
         <div className="mainapp-content-container">
             <div className="mainapp-content playlist-container">
-                <div className="row playlist-header-container">
-                    <div className="playlist-header">Header</div>
+                <div>Playlist Name</div>
+                <div>
+                    <button>Edit Desc.</button>
+                    Description
                 </div>
-                <div className="playlist-content-container">
-                    Content
-                    <br />
-                    Content
-                    <br />
-                    Content
-                    <br />
-                    Content
-                    <br />
-                    Content
-                    <br />
+                <div>
+                    <button>Play All</button>
+                    <button>Queue All</button>
+                    <button>Edit Name</button>
+                    <button>...</button>
                 </div>
+                <PlaylistTrackListing></PlaylistTrackListing>
             </div>
         </div>
     );

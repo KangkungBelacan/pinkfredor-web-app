@@ -124,21 +124,6 @@ const BrowseAllSongs = (props: any) => {
         },
     });
 
-    const [
-        {
-            data: _playlistsData,
-            loading: _playlistsLoading,
-            error: _playlistsError,
-        },
-        playlistsRefetch,
-    ] = useAxios({
-        url: "/api/indexes/playlists",
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${localStorage.token}`,
-        },
-    });
-
     const Play = (songData: any) => {
         let new_queue: Array<MusicQueueItem> = [];
         let indexFilesDataKeys = Object.keys(indexFilesData.files);
@@ -315,33 +300,11 @@ const BrowseAllSongs = (props: any) => {
             artistsError ||
             albumLoading ||
             albumError ||
-            _playlistsLoading ||
-            _playlistsError ||
             !pageLoading
         )
             return;
 
         let indexFiles = Object.values(indexFilesData.files);
-
-        let _tbl_items = [];
-        for (let i = 0; i < indexFiles.length; i++) {
-            _tbl_items.push(
-                <TableItem
-                    key={i}
-                    position={i + 1}
-                    songData={indexFiles[i]}
-                    artistsDataState={artistsData.artists}
-                    albumDataState={albumData.albums}
-                    songActions={songActions}
-                    imageColor={
-                        "#" + ((Math.random() * 0xffffff) << 0).toString(16)
-                    }
-                    nowPlayingURL={nowPlayingURL}
-                    indexFilesState={indexFiles}
-                />
-            );
-        }
-        setTableItems(_tbl_items);
         setIndexFilesState(indexFiles);
         setArtistsDataState(artistsData.artists);
         setAlbumDataState(albumData.albums);
@@ -356,93 +319,24 @@ const BrowseAllSongs = (props: any) => {
         albumData,
         albumLoading,
         albumError,
-        _playlistsData,
-        _playlistsLoading,
-        _playlistsError,
         pageLoading,
     ]);
 
     return (
         <div>
             {indexFilesState.length !== 0 ? (
-                <CustomTable>{tableItems}</CustomTable>
+                <CustomTable songs={indexFilesState}
+                             artists={artistsDataState}
+                             albums={albumDataState}
+                             albumArtEnabled={false}
+                             customAction={<ExampleSongActions/>}
+                             tableItemOnClick={(song) => alert("You clicked on " + song.file_metadata.song_title)}
+                />
             ) : (
                 <div style={{ color: "white" }}>
                     Loading... (change this shit later)
                 </div>
             )}
-            {/*<MaterialTable*/}
-            {/*    icons={tableIcons}*/}
-            {/*    columns={song_columns}*/}
-            {/*    data={indexFilesState}*/}
-            {/*    title="All Songs"*/}
-            {/*    actions={[*/}
-            {/*        {*/}
-            {/*            icon: MoreVert,*/}
-            {/*            tooltip: "More Options",*/}
-            {/*            onClick: matTableActionOnClick,*/}
-            {/*        },*/}
-            {/*    ]}*/}
-            {/*    components={{*/}
-            {/*        Action: (props) => (*/}
-            {/*            <Dropdown*/}
-            {/*                as={ButtonGroup}*/}
-            {/*                onClick={(evt: any) => {*/}
-            {/*                    evt.stopPropagation();*/}
-            {/*                }}*/}
-            {/*            >*/}
-            {/*                <Button*/}
-            {/*                    id="Play"*/}
-            {/*                    onClick={(event) =>*/}
-            {/*                        props.action.onClick(event, props.data)*/}
-            {/*                    }*/}
-            {/*                    variant="success"*/}
-            {/*                >*/}
-            {/*                    Play*/}
-            {/*                </Button>*/}
-
-            {/*                <Dropdown.Toggle*/}
-            {/*                    split*/}
-            {/*                    variant="success"*/}
-            {/*                    id="dropdown-split-basic"*/}
-            {/*                />*/}
-
-            {/*                <Dropdown.Menu>*/}
-            {/*                    <Dropdown.Item*/}
-            {/*                        id="AddToQ"*/}
-            {/*                        onClick={(event) =>*/}
-            {/*                            props.action.onClick(event, props.data)*/}
-            {/*                        }*/}
-            {/*                    >*/}
-            {/*                        Add to queue*/}
-            {/*                    </Dropdown.Item>*/}
-            {/*                    <Dropdown.Item*/}
-            {/*                        id="PlayNext"*/}
-            {/*                        onClick={(event) =>*/}
-            {/*                            props.action.onClick(event, props.data)*/}
-            {/*                        }*/}
-            {/*                    >*/}
-            {/*                        Play next*/}
-            {/*                    </Dropdown.Item>*/}
-            {/*                    <Dropdown.Item*/}
-            {/*                        id="AddToPlaylist"*/}
-            {/*                        onClick={(event) =>*/}
-            {/*                            props.action.onClick(event, props.data)*/}
-            {/*                        }*/}
-            {/*                    >*/}
-            {/*                        Add to playlist*/}
-            {/*                    </Dropdown.Item>*/}
-            {/*                </Dropdown.Menu>*/}
-            {/*            </Dropdown>*/}
-            {/*        ),*/}
-            {/*    // }}*/}
-            {/*    options={{*/}
-            {/*        actionsColumnIndex: -1,*/}
-            {/*    }}*/}
-            {/*    onRowClick={(e, rowData) => {*/}
-            {/*        Play(e, rowData);*/}
-            {/*    }}*/}
-            {/*/>*/}
         </div>
     );
 };
