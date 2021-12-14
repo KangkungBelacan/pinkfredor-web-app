@@ -1,22 +1,11 @@
 import "./TableItem.css";
-import { ButtonGroup, Dropdown } from "react-bootstrap";
-import React, { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faCaretLeft,
-    faEllipsisH,
-    faPlay,
-    faPlus,
-} from "@fortawesome/free-solid-svg-icons";
-import { useAppSelector } from "../../../app/hooks";
-import { selectNowPlayingURL } from "../../../app/reducers/musicPlayerSlice";
-
-import {
-    playlistStatusSelector,
-    playlistDataSelector,
-    playlistErrorSelector,
-    fetchPlaylist,
-} from "../../../app/reducers/playlistSlice";
+import {Dropdown} from "react-bootstrap";
+import React from "react";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faPlay,} from "@fortawesome/free-solid-svg-icons";
+import {useAppSelector} from "../../../app/hooks";
+import {selectNowPlayingURL} from "../../../app/reducers/musicPlayerSlice";
+import {playlistDataSelector} from "../../../app/reducers/playlistSlice";
 
 const play = <FontAwesomeIcon className={"icons-play"} icon={faPlay}/>;
 
@@ -33,14 +22,9 @@ interface SongObject {
         [x: string]: any;
     };
     filename: string;
+
     [x: string]: any;
 }
-
-const TableItem = (props: any) => {
-    const nowPlayingURL = useAppSelector(selectNowPlayingURL);
-    const playlistsData = useAppSelector(playlistDataSelector);
-    let songData = props.songData;
-    let indexFilesState = props.indexFilesState;
 
 interface TableItemProps {
     songObject: SongObject;
@@ -52,56 +36,11 @@ interface TableItemProps {
     tableItemOnClick?: any;
 }
 
-const EvaluateContainerDetails = (props: TableItemProps) => {
-    let songObject = props.songObject;
-    let artistsDataState = props.artistsData;
-    let albumsDataState = props.albumsData;
-    let containerDetails = "";
-    if (
-        songObject.file_metadata.song_artistid != "" ||
-        songObject.file_metadata.song_albumid != "" ||
-        "song_artistid" in songObject.file_metadata ||
-        "song_albumid" in songObject.file_metadata
-    ) {
-        if ("song_artistid" in songObject.file_metadata) {
-            if (songObject.file_metadata.song_artistid !== "") {
-                containerDetails =
-                    artistsDataState[songObject.file_metadata.song_artistid]
-                        .artist_name;
-            }
-        }
-
-        if (
-            "song_artistid" in songObject.file_metadata &&
-            "song_albumid" in songObject.file_metadata
-        ) {
-            if (
-                songObject.file_metadata.song_artistid !== "" &&
-                songObject.file_metadata.song_albumid !== ""
-            ) {
-                containerDetails += ", ";
-            }
-        }
-
-        if ("song_albumid" in songObject.file_metadata) {
-            if (songObject.file_metadata.song_albumid !== "") {
-                containerDetails +=
-                    albumsDataState[songObject.file_metadata.song_albumid]
-                        .album_name;
-            }
-        }
-    }
-
-    return containerDetails;
-}
-
 const TableItem = (props: TableItemProps) => {
-    const {nowPlayingURL} = React.useContext(MusicPlayerContext);
-    const {playlistData} = React.useContext(PlaylistContext);
+    const nowPlayingURL = useAppSelector(selectNowPlayingURL);
+    const playlistsData = useAppSelector(playlistDataSelector);
     let songObject = props.songObject;
-
     let songActions = props.customAction;
-    let containerDetails: string = "";
     let isPlayingNow: boolean =
         songObject.id === nowPlayingURL.split("&fileid=")[1];
 
@@ -115,8 +54,8 @@ const TableItem = (props: TableItemProps) => {
                     className={
                         "table-item-container-image-overlay table-item-container-image-fade"
                     }
-                ></div>
-                <div className={"table-item-container-image-disc"}></div>
+                />
+                <div className={"table-item-container-image-disc"}/>
                 {play}
             </div>
         )
@@ -133,7 +72,7 @@ const TableItem = (props: TableItemProps) => {
                 <Dropdown.Item
                     key={playlistID}
                     onClick={() => {
-                        songActions(songData, "AddToPlaylist", playlistID);
+                        songActions(songObject, "AddToPlaylist", playlistID);
                     }}
                 >
                     {playlists[playlistID].playlist_name}
@@ -143,10 +82,47 @@ const TableItem = (props: TableItemProps) => {
         return dropdownPlaylistItems;
     };
 
-    useEffect(() => {
-        if (playlistsData === undefined) return;
-        setDropdownPlaylistItems(GenerateDropdownPlaylistItems());
-    }, [playlistsData]);
+    const EvaluateContainerDetails = (props: TableItemProps) => {
+        let songObject = props.songObject;
+        let artistsDataState = props.artistsData;
+        let albumsDataState = props.albumsData;
+        let containerDetails = "";
+        if (
+            songObject.file_metadata.song_artistid != "" ||
+            songObject.file_metadata.song_albumid != "" ||
+            "song_artistid" in songObject.file_metadata ||
+            "song_albumid" in songObject.file_metadata
+        ) {
+            if ("song_artistid" in songObject.file_metadata) {
+                if (songObject.file_metadata.song_artistid !== "") {
+                    containerDetails =
+                        artistsDataState[songObject.file_metadata.song_artistid]
+                            .artist_name;
+                }
+            }
+
+            if (
+                "song_artistid" in songObject.file_metadata &&
+                "song_albumid" in songObject.file_metadata
+            ) {
+                if (
+                    songObject.file_metadata.song_artistid !== "" &&
+                    songObject.file_metadata.song_albumid !== ""
+                ) {
+                    containerDetails += ", ";
+                }
+            }
+
+            if ("song_albumid" in songObject.file_metadata) {
+                if (songObject.file_metadata.song_albumid !== "") {
+                    containerDetails +=
+                        albumsDataState[songObject.file_metadata.song_albumid]
+                            .album_name;
+                }
+            }
+        }
+        return containerDetails;
+    }
 
     return (
         <div

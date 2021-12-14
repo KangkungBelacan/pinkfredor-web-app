@@ -4,9 +4,24 @@ import {faCaretLeft, faEllipsisH, faPlay, faPlus,} from "@fortawesome/free-solid
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import {MusicQueueItem} from "../../../interface/context/MusicQueueItem";
-import MusicPlayerContext from "../../../context/MusicPlayerContext";
 import useAxios from "axios-hooks";
-import PlaylistContext from "../../../context/PlaylistContext";
+import {useAppDispatch, useAppSelector} from "../../../app/hooks";
+import {
+    selectNowPlayingURL,
+    selectQueue,
+    setNowPlayingURL,
+    setPlayStatus,
+    setQueue,
+    setSongArtistLabel,
+    setSongTitleLabel,
+    toggle_play
+} from "../../../app/reducers/musicPlayerSlice";
+import {
+    fetchPlaylist,
+    playlistDataSelector,
+    playlistErrorSelector,
+    playlistStatusSelector
+} from "../../../app/reducers/playlistSlice";
 
 const ellipsisH = <FontAwesomeIcon icon={faEllipsisH}/>;
 const play = <FontAwesomeIcon className={"icons-play"} icon={faPlay}/>;
@@ -53,17 +68,21 @@ interface ExampleSongActionsProps {
 
 const ExampleSongActions = (props: ExampleSongActionsProps) => {
     const [dropdownPlaylistItems, setDropdownPlaylistItems] = useState<any>([]);
-    const {playlistData, playlistLoading, playlistErr, playlistRefetch} =
-        React.useContext(PlaylistContext);
-    const {
-        setStatus,
-        nowPlayingURL,
-        setNowPlayingURL,
-        queue,
-        setQueue,
-        setSongTitleLabel,
-        setSongArtistLabel,
-    } = React.useContext(MusicPlayerContext);
+    const playlistData = useAppSelector(playlistDataSelector);
+    const playlistStatus = useAppSelector(playlistStatusSelector);
+    const playlistError = useAppSelector(playlistErrorSelector);
+    // const {
+    //     nowPlayingURL,
+    //     setNowPlayingURL,
+    //     queue,
+    //     setQueue,
+    //     setSongTitleLabel,
+    //     setSongArtistLabel,
+    // } = React.useContext(MusicPlayerContext);
+    const togglePlay = useAppSelector(toggle_play);
+    const nowPlayingURL = useAppSelector(selectNowPlayingURL);
+    const queue = useAppSelector(selectQueue);
+    const dispatch = useAppDispatch();
 
     const [
         {
@@ -119,7 +138,7 @@ const ExampleSongActions = (props: ExampleSongActionsProps) => {
             )
             .then((res) => {
                 console.log("Success"); // TODO: Add notification here
-                playlistRefetch();
+                dispatch(fetchPlaylist());
             })
             .catch((err) => {
                 console.log(err);
@@ -180,11 +199,11 @@ const ExampleSongActions = (props: ExampleSongActionsProps) => {
         };
         let newQueue = queue;
         newQueue.splice(currentPlayingSongIndex + 1, 0, newSongItem);
-        setQueue(newQueue);
+        dispatch(setQueue(newQueue));
     };
 
     const AddToQ = (songObject: any) => {
-        setQueue([
+        dispatch(setQueue([
             ...queue,
             {
                 item_id: "queue_item_" + songObject.id + Date.now().toString(),
@@ -193,7 +212,7 @@ const ExampleSongActions = (props: ExampleSongActionsProps) => {
                 song_title: songObject.file_metadata.song_title,
                 song_artist: songObject.file_metadata.song_artist,
             },
-        ]);
+        ]));
     };
 
 
@@ -210,14 +229,14 @@ const ExampleSongActions = (props: ExampleSongActionsProps) => {
                 song_artist: indexFilesData.files[indexFilesDataKeys[i]].file_metadata.song_artist,
             });
         }
-        setQueue(new_queue);
-        setNowPlayingURL(
+        dispatch(setQueue(new_queue));
+        dispatch(setNowPlayingURL(
             `/api/driveapi/files/download?token=${localStorage.token}&fileid=${songObject.id}`
-        );
-        setSongTitleLabel(songObject.file_metadata.song_title);
-        setSongArtistLabel(songObject.file_metadata.song_artist);
+        ));
+        dispatch(setSongTitleLabel(songObject.file_metadata.song_title));
+        dispatch(setSongArtistLabel(songObject.file_metadata.song_artist));
         // setSongAlbumArtURL("");
-        setStatus("PLAYING");
+        dispatch(setPlayStatus("PLAYING"));
 
         // console.log(rowData);
         // window.alert(
