@@ -5,12 +5,8 @@ import NowPlayingQueuePopUpRowProps from "../../../interface/components/MainApp/
 import {Draggable} from "react-beautiful-dnd";
 import composeRefs from '@seznam/compose-react-refs'
 import {useAppDispatch, useAppSelector} from '../../../app/hooks';
-import {selectQueue, setQueue} from '../../../app/reducers/musicPlayerSlice';
-import {
-    stop_song,
-    next_song,
-    change_song_in_queue
-} from "../../../app/reducers/musicPlayerSlice"
+import {next_song, play_song, selectQueue, setQueue, stop_song} from '../../../app/reducers/musicPlayerSlice';
+
 const NowPlayingQueuePopUpRow = React.forwardRef((props: NowPlayingQueuePopUpRowProps, rowRef: any) => {
     const queue = useAppSelector(selectQueue);
     const CustomToggle = React.forwardRef(
@@ -60,7 +56,11 @@ const NowPlayingQueuePopUpRow = React.forwardRef((props: NowPlayingQueuePopUpRow
 
     const change_song = () => {
         if (!props.is_playing) {
-            dispatch(change_song_in_queue(props.item_id))
+            dispatch(play_song({
+                id: props.item_id,
+                title: props.song_title,
+                artist: props.song_artist,
+            }))
         }
     };
 
@@ -73,7 +73,7 @@ const NowPlayingQueuePopUpRow = React.forwardRef((props: NowPlayingQueuePopUpRow
                             // Stop operation
                             // props.parent_controls.stop_song();
                             dispatch(stop_song())
-                            
+
                         } else {
                             // props.parent_controls.next_song();
                             dispatch(next_song())

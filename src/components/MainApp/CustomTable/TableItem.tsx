@@ -9,9 +9,11 @@ import {playlistDataSelector} from "../../../app/reducers/playlistSlice";
 
 const play = <FontAwesomeIcon className={"icons-play"} icon={faPlay}/>;
 
-interface SongObject {
+// TODO: Move these interfaces into a seperate file
+export interface SongObject {
     id: string;
     parents: string[];
+    filename: string;
     file_metadata: {
         song_comment: string;
         song_artistid: string;
@@ -21,12 +23,11 @@ interface SongObject {
         album_track_no: string;
         [x: string]: any;
     };
-    filename: string;
 
     [x: string]: any;
 }
 
-interface TableItemProps {
+export interface TableItemProps {
     songObject: SongObject;
     allSongs: SongObject[];
     artistsData: any;

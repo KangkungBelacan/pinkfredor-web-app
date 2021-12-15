@@ -1,8 +1,15 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../../app/store";
-import { ReactSoundProps } from "react-sound";
-import { MusicQueueItem } from "../../interface/context/MusicQueueItem";
-import example_song_cover from "../../images/example-song-cover.png"
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {RootState} from "../../app/store";
+import {ReactSoundProps} from "react-sound";
+import {MusicQueueItem} from "../../interface/context/MusicQueueItem";
+import example_song_cover from "../../images/example-song-cover.png";
+
+interface PlaySongObject {
+    id: string;
+    title: string;
+    artist: string;
+}
+
 export interface MusicPlayerState {
     playStatus: ReactSoundProps["playStatus"];
     nowPlayingURL: string;
@@ -139,8 +146,12 @@ export const musicPlayerSlice = createSlice({
                 state.playStatus = "PLAYING"
             }
         },
-        change_song_in_queue: (state, action: PayloadAction<any>) => {
-            console.log("Hmm, something is missing here...")
+        // Please use this instead of manually setting stuff.
+        play_song: (state, action: PayloadAction<PlaySongObject>) => {
+            state.nowPlayingURL = `/api/driveapi/files/download?token=${localStorage.token}&fileid=${action.payload.id}`;
+            state.songTitleLabel = action.payload.title;
+            state.songArtistLabel = action.payload.artist;
+            state.playStatus = "PLAYING";
         },
         stop_song: (state) => {
             state.playStatus = "STOPPED"
@@ -162,7 +173,7 @@ export const {
     toggle_play,
     prev_song,
     next_song,
-    change_song_in_queue,
+    play_song,
     stop_song
 } = musicPlayerSlice.actions;
 

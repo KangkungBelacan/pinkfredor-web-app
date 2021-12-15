@@ -26,6 +26,7 @@ import axios from "axios";
 import ExampleSongActions from "../CustomTable/ExampleSongActions";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import {
+    play_song,
     selectNowPlayingURL,
     selectPlayStatus,
     selectQueue,
@@ -33,7 +34,7 @@ import {
     setPlayStatus,
     setQueue,
     setSongArtistLabel,
-    setSongTitleLabel,
+    setSongTitleLabel
 } from "../../../app/reducers/musicPlayerSlice";
 import {playlistDataSelector, playlistErrorSelector, playlistStatusSelector} from "../../../app/reducers/playlistSlice";
 
@@ -326,7 +327,11 @@ const BrowseAllSongs = (props: any) => {
                              albums={albumDataState}
                              albumArtEnabled={false}
                              customAction={<ExampleSongActions/>}
-                             tableItemOnClick={(song) => alert("You clicked on " + song.file_metadata.song_title)}
+                             tableItemOnClick={(song) => dispatch(play_song({
+                                 id: song.id,
+                                 title: song.file_metadata.song_title,
+                                 artist: song.file_metadata.song_artistid, // TODO: GET ARTIST NAME INSTEAD OF PUTTING ID
+                             }))}
                 />
             ) : (
                 <div style={{color: "white"}}>
