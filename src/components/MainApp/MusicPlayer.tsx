@@ -18,23 +18,21 @@ import VolumeBar from "./MusicPlayerSubComponent/VolumeBar";
 import NowPlayingQueuePopUp from "./MusicPlayerSubComponent/NowPlayingQueuePopUp";
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {
+    next_song,
+    prev_song,
     selectIsLoadingSong,
     selectIsLoop,
     selectIsShuffle,
     selectNowPlayingURL,
     selectPlayStatus,
-    selectQueue,
     selectSongAlbumArtURL,
     selectSongArtistLabel,
     selectSongTitleLabel,
     selectVolume,
     setIsLoadingSong,
-    setIsShuffle,
     setIsLoop,
+    setIsShuffle,
     setVolume,
-    stop_song,
-    prev_song,
-    next_song,
     toggle_play
 } from '../../app/reducers/musicPlayerSlice';
 
@@ -313,7 +311,7 @@ function MusicPlayer(props: any): JSX.Element {
                         {bars}
                     </button>
                     <div className="player-misc-controls-volume-slider-container">
-                        <VolumeBar setVolume={dispatch(setVolume)}/>
+                        <VolumeBar setVolume={(volume: number) => dispatch(setVolume(volume))}/>
                     </div>
                     <p
                         style={{
