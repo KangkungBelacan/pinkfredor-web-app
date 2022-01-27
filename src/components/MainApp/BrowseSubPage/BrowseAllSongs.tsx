@@ -143,7 +143,12 @@ const BrowseAllSongs = (props: any) => {
             });
         }
         dispatch(setQueue(new_queue));
-        dispatch(play_song(songData))
+        let newSongData = {
+            id: songData.id,
+            title: songData.file_metadata.song_title,
+            artist: songData.file_metadata.song_artistid, // TODO: Pass in artist name instead of id
+        };
+        dispatch(play_song(newSongData));
 
         // console.log(rowData);
         // window.alert(
