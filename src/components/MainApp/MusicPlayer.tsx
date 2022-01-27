@@ -33,7 +33,7 @@ import {
     setIsLoop,
     setIsShuffle,
     setVolume,
-    toggle_play
+    toggle_play,
 } from '../../app/reducers/musicPlayerSlice';
 
 const stepBackward = <FontAwesomeIcon icon={faStepBackward}/>;
@@ -230,7 +230,7 @@ function MusicPlayer(props: any): JSX.Element {
                         </button>
                         <button
                             className="player-controls-button-play"
-                            onClick={toggle_play}
+                            onClick={() => dispatch(toggle_play())}
                             style={{
                                 animation: isLoadingSong
                                     ? "spin 2s linear infinite"

@@ -79,7 +79,7 @@ export const musicPlayerSlice = createSlice({
         setIsShuffle: (state, action: PayloadAction<boolean>) => {
             state.isShuffle = action.payload;
         },
-        toggle_play: (state, action: PayloadAction<any>) => {
+        toggle_play: (state) => {
             if (state.isLoadingSong) {
                 return;
             }
