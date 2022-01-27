@@ -30,11 +30,7 @@ import {
     selectNowPlayingURL,
     selectPlayStatus,
     selectQueue,
-    setNowPlayingURL,
-    setPlayStatus,
-    setQueue,
-    setSongArtistLabel,
-    setSongTitleLabel
+    setQueue
 } from "../../../app/reducers/musicPlayerSlice";
 import {playlistDataSelector, playlistErrorSelector, playlistStatusSelector} from "../../../app/reducers/playlistSlice";
 
@@ -146,12 +142,8 @@ const BrowseAllSongs = (props: any) => {
                     .song_artist,
             });
         }
-        setQueue(new_queue);
-        setNowPlayingURL(songData.id);
-        setSongTitleLabel(songData.file_metadata.song_title);
-        setSongArtistLabel(songData.file_metadata.song_artist);
-        // setSongAlbumArtURL("");
-        setPlayStatus("PLAYING");
+        dispatch(setQueue(new_queue));
+        dispatch(play_song(songData))
 
         // console.log(rowData);
         // window.alert(
@@ -327,11 +319,9 @@ const BrowseAllSongs = (props: any) => {
                              albums={albumDataState}
                              albumArtEnabled={false}
                              customAction={<ExampleSongActions/>}
-                             tableItemOnClick={(song) => dispatch(play_song({
-                                 id: song.id,
-                                 title: song.file_metadata.song_title,
-                                 artist: song.file_metadata.song_artistid, // TODO: GET ARTIST NAME INSTEAD OF PUTTING ID
-                             }))}
+                             tableItemOnClick={(song) => {
+                                 Play(song)
+                             }}
                 />
             ) : (
                 <div style={{color: "white"}}>
