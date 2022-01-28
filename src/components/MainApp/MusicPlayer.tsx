@@ -218,7 +218,7 @@ function MusicPlayer(props: any): JSX.Element {
                         </button>
                         <button
                             className="player-controls-button-misc d-md-inline-block d-none"
-                            onClick={prev_song}
+                            onClick={() => dispatch(prev_song())}
                         >
                             {stepBackward}
                         </button>
@@ -251,7 +251,7 @@ function MusicPlayer(props: any): JSX.Element {
                         </button>
                         <button
                             className="player-controls-button-misc"
-                            onClick={next_song}
+                            onClick={() => dispatch(next_song())}
                         >
                             {stepForward}
                         </button>

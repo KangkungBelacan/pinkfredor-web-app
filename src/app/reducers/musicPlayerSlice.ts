@@ -32,8 +32,8 @@ const initialState: MusicPlayerState = {
     songArtistLabel: "",
     songAlbumArtURL: example_song_cover,
     isLoadingSong: false,
-    isLoop: true,
-    isShuffle: true
+    isLoop: false,
+    isShuffle: false
 };
 
 export const musicPlayerSlice = createSlice({
@@ -123,17 +123,15 @@ export const musicPlayerSlice = createSlice({
                 return;
             }
             let next_idx = 0;
-            let loop_target = 0;
             for (let i = 0; i < state.queue.length; i++) {
                 if (state.queue[i].current && i < state.queue.length - 1) {
-                    if (!state.isShuffle && !state.isLoop) {
+                    if (!state.isShuffle && !state.isLoop) { // If not shuffling and not looping
                         next_idx = i + 1;
-                        loop_target = next_idx;
-                    } else if (state.isShuffle && !state.isLoop) {
-                        next_idx = i + Math.floor(Math.random() * state.queue.length);
-                        loop_target = next_idx;
-                    } else if ((!state.isShuffle && state.isLoop) || (state.isShuffle && state.isLoop)) {
-                        next_idx = loop_target;
+                    } else if (state.isShuffle && !state.isLoop) { // If shuffling but not looping
+                        let random_idx = Math.floor(Math.random() * state.queue.length)
+                        next_idx = random_idx === i ? i + 1 : random_idx;
+                    } else { // If looping
+                        next_idx = i;
                     }
                 }
                 state.queue[i].current = false;
